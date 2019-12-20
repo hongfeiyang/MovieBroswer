@@ -1,4 +1,4 @@
-# MovieBroswer - An iOS IMDB App
+# MovieBroswer - An iOS TMDB App
 Browse your favourite movie and find your next movie to watch!
 This app uses The Movie DB as data source.
 
