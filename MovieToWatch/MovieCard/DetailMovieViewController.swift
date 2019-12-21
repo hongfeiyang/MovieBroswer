@@ -9,15 +9,22 @@
 import UIKit
 
 class DetailMovieViewController: UIViewController {
-    
-    
-    public var result: MovieItem! {
+
+    public var content: MovieDetail! {
         didSet {
-            imageURL = APIConfiguration.parsePosterURL(file_path: result.posterPath, size: .original)
-            var info = SummaryMovieInfo()
-            info.summary = result.overview
-            info.title = result.title
-            summaryInfoView.info = info
+            imageURL = APIConfiguration.parsePosterURL(file_path: content.posterPath, size: .original)
+            updateShortMovieView()
+        }
+    }
+    
+    public var movieID: Int! {
+        didSet {
+            
+            let movieDetailQuery = MovieDetailQuery(movieID: movieID)
+            Network.getMovieDetail(query: movieDetailQuery) { [weak self] detail in
+                self?.content = detail
+                print(detail.tagline)
+            }
         }
     }
     
@@ -33,14 +40,7 @@ class DetailMovieViewController: UIViewController {
     
     private var imageURL: URL? {
         didSet {
-            guard let url = imageURL else {print("failed to have a valid image url"); return}
-            Cache.shared.cacheImage(url: url) { (url, image) in
-                if url == self.imageURL {
-                    DispatchQueue.main.async {
-                        self.imageView.image = image
-                    }
-                }
-            }
+            fetchAndSetImage()
         }
     }
     
@@ -67,8 +67,8 @@ class DetailMovieViewController: UIViewController {
     }()
     
     
-    private var summaryInfoView: SummaryMovieInfoView = {
-        let view = SummaryMovieInfoView()
+    private var shortInfoView: ShortMovieInfoView = {
+        let view = ShortMovieInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -87,7 +87,7 @@ class DetailMovieViewController: UIViewController {
         scrollView.addSubview(contentView)
 
         contentView.addSubview(imageView)
-        contentView.addSubview(summaryInfoView)
+        contentView.addSubview(shortInfoView)
         contentView.addSubview(dismissButton)
         
         
@@ -108,10 +108,10 @@ class DetailMovieViewController: UIViewController {
             imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 3/2),
 
-            summaryInfoView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            summaryInfoView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            summaryInfoView.heightAnchor.constraint(equalToConstant: CGFloat(Constants.MOIVE_SUMMARY_VIEW_HEIGHT)),
-            summaryInfoView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor),
+            shortInfoView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            shortInfoView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            shortInfoView.heightAnchor.constraint(equalToConstant: CGFloat(Constants.MOIVE_SUMMARY_VIEW_HEIGHT)),
+            shortInfoView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor),
             
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
@@ -121,7 +121,7 @@ class DetailMovieViewController: UIViewController {
             dismissButton.widthAnchor.constraint(equalTo: dismissButton.heightAnchor),
         ]
         
-        let constraint1 = summaryInfoView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CGFloat(Constants.MOVIE_POSTER_HEIGHT) - CGFloat(Constants.MOIVE_SUMMARY_VIEW_HEIGHT))
+        let constraint1 = shortInfoView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CGFloat(Constants.MOVIE_POSTER_HEIGHT) - CGFloat(Constants.MOIVE_SUMMARY_VIEW_HEIGHT))
         constraint1.priority = .defaultLow
         constraint1.isActive = true
         
@@ -131,7 +131,7 @@ class DetailMovieViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         setupLayout()
     }
@@ -140,10 +140,28 @@ class DetailMovieViewController: UIViewController {
         super.viewDidLayoutSubviews()
         scrollView.contentSize = contentView.frame.size
     }
-    
+
     
 }
 
 extension DetailMovieViewController: UIScrollViewDelegate {
     
+}
+
+extension DetailMovieViewController {
+    private func updateShortMovieView() {
+        let info = ShortMovieInfo(title: content.title, overview: content.overview, rating: Float(content.voteAverage))
+        shortInfoView.info = info
+    }
+    
+    private func fetchAndSetImage() {
+        guard let url = imageURL else {print("failed to have a valid image url"); return}
+        Cache.shared.cacheImage(url: url) { (url, image) in
+            if url == self.imageURL {
+                DispatchQueue.main.async {
+                    self.imageView.image = image
+                }
+            }
+        }
+    }
 }

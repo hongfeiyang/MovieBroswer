@@ -19,4 +19,6 @@ struct Constants {
     static let MOVIE_POSTER_HEIGHT = Constants.MOVIE_POSTER_WIDTH * 3/2
     
     static let MOIVE_SUMMARY_VIEW_HEIGHT = 80
+    
+    static var USER_INTERFACE_STYLE: UIUserInterfaceStyle = .unspecified
 }

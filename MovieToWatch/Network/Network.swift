@@ -21,11 +21,11 @@ enum Order: String {
     case desc = ".desc"
 }
 
-struct DiscoverMovieQuery {
+struct DiscoverMovieQuery: CustomStringConvertible {
     
     static let baseURL = "https://api.themoviedb.org/3/discover/movie"
     
-    private var api_key: String = "8bb40fd6bdda6cfcc5397a96da82609d"
+    private var api_key: String = API_KEY
     private var language: String?
     private var region: String?
     private var sort_option: SortByOptions?
@@ -76,23 +76,69 @@ struct DiscoverMovieQuery {
         self.page = page
     }
     
-    init() {
+    init() {}
+}
+
+struct MovieDetailQuery: CustomStringConvertible {
+
+    let baseURL = "https://api.themoviedb.org/3/movie/"
+    
+    let movieID: Int
+    var language: String?
+    var append_to_response: String?
+    
+    init(movieID: Int) {
+        self.movieID = movieID
+    }
+    
+    init(movieID: Int, language: String) {
+        self.movieID = movieID
+        self.language = language
+    }
+    
+    init(movieID: Int, language: String, append_to_response: String) {
+        self.movieID = movieID
+        self.language = language
+        self.append_to_response = append_to_response
+    }
+    
+    var description: String {
+        var result = baseURL + "\(movieID)" + "?" + "api_key=\(API_KEY)"
         
+        if let language = language {
+            result += "&language=\(language)"
+        }
+        
+        if let append_to_response = append_to_response {
+            result += "&append_to_response=\(append_to_response)"
+        }
+        
+        return result
     }
 }
 
 
 class Network {
     
-    static func getDiscoverMovieResults(query: DiscoverMovieQuery, completion: (([MovieItem]) -> Void)?) {
+    static func getMovieDetail(query: MovieDetailQuery, completion: ((MovieDetail) -> Void)?) {
         guard let url = URL(string: query.description) else {return}
-        let session = URLSession.shared.discoverMovieTask(with: url) {(data, response, error) in
+        URLSession.shared.movieDetailTask(with: url) {(data, response, error) in
+            NSLog("response received")
+            guard let data = data else {print("fail to parse MovieDetail"); return}
+            NSLog("response parsed")
+            completion?(data)
+        }.resume()
+        NSLog("Query send: \(query)")
+    }
+    
+    static func getDiscoverMovieResults(query: DiscoverMovieQuery, completion: (([MovieResult]) -> Void)?) {
+        guard let url = URL(string: query.description) else {return}
+        URLSession.shared.discoverMovieTask(with: url) {(data, response, error) in
             NSLog("response received")
             guard let data = data else {print("fail to parse DiscoverMovie"); return}
             NSLog("response parsed")
             completion?(data.results)
-        }
-        session.resume()
+        }.resume()
         NSLog("Query send: \(query.description)")
         
         

@@ -18,7 +18,7 @@ import Foundation
 // MARK: - DiscoverMovie
 struct DiscoverMovie: Codable {
     let page, totalResults, totalPages: Int
-    let results: [MovieItem]
+    let results: [MovieResult]
 
     enum CodingKeys: String, CodingKey {
         case page
@@ -40,7 +40,7 @@ struct DiscoverMovie: Codable {
 //   task.resume()
 
 // MARK: - MovieItem
-struct MovieItem: Codable {
+struct MovieResult: Codable {
     let popularity: Double
     let voteCount: Int
     let video: Bool

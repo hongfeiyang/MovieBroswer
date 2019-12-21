@@ -12,6 +12,7 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
     let duration = 0.5
     var originFrame = CGRect.zero
+    weak var cell: CardCollectionViewCell!
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
@@ -42,7 +43,7 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         toView.layer.cornerRadius = CGFloat(Constants.CARD_CORNER_RADIUS)
         
         containerView.layoutIfNeeded()
-        
+        cell.isHidden = true
         // animate expansion to fill out the space
         UIView.animate(withDuration: duration/2, animations: {
             cardWidthConstraint.constant = finalFrame.width
@@ -52,7 +53,7 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         
         
         // animate spring upwards
-        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: {
+        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [.curveLinear], animations: {
             cardTopAnchorConstraint.constant = 0
             containerView.layoutIfNeeded()
         })
@@ -71,6 +72,7 @@ class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
     let duration = 0.5
     var originFrame = CGRect.zero
+    weak var cell: CardCollectionViewCell!
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
@@ -114,6 +116,7 @@ class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             fromView.layer.cornerRadius = CGFloat(Constants.CARD_CORNER_RADIUS)
             containerView.layoutIfNeeded()
         }) { (finished) in
+            self.cell.isHidden = false
             fromView.removeFromSuperview()
             transitionContext.completeTransition(finished)
         }

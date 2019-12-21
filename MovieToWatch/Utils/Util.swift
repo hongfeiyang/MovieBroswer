@@ -40,6 +40,17 @@ extension UIImage {
 
 extension UIColor {
     
+    static var contrastColor: UIColor {
+        switch Constants.USER_INTERFACE_STYLE {
+        case .dark:
+            return UIColor.white
+        case .light:
+            return UIColor.black
+        default:
+            return UIColor.white
+        }
+    }
+    
     var rgba: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         var red: CGFloat = 0
         var green: CGFloat = 0
@@ -50,7 +61,7 @@ extension UIColor {
         return (red, green, blue, alpha)
     }
     
-    func ContrastColor() -> UIColor {
+    func getComplementaryColor() -> UIColor {
         var d: Float = 0
 
         // Counting the perceptive luminance - human eye favors green color...
@@ -65,4 +76,6 @@ extension UIColor {
 
         return UIColor(red: CGFloat(d/255), green: CGFloat(d/255), blue: CGFloat(d/255), alpha: 1);
     }
+    
+    
 }
