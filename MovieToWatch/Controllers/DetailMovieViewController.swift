@@ -10,9 +10,9 @@ import UIKit
 
 class DetailMovieViewController: UIViewController {
 
-    public var content: MovieDetail! {
+    public var content: MovieMO! {
         didSet {
-            imageURL = APIConfiguration.parsePosterURL(file_path: content.posterPath, size: .original)
+            imageURL = APIConfiguration.parsePosterURL(file_path: content.posterPath!, size: .original)
             updateShortMovieView()
         }
     }
@@ -23,7 +23,7 @@ class DetailMovieViewController: UIViewController {
             let movieDetailQuery = MovieDetailQuery(movieID: movieID)
             Network.getMovieDetail(query: movieDetailQuery) { [weak self] detail in
                 self?.content = detail
-                print(detail.tagline)
+                //print(detail.tagline)
             }
         }
     }
@@ -150,7 +150,7 @@ extension DetailMovieViewController: UIScrollViewDelegate {
 
 extension DetailMovieViewController {
     private func updateShortMovieView() {
-        let info = ShortMovieInfo(title: content.title, overview: content.overview, rating: Float(content.voteAverage))
+        let info = ShortMovieInfo(title: content.title!, overview: content.overview!, rating: Float(content.voteAverage))
         shortInfoView.info = info
     }
     

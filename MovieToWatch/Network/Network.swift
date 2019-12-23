@@ -120,11 +120,11 @@ struct MovieDetailQuery: CustomStringConvertible {
 
 class Network {
     
-    static func getMovieDetail(query: MovieDetailQuery, completion: ((MovieDetail) -> Void)?) {
+    static func getMovieDetail(query: MovieDetailQuery, completion: ((MovieMO) -> Void)?) {
         guard let url = URL(string: query.description) else {return}
         URLSession.shared.movieDetailTask(with: url) {(data, response, error) in
             NSLog("response received")
-            guard let data = data else {print("fail to parse MovieDetail"); return}
+            guard let data = data else {print("movieDetailTask returned nil"); return}
             NSLog("response parsed")
             completion?(data)
         }.resume()

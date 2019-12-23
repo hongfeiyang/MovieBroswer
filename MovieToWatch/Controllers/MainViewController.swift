@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class MainViewController: UIViewController {
     
@@ -15,6 +16,7 @@ class MainViewController: UIViewController {
     private var cardDismissAnimator = CardDismissAnimator()
     private var currentPage = 0
     private var pageIsLoadingMoreContent = false
+    
     
     private var results = [MovieResult]() {
         didSet {
@@ -72,7 +74,14 @@ class MainViewController: UIViewController {
         view.addSubview(collectionView)
         setupLayout()
         refresh()
+        
     }
+//    
+//    lazy var fetchedResultsController: NSFetchedResultsController = {
+//        let fetchRequest: NSFetchRequest<Movie> = Movie.fetchRequest()
+//        
+//        
+//    }()
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

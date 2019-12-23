@@ -10,12 +10,22 @@ import UIKit
 
 class CardCollectionViewCell: UICollectionViewCell {
     
-    public var content: (result: MovieResult, detail: MovieDetail?)! {
+    public var content: (result: MovieResult, detail: MovieMO?)! {
         didSet {
             imageURL = APIConfiguration.parsePosterURL(file_path: content.result.posterPath, size: .original)
             updateShortMovieInfoView()
         }
     }
+    
+//    public var movieID: Int! {
+//        didSet {
+//            let movieDetailQuery = MovieDetailQuery(movieID: movieID)
+//            Network.getMovieDetail(query: movieDetailQuery) { [weak self] detail in
+//                self?.content = content
+//                
+//            }
+//        }
+//    }
     
     private var activityIndicatorView: UIActivityIndicatorView = {
         let indicatorView = UIActivityIndicatorView()
