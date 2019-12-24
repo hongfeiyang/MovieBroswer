@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="BelongsToCollection" representedClassName="BelongsToCollectionMO" syncable="YES">
-        <attribute name="backdropPath" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="posterPath" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="Genre" representedClassName="GenreMO" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-    </entity>
     <entity name="Movie" representedClassName="MovieMO" syncable="YES">
         <attribute name="adult" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="backdropPath" optional="YES" attributeType="String"/>
+        <attribute name="belongsToCollection" optional="YES" attributeType="Transformable"/>
         <attribute name="budget" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="genres" optional="YES" attributeType="Transformable"/>
         <attribute name="homepage" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="imdbID" optional="YES" attributeType="String"/>
@@ -22,41 +14,25 @@
         <attribute name="overview" optional="YES" attributeType="String"/>
         <attribute name="popularity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="posterPath" optional="YES" attributeType="String"/>
+        <attribute name="productionCompanies" optional="YES" attributeType="Transformable"/>
+        <attribute name="productionCountries" optional="YES" attributeType="Transformable"/>
         <attribute name="releaseDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="revenue" optional="YES" attributeType="Integer 64" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="runtime" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="spokenLanguages" optional="YES" attributeType="Transformable"/>
         <attribute name="status" optional="YES" attributeType="String"/>
         <attribute name="tagline" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="video" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="voteAverage" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="voteCount" optional="YES" attributeType="Integer 64" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <relationship name="belongsToCollection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BelongsToCollection"/>
-        <relationship name="genres" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Genre"/>
-        <relationship name="productionCompanies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ProductionCompany"/>
-        <relationship name="productionCountries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ProductionCountry"/>
-        <relationship name="spokenLanguages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SpokenLanguage"/>
-    </entity>
-    <entity name="ProductionCompany" representedClassName="ProductionCompanyMO" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="logoPath" optional="YES" attributeType="String"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="originCountry" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="ProductionCountry" representedClassName="ProductionCountryMO" syncable="YES">
-        <attribute name="iso3166_1" optional="YES" attributeType="String"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="SpokenLanguage" representedClassName="SpokenLanguageMO" syncable="YES">
-        <attribute name="iso639_1" optional="YES" attributeType="String"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="BelongsToCollection" positionX="-84.92578125" positionY="-49.5" width="128" height="103"/>
-        <element name="Genre" positionX="-52.921875" positionY="115.09375" width="128" height="73"/>
         <element name="Movie" positionX="-579.8515625" positionY="-198.01953125" width="128" height="418"/>
-        <element name="ProductionCompany" positionX="-97.1796875" positionY="257.859375" width="128" height="103"/>
-        <element name="ProductionCountry" positionX="-304.9609375" positionY="296.9609375" width="128" height="73"/>
-        <element name="SpokenLanguage" positionX="-443.73828125" positionY="298.30078125" width="128" height="73"/>
     </elements>
 </model>

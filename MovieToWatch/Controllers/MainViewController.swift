@@ -16,29 +16,17 @@ class MainViewController: UIViewController {
     private var cardDismissAnimator = CardDismissAnimator()
     private var currentPage = 0
     private var pageIsLoadingMoreContent = false
-    
-    
-    private var results = [MovieResult]() {
-        didSet {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
-    }
-    
-//    private var movieDetailDict = [Int: MovieDetail]()
-    
-    
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .systemBackground
-        collectionView.refreshControl = refreshControl
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(CardCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        return collectionView
+
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .systemBackground
+        tableView.refreshControl = refreshControl
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(CardTableViewCell.self, forCellReuseIdentifier: "Cell")
+        return tableView
     }()
     
     private lazy var refreshControl: UIRefreshControl = {
@@ -48,22 +36,19 @@ class MainViewController: UIViewController {
     }()
     
     @objc private func refresh() {
+ 
         currentPage = 1
-        loadMoreData { results in
-            DispatchQueue.main.async {
-                self.refreshControl.endRefreshing()
-                self.results = results
-            }
-        }
+        loadMoreData()
+        
     }
     
     private func setupLayout() {
         
         let constraints = [
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ]
         
         NSLayoutConstraint.activate(constraints)
@@ -71,67 +56,115 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(collectionView)
+        view.addSubview(tableView)
         setupLayout()
         refresh()
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        
         
     }
-//    
-//    lazy var fetchedResultsController: NSFetchedResultsController = {
-//        let fetchRequest: NSFetchRequest<Movie> = Movie.fetchRequest()
-//        
-//        
-//    }()
+
+    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<MovieMO> = {
+        let fetchRequest: NSFetchRequest<MovieMO> = MovieMO.fetchRequest()
+        
+        let sortDescriptor = NSSortDescriptor(key: "popularity", ascending: false)
+        
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        controller.delegate = self
+        return controller
+    }()
 }
 
-extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+
+extension MainViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+     
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .delete:
+            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .move:
+            break
+        case .update:
+            break
+        @unknown default:
+            fatalError("unimplemented case")
+        }
+    }
+     
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+        switch type {
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
+        case .delete:
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+        case .update:
+            tableView.reloadRows(at: [indexPath!], with: .fade)
+        case .move:
+            tableView.moveRow(at: indexPath!, to: newIndexPath!)
+        @unknown default:
+            fatalError("unimplemented case")
+        }
+        
+    }
+     
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        
+        tableView.endUpdates()
+        
+        pageIsLoadingMoreContent = false
+        DispatchQueue.main.async {
+            self.refreshControl.endRefreshing()
+        }
+    }
+}
+
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let results = fetchedResultsController.fetchedObjects else {return 0}
+        
         return results.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let cell = cell as? CardTableViewCell else {fatalError("no cell named CardCollectionViewCell")}
         
-        let width = UIScreen.main.bounds.width - 40
-        let height = width * 6/5
-        
-        return CGSize(width: width, height: height)
+        let result = fetchedResultsController.object(at: indexPath)
+        cell.content = result
     }
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let cell = cell as? CardCollectionViewCell else {fatalError("no cell named CardCollectionViewCell")}
-        
-        let result = results[indexPath.row]
-        let id = result.id
-        
-        cell.content = (result, nil)
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return (UIScreen.main.bounds.width - 20 * 2) * 6/5
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //guard let cell = collectionView.cellForItem(at: indexPath) as? CardCollectionViewCell else {fatalError("failed to cast cell as CardColectionCell at didSelectItemAtIndexPath")}
-        
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = DetailMovieViewController()
-        let result = results[indexPath.row]
-        let id = result.id
-        
-        vc.movieID = id
+        let result = fetchedResultsController.object(at: indexPath)
+        vc.content = result
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = self
         //vc.isModalInPresentation = true
         present(vc, animated: true, completion: nil)
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 20
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 20
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -142,26 +175,25 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         if yOffset > contentHeight - scrollView.frame.height + triggerOffset && !pageIsLoadingMoreContent {
             currentPage += 1
-            loadMoreData { results in
-                DispatchQueue.main.async {
-                    self.results += results
-                    NSLog("new content loaded")
-                    self.pageIsLoadingMoreContent = false
-                }
+            loadMoreData() {
+                self.pageIsLoadingMoreContent = false
             }
-            pageIsLoadingMoreContent = true
+            self.pageIsLoadingMoreContent = true
+            
         }
     }
     
 }
+
+
 
 extension MainViewController: UIViewControllerTransitioningDelegate {
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
         guard
-            let selectedIndexPathCell = collectionView.indexPathsForSelectedItems?.first,
-            let selectedCell = collectionView.cellForItem(at: selectedIndexPathCell) as? CardCollectionViewCell,
+            let selectedIndexPathCell = tableView.indexPathForSelectedRow,
+            let selectedCell = tableView.cellForRow(at: selectedIndexPathCell) as? CardTableViewCell,
             let selectedCellSuperview = selectedCell.superview
             else {
                 return nil
@@ -176,8 +208,8 @@ extension MainViewController: UIViewControllerTransitioningDelegate {
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
         guard
-            let selectedIndexPathCell = collectionView.indexPathsForSelectedItems?.first,
-            let selectedCell = collectionView.cellForItem(at: selectedIndexPathCell) as? CardCollectionViewCell,
+            let selectedIndexPathCell = tableView.indexPathForSelectedRow,
+            let selectedCell = tableView.cellForRow(at: selectedIndexPathCell) as? CardTableViewCell,
             let selectedCellSuperview = selectedCell.superview
             else {
                 return nil
@@ -193,21 +225,12 @@ extension MainViewController: UIViewControllerTransitioningDelegate {
 
 extension MainViewController {
     
-    private func loadMoreData(completion: (([MovieResult]) -> Void)?) {
+    private func loadMoreData(completion: (() -> Void)? = nil) {
         let discoverMovieQuery = DiscoverMovieQuery(language: nil, region: "AU", sort_option: nil, order: nil, page: currentPage, include_adult: true, include_video: true)
-        Network.getDiscoverMovieResults(query: discoverMovieQuery) { results in
-//            for result in results {
-//                let movieID = result.id
-//                let movieDetailQuery = MovieDetailQuery(movieID: movieID)
-//                Network.getMovieDetail(query: movieDetailQuery) { [weak self] detail in
-//                    self?.movieDetailDict[movieID] = detail
-//                }
-//            }
-            completion?(results)
+        Network.getDiscoverMovieResults(query: discoverMovieQuery) {
+            completion?()
         }
-    }
-    
-    private func configureCell() {
         
     }
+    
 }

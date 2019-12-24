@@ -9,13 +9,13 @@
 import UIKit
 
 struct ShortMovieInfo {
-    let title: String
-    let overview: String
-    let rating: Float
+    let title: String?
+    let tagLine: String?
+    let rating: Double
     
-    init(title: String, overview: String, rating: Float) {
+    init(title: String?, tagLine: String?, rating: Double) {
         self.title = title
-        self.overview = overview
+        self.tagLine = tagLine
         self.rating = rating
         
     }
@@ -29,7 +29,7 @@ class ShortMovieInfoView: UIView {
         didSet {
             DispatchQueue.main.async { [unowned self] in
                 self.titleLabel.text = self.info.title
-                self.overviewLabel.text = self.info.overview
+                self.tagLineLabel.text = self.info.tagLine
                 self.ratingLabel.text = String(self.info.rating)+"/10"
             }
         }
@@ -39,7 +39,7 @@ class ShortMovieInfoView: UIView {
         let label = UILabel()
         label.text = ""
         label.textColor = .label
-        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 22, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -48,19 +48,18 @@ class ShortMovieInfoView: UIView {
         let label = UILabel()
         label.text = ""
         label.textColor = .secondaryLabel
-        label.font = UIFont.systemFont(ofSize: 15, weight: .light)
+        label.font = UIFont.systemFont(ofSize: 15, weight: .heavy)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private var overviewLabel: UILabel = {
+    private var tagLineLabel: UILabel = {
         let label = UILabel()
         label.text = ""
-        label.textColor = .label
-        label.isHidden = true
+        label.textColor = .secondaryLabel
         label.numberOfLines = 0
         label.lineBreakMode = .byTruncatingTail
-        label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 12, weight: .light)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -82,7 +81,7 @@ class ShortMovieInfoView: UIView {
     
     private func setupLayout() {
         
-        let padding = CGFloat(10)
+        let padding = CGFloat(15)
         
         let constraints = [
             blurView.topAnchor.constraint(equalTo: topAnchor),
@@ -90,13 +89,15 @@ class ShortMovieInfoView: UIView {
             blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
             blurView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            overviewLabel.leadingAnchor.constraint(equalTo: blurView.contentView.leadingAnchor, constant: padding),
-            overviewLabel.trailingAnchor.constraint(equalTo: blurView.contentView.trailingAnchor, constant: -padding),
-            overviewLabel.centerYAnchor.constraint(equalTo: blurView.contentView.centerYAnchor),
+            tagLineLabel.leadingAnchor.constraint(equalTo: blurView.contentView.leadingAnchor, constant: padding),
+            //tagLineLabel.trailingAnchor.constraint(equalTo: blurView.contentView.trailingAnchor, constant: -padding),
+            tagLineLabel.topAnchor.constraint(equalTo: blurView.contentView.centerYAnchor),
+            tagLineLabel.bottomAnchor.constraint(equalTo: blurView.contentView.bottomAnchor, constant: -padding),
+            tagLineLabel.trailingAnchor.constraint(lessThanOrEqualTo: ratingLabel.leadingAnchor, constant: -padding),
             
             titleLabel.leadingAnchor.constraint(equalTo: blurView.contentView.leadingAnchor, constant: padding),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: ratingLabel.leadingAnchor, constant: -padding),
-            titleLabel.centerYAnchor.constraint(equalTo: blurView.contentView.centerYAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: blurView.contentView.centerYAnchor),
             
             ratingLabel.trailingAnchor.constraint(equalTo: blurView.contentView.trailingAnchor, constant: -padding),
             ratingLabel.centerYAnchor.constraint(equalTo: blurView.contentView.centerYAnchor),
@@ -114,7 +115,7 @@ class ShortMovieInfoView: UIView {
         
         addSubview(blurView)
         blurView.contentView.addSubview(vibrancyView)
-        vibrancyView.contentView.addSubview(overviewLabel)
+        vibrancyView.contentView.addSubview(tagLineLabel)
         vibrancyView.contentView.addSubview(titleLabel)
         vibrancyView.contentView.addSubview(ratingLabel)
         setupLayout()
@@ -126,7 +127,7 @@ class ShortMovieInfoView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        overviewLabel.sizeToFit()
+        tagLineLabel.sizeToFit()
         titleLabel.sizeToFit()
         ratingLabel.sizeToFit()
     }

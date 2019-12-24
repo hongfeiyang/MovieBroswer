@@ -16,17 +16,17 @@ class DetailMovieViewController: UIViewController {
             updateShortMovieView()
         }
     }
-    
-    public var movieID: Int! {
-        didSet {
-            
-            let movieDetailQuery = MovieDetailQuery(movieID: movieID)
-            Network.getMovieDetail(query: movieDetailQuery) { [weak self] detail in
-                self?.content = detail
-                //print(detail.tagline)
-            }
-        }
-    }
+//
+//    public var movieID: Int! {∫
+//        didSet {
+//
+//            let movieDetailQuery = MovieDetailQuery(movieID: movieID)
+//            Network.getMovieDetail(query: movieDetailQuery) { [weak self] detail in
+//                self?.content = detail
+//                //print(detail.tagline)
+//            }
+//        }
+//    }
     
     public lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -150,7 +150,7 @@ extension DetailMovieViewController: UIScrollViewDelegate {
 
 extension DetailMovieViewController {
     private func updateShortMovieView() {
-        let info = ShortMovieInfo(title: content.title!, overview: content.overview!, rating: Float(content.voteAverage))
+        let info = ShortMovieInfo(title: content.title, tagLine: content.tagline, rating: content.voteAverage)
         shortInfoView.info = info
     }
     

@@ -12,7 +12,7 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
     let duration = 0.5
     var originFrame = CGRect.zero
-    weak var cell: CardCollectionViewCell!
+    weak var cell: CardTableViewCell!
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
@@ -32,10 +32,11 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         let cardWidthConstraint = toView.widthAnchor.constraint(equalToConstant: initialFrame.width)
         let cardHeightConstraint = toView.heightAnchor.constraint(equalToConstant: initialFrame.height)
         let cardTopAnchorConstraint = toView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: originFrame.origin.y)
+        let cardCenterXAnchorConstraint = toView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: originFrame.midX - containerView.frame.midX)
         
         let toViewConstraints = [
             cardTopAnchorConstraint,
-            toView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            cardCenterXAnchorConstraint,
             cardWidthConstraint,
             cardHeightConstraint,
         ]
@@ -48,6 +49,7 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         UIView.animate(withDuration: duration/2, animations: {
             cardWidthConstraint.constant = finalFrame.width
             cardHeightConstraint.constant = finalFrame.height
+            cardCenterXAnchorConstraint.constant = 0
             containerView.layoutIfNeeded()
         })
         
@@ -72,7 +74,7 @@ class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
     let duration = 0.5
     var originFrame = CGRect.zero
-    weak var cell: CardCollectionViewCell!
+    weak var cell: CardTableViewCell!
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
@@ -101,9 +103,9 @@ class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         let cardWidthConstraint = fromView.widthAnchor.constraint(equalToConstant: containerView.frame.width)
         let cardHeightConstraint = fromView.heightAnchor.constraint(equalToConstant: containerView.frame.height)
         let cardTopAnchorConstraint = fromView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0)
-        fromView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        let cardCenterXAnchorConstraint = fromView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
    
-        NSLayoutConstraint.activate([cardWidthConstraint, cardHeightConstraint, cardTopAnchorConstraint])
+        NSLayoutConstraint.activate([cardWidthConstraint, cardHeightConstraint, cardTopAnchorConstraint, cardCenterXAnchorConstraint])
         fromView.clipsToBounds = true // for corner radius animation
         
         containerView.layoutIfNeeded()
@@ -113,6 +115,7 @@ class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             cardTopAnchorConstraint.constant = self.originFrame.origin.y
             cardWidthConstraint.constant = self.originFrame.width
             cardHeightConstraint.constant = self.originFrame.height
+            cardCenterXAnchorConstraint.constant = self.originFrame.midX - containerView.frame.midX
             fromView.layer.cornerRadius = CGFloat(Constants.CARD_CORNER_RADIUS)
             containerView.layoutIfNeeded()
         }) { (finished) in

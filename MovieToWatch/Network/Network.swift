@@ -120,27 +120,35 @@ struct MovieDetailQuery: CustomStringConvertible {
 
 class Network {
     
-    static func getMovieDetail(query: MovieDetailQuery, completion: ((MovieMO) -> Void)?) {
+    static func getMovieDetail(query: MovieDetailQuery) {
         guard let url = URL(string: query.description) else {return}
         URLSession.shared.movieDetailTask(with: url) {(data, response, error) in
-            NSLog("response received")
-            guard let data = data else {print("movieDetailTask returned nil"); return}
-            NSLog("response parsed")
-            completion?(data)
+            //NSLog("response received")
+            guard let movieDetail = data else {print("movieDetailTask returned nil"); return}
+            //NSLog("response parsed")
+            
+            _ = MovieMO(data: movieDetail)
+            
+            
         }.resume()
-        NSLog("Query send: \(query)")
+        //NSLog("Query send: \(query)")
     }
     
-    static func getDiscoverMovieResults(query: DiscoverMovieQuery, completion: (([MovieResult]) -> Void)?) {
+    static func getDiscoverMovieResults(query: DiscoverMovieQuery, completion: (() -> Void)? = nil) {
         guard let url = URL(string: query.description) else {return}
         URLSession.shared.discoverMovieTask(with: url) {(data, response, error) in
-            NSLog("response received")
+            //NSLog("response received")
             guard let data = data else {print("fail to parse DiscoverMovie"); return}
-            NSLog("response parsed")
-            completion?(data.results)
+            //NSLog("response parsed")
+            
+            for result in data.results {
+                let detailQuery = MovieDetailQuery(movieID: result.id)
+                getMovieDetail(query: detailQuery)
+            }
+            
+            completion?()
+            
         }.resume()
-        NSLog("Query send: \(query.description)")
-        
-        
+        //NSLog("Query send: \(query.description)")
     }
 }

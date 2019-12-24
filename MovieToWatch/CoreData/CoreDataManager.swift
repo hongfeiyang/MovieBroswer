@@ -28,6 +28,7 @@ class CoreDataManager {
     
     func saveContext(backgroundContext: NSManagedObjectContext? = nil) {
         let context = backgroundContext ?? CoreDataManager.shared.persistentContainer.viewContext
+        context.mergePolicy = NSOverwriteMergePolicy
         guard context.hasChanges else { return }
         do {
             try context.save()
