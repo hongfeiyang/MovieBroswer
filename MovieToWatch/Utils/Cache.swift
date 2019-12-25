@@ -21,12 +21,15 @@ class Cache {
         } else {
             
             URLSession.shared.dataTask(with: url) { (data, response, error) in
-                guard let data = data, let image = UIImage(data: data) else { print("failed to get image data"); return}
+                guard let data = data else { print("failed to get image data"); return}
                 
-                let screenWidth = UIScreen.main.bounds.width
-                let height = screenWidth * 3/2
-                let size = CGSize(width: screenWidth, height: height)
-                let newImage = image.resizeImage(targetSize: size)
+                let image = UIImage(data: data)!
+                
+                // compress image to prevent low memory warning
+//                let screenWidth = UIScreen.main.bounds.width
+//                let height = screenWidth * 3/2
+//                let size = CGSize(width: screenWidth, height: height)
+//                let newImage = image.resizeImage(targetSize: size)
                 
                 Cache.shared.imageCache.setObject(image, forKey: url.absoluteString as NSString)
                 

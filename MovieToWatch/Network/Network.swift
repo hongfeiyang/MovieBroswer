@@ -25,20 +25,20 @@ struct DiscoverMovieQuery: CustomStringConvertible {
     
     static let baseURL = "https://api.themoviedb.org/3/discover/movie"
     
-    private var api_key: String = API_KEY
-    private var language: String?
-    private var region: String?
-    private var sort_option: SortByOptions?
-    private var order: Order?
-    private var sort_by: String? {
+    var api_key: String = API_KEY
+    var language: String?
+    var region: String?
+    var sort_option: SortByOptions?
+    var order: Order?
+    var sort_by: String? {
         if let sort_option = sort_option, let order = order {
             return sort_option.rawValue + order.rawValue
         }
         return nil
     }
-    private var include_adult: Bool?
-    private var include_video: Bool?
-    private var page: Int?
+    var include_adult: Bool?
+    var include_video: Bool?
+    var page: Int?
     
     var description: String {
         
@@ -120,33 +120,59 @@ struct MovieDetailQuery: CustomStringConvertible {
 
 class Network {
     
-    static func getMovieDetail(query: MovieDetailQuery) {
+    static func getMovieDetail(query: MovieDetailQuery, completion: ((MovieDetail) -> Void)?) {
         guard let url = URL(string: query.description) else {return}
         URLSession.shared.movieDetailTask(with: url) {(data, response, error) in
             //NSLog("response received")
             guard let movieDetail = data else {print("movieDetailTask returned nil"); return}
             //NSLog("response parsed")
             
-            _ = MovieMO(data: movieDetail)
+            completion?(movieDetail)
             
-            
+//            let predicate = NSPredicate(format: "id == %d", movieDetail.id)
+//            let result = CoreDataManager.shared.fetchRecordForEntity("Movie", predicate)
+//
+//            if let movie = result.first {
+//                CoreDataManager.shared.managedObjectContext.delete(movie)
+//            }
+//            _ = MovieMO(data: movieDetail)
+
         }.resume()
         //NSLog("Query send: \(query)")
     }
     
-    static func getDiscoverMovieResults(query: DiscoverMovieQuery, completion: (() -> Void)? = nil) {
+    static func getDiscoverMovieResults(query: DiscoverMovieQuery, completion: (([MovieResult]) -> Void)? = nil) {
         guard let url = URL(string: query.description) else {return}
         URLSession.shared.discoverMovieTask(with: url) {(data, response, error) in
             //NSLog("response received")
             guard let data = data else {print("fail to parse DiscoverMovie"); return}
             //NSLog("response parsed")
             
-            for result in data.results {
-                let detailQuery = MovieDetailQuery(movieID: result.id)
-                getMovieDetail(query: detailQuery)
-            }
+            completion?(data.results)
+//            let dispatchGroup = DispatchGroup()
+//
+//            for result in data.results {
+//                dispatchGroup.enter()
+//                let detailQuery = MovieDetailQuery(movieID: result.id)
+//                getMovieDetail(query: detailQuery) { movieDetail in
+//
+//                    let predicate = NSPredicate(format: "id == %d", movieDetail.id)
+//                    let result = CoreDataManager.shared.fetchRecordForEntity("Movie", predicate)
+//
+//                    if let movie = result.first {
+//                        CoreDataManager.shared.managedObjectContext.delete(movie)
+//                    }
+//                    _ = MovieMO(data: movieDetail)
+//
+//                    dispatchGroup.leave()
+//                }
+//            }
+//
+//            dispatchGroup.notify(queue: .main) {
+//                completion?()
+//            }
             
-            completion?()
+            
             
         }.resume()
         //NSLog("Query send: \(query.description)")

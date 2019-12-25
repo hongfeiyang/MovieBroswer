@@ -16,6 +16,11 @@
 		8D12BE6623A6A2B4006C72B4 /* DiscoverMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12BE6523A6A2B4006C72B4 /* DiscoverMovie.swift */; };
 		8D12BE6823A74491006C72B4 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12BE6723A74491006C72B4 /* CardTableViewCell.swift */; };
 		8D12BE6C23A79C4B006C72B4 /* APIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12BE6B23A79C4B006C72B4 /* APIConfiguration.swift */; };
+		8D400AE723B30A08006555D3 /* ImageCacheMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AE523B30A08006555D3 /* ImageCacheMO+CoreDataClass.swift */; };
+		8D400AE823B30A08006555D3 /* ImageCacheMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AE623B30A08006555D3 /* ImageCacheMO+CoreDataProperties.swift */; };
+		8D400AEA23B33388006555D3 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AE923B33388006555D3 /* TestViewController.swift */; };
+		8D400AEC23B34911006555D3 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AEB23B34911006555D3 /* MainTabBarController.swift */; };
+		8D400AEF23B36A56006555D3 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AEE23B36A56006555D3 /* SearchViewController.swift */; };
 		8D4CFE9723B0EE4F00985287 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4CFE9623B0EE4F00985287 /* CoreDataManager.swift */; };
 		8D821D7023A8E96E0097F089 /* DetailMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D821D6F23A8E96E0097F089 /* DetailMovieViewController.swift */; };
 		8D821D7223A8EE7A0097F089 /* CardAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D821D7123A8EE7A0097F089 /* CardAnimator.swift */; };
@@ -42,6 +47,11 @@
 		8D12BE6523A6A2B4006C72B4 /* DiscoverMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverMovie.swift; sourceTree = "<group>"; };
 		8D12BE6723A74491006C72B4 /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
 		8D12BE6B23A79C4B006C72B4 /* APIConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfiguration.swift; sourceTree = "<group>"; };
+		8D400AE523B30A08006555D3 /* ImageCacheMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCacheMO+CoreDataClass.swift"; sourceTree = "<group>"; };
+		8D400AE623B30A08006555D3 /* ImageCacheMO+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCacheMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		8D400AE923B33388006555D3 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		8D400AEB23B34911006555D3 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		8D400AEE23B36A56006555D3 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		8D4CFE9623B0EE4F00985287 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		8D821D6F23A8E96E0097F089 /* DetailMovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMovieViewController.swift; sourceTree = "<group>"; };
 		8D821D7123A8EE7A0097F089 /* CardAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardAnimator.swift; sourceTree = "<group>"; };
@@ -86,13 +96,13 @@
 		8D12BE4E23A699CE006C72B4 /* MovieToWatch */ = {
 			isa = PBXGroup;
 			children = (
+				8D400AEE23B36A56006555D3 /* SearchViewController.swift */,
+				8D400AED23B369AE006555D3 /* Discover */,
 				8DA5DB4A23B24D0B00895DEF /* Codable */,
 				8DA5DB4523B167C400895DEF /* CoreData */,
-				8DA5DB4423B1674300895DEF /* Controllers */,
+				8DA5DB4423B1674300895DEF /* Common */,
 				8DB9469023AD12DF00AFD13C /* Utils */,
 				8DB9468F23ACC34000AFD13C /* Network */,
-				8DB9469523AD13D600AFD13C /* MovieCard */,
-				8DB9469423AD13BD00AFD13C /* Views */,
 				8D12BE6323A699FC006C72B4 /* Supporting Files */,
 				8D12BE5823A699CF006C72B4 /* Assets.xcassets */,
 				8D12BE5D23A699CF006C72B4 /* Info.plist */,
@@ -111,9 +121,21 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		8D400AED23B369AE006555D3 /* Discover */ = {
+			isa = PBXGroup;
+			children = (
+				8DB9469523AD13D600AFD13C /* MovieCard */,
+				8D12BE5323A699CE006C72B4 /* MainViewController.swift */,
+				8D400AE923B33388006555D3 /* TestViewController.swift */,
+			);
+			path = Discover;
+			sourceTree = "<group>";
+		};
 		8DA5DAC323B14AFF00895DEF /* CoreDataObjectModel */ = {
 			isa = PBXGroup;
 			children = (
+				8D400AE523B30A08006555D3 /* ImageCacheMO+CoreDataClass.swift */,
+				8D400AE623B30A08006555D3 /* ImageCacheMO+CoreDataProperties.swift */,
 				8DA5DB6523B260D900895DEF /* MovieMO+CoreDataClass.swift */,
 				8DA5DB6623B260D900895DEF /* MovieMO+CoreDataProperties.swift */,
 				8DA5DABD23B13DFC00895DEF /* DataModel.xcdatamodeld */,
@@ -121,13 +143,13 @@
 			path = CoreDataObjectModel;
 			sourceTree = "<group>";
 		};
-		8DA5DB4423B1674300895DEF /* Controllers */ = {
+		8DA5DB4423B1674300895DEF /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				8D12BE5323A699CE006C72B4 /* MainViewController.swift */,
 				8D821D6F23A8E96E0097F089 /* DetailMovieViewController.swift */,
+				8D400AEB23B34911006555D3 /* MainTabBarController.swift */,
 			);
-			path = Controllers;
+			path = Common;
 			sourceTree = "<group>";
 		};
 		8DA5DB4523B167C400895DEF /* CoreData */ = {
@@ -167,17 +189,10 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		8DB9469423AD13BD00AFD13C /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				8DB9469223AD139A00AFD13C /* ShortMovieInfoView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		8DB9469523AD13D600AFD13C /* MovieCard */ = {
 			isa = PBXGroup;
 			children = (
+				8DB9469223AD139A00AFD13C /* ShortMovieInfoView.swift */,
 				8D12BE6723A74491006C72B4 /* CardTableViewCell.swift */,
 				8D821D7123A8EE7A0097F089 /* CardAnimator.swift */,
 			);
@@ -256,14 +271,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DB9468E23ACBD7800AFD13C /* Network.swift in Sources */,
+				8D400AE723B30A08006555D3 /* ImageCacheMO+CoreDataClass.swift in Sources */,
+				8D400AEC23B34911006555D3 /* MainTabBarController.swift in Sources */,
 				8DB0E61023AB318300AAB29E /* Util.swift in Sources */,
 				8DA5DB6823B260D900895DEF /* MovieMO+CoreDataProperties.swift in Sources */,
 				8DA5DABF23B13DFC00895DEF /* DataModel.xcdatamodeld in Sources */,
 				8D12BE5423A699CE006C72B4 /* MainViewController.swift in Sources */,
+				8D400AE823B30A08006555D3 /* ImageCacheMO+CoreDataProperties.swift in Sources */,
+				8D400AEA23B33388006555D3 /* TestViewController.swift in Sources */,
 				8D12BE6C23A79C4B006C72B4 /* APIConfiguration.swift in Sources */,
 				8D12BE5023A699CE006C72B4 /* AppDelegate.swift in Sources */,
 				8D821D7023A8E96E0097F089 /* DetailMovieViewController.swift in Sources */,
 				8D821D7223A8EE7A0097F089 /* CardAnimator.swift in Sources */,
+				8D400AEF23B36A56006555D3 /* SearchViewController.swift in Sources */,
 				8DA5DB4C23B24E0200895DEF /* MovieDetail.swift in Sources */,
 				8DB9469323AD139A00AFD13C /* ShortMovieInfoView.swift in Sources */,
 				8DB0E60E23AA92CF00AAB29E /* Cache.swift in Sources */,
@@ -419,6 +439,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JCDJLS5JT8;
 				INFOPLIST_FILE = MovieToWatch/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -437,6 +458,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JCDJLS5JT8;
 				INFOPLIST_FILE = MovieToWatch/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -11,9 +11,9 @@ import UIKit
 struct ShortMovieInfo {
     let title: String?
     let tagLine: String?
-    let rating: Double
+    let rating: Double?
     
-    init(title: String?, tagLine: String?, rating: Double) {
+    init(title: String?, tagLine: String?, rating: Double?) {
         self.title = title
         self.tagLine = tagLine
         self.rating = rating
@@ -30,7 +30,7 @@ class ShortMovieInfoView: UIView {
             DispatchQueue.main.async { [unowned self] in
                 self.titleLabel.text = self.info.title
                 self.tagLineLabel.text = self.info.tagLine
-                self.ratingLabel.text = String(self.info.rating)+"/10"
+                self.ratingLabel.text = String(self.info.rating ?? 0)+"/10"
             }
         }
     }

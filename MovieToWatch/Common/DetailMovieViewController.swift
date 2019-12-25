@@ -10,23 +10,42 @@ import UIKit
 
 class DetailMovieViewController: UIViewController {
 
-    public var content: MovieMO! {
+    public var content: MovieDetail! {
         didSet {
-            imageURL = APIConfiguration.parsePosterURL(file_path: content.posterPath!, size: .original)
-            updateShortMovieView()
+            
         }
     }
-//
-//    public var movieID: Int! {∫
-//        didSet {
-//
-//            let movieDetailQuery = MovieDetailQuery(movieID: movieID)
-//            Network.getMovieDetail(query: movieDetailQuery) { [weak self] detail in
-//                self?.content = detail
-//                //print(detail.tagline)
-//            }
-//        }
-//    }
+    
+    public var imageURLString: String? {
+        didSet {
+            guard let imageURLString = imageURLString else {return}
+            imageURL = APIConfiguration.parsePosterURL(file_path: imageURLString, size: .original)
+            fetchAndSetImage()
+        }
+    }
+    
+    private var imageURL: URL?
+    
+    public var movieID: Int! {
+        didSet {
+            let detailQuery = MovieDetailQuery(movieID: movieID)
+            
+            Network.getMovieDetail(query: detailQuery) { [weak self] movieDetail in
+                self?.content = movieDetail
+                self?.updateShortMovieView()
+            }
+        }
+    }
+    
+    public var posterImage: UIImage? {
+        didSet {
+            DispatchQueue.main.async {
+                if self.imageView.image == nil {
+                    self.imageView.image = self.posterImage
+                }
+            }
+        }
+    }
     
     public lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -38,11 +57,7 @@ class DetailMovieViewController: UIViewController {
         return scrollView
     }()
     
-    private var imageURL: URL? {
-        didSet {
-            fetchAndSetImage()
-        }
-    }
+
     
     private var dismissButton: UIButton =  {
         let button = UIButton()

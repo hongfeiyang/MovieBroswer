@@ -8,17 +8,24 @@
 
 import UIKit
 
-class CardTableViewCell: UITableViewCell {
+class CardViewCell: UICollectionViewCell {
     
-    public var content: MovieMO! {
+    public var content: MovieResult! {
         didSet {
             if let posterPath = content.posterPath {
-                imageURL = APIConfiguration.parsePosterURL(file_path: posterPath, size: .original)
+                imageURL = APIConfiguration.parsePosterURL(file_path: posterPath, size: .w780)
             }
             
             updateShortMovieInfoView()
         }
     }
+    
+    public var imageURL: URL? {
+        didSet {
+            fetchAndSetImage()
+        }
+    }
+    
     
     private var activityIndicatorView: UIActivityIndicatorView = {
         let indicatorView = UIActivityIndicatorView()
@@ -30,13 +37,9 @@ class CardTableViewCell: UITableViewCell {
         return indicatorView
     }()
     
-    private var imageURL: URL? {
-        didSet {
-            fetchAndSetImage()
-        }
-    }
+
     
-    private var posterImageView: UIImageView = {
+    public var posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -53,38 +56,31 @@ class CardTableViewCell: UITableViewCell {
     
     private func setupLayout() {
         let constraints = [
-            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            posterImageView.topAnchor.constraint(equalTo: topAnchor),
             posterImageView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            posterImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 3/2),
             
-            shortInfoView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            shortInfoView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            shortInfoView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            shortInfoView.trailingAnchor.constraint(equalTo: trailingAnchor),
             shortInfoView.heightAnchor.constraint(equalToConstant: CGFloat(Constants.MOIVE_SUMMARY_VIEW_HEIGHT)),
-            shortInfoView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
-            
-            contentView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            contentView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            contentView.widthAnchor.constraint(equalTo: widthAnchor),
-            contentView.heightAnchor.constraint(equalTo: heightAnchor),
+            shortInfoView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
         ]
         
         NSLayoutConstraint.activate(constraints)
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    
         backgroundColor = .systemGroupedBackground
         layer.cornerRadius = CGFloat(Constants.CARD_CORNER_RADIUS)
         layer.shadowColor = UIColor.systemGroupedBackground.cgColor
         layer.shadowRadius = CGFloat(Constants.CARD_SHADOW_RADIUS)
         layer.shadowOpacity = Constants.CARD_SHADOW_OPACITY
         layer.masksToBounds = true
-        contentView.clipsToBounds = true
         clipsToBounds = true
         
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(posterImageView)
         contentView.addSubview(shortInfoView)
         
@@ -129,19 +125,21 @@ class LoadingCollectionViewCell: UICollectionViewCell {
     
 }
 
-extension CardTableViewCell {
+extension CardViewCell {
     public func updateShortMovieInfoView() {
-        let info = ShortMovieInfo(title: content.title, tagLine: content.tagline, rating: content.voteAverage)
+        let info = ShortMovieInfo(title: content.title, tagLine: content.overview, rating: content.voteAverage ?? 0)
         shortInfoView.info = info
     }
     
     private func fetchAndSetImage() {
+
         guard let url = imageURL else {print("failed to have a valid image url"); return}
 
         DispatchQueue.main.async {
             self.activityIndicatorView.startAnimating()
             self.posterImageView.image = nil
         }
+
         Cache.shared.cacheImage(url: url) { (url, image) in
             if url == self.imageURL {
                 DispatchQueue.main.async {

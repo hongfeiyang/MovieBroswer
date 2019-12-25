@@ -12,7 +12,7 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
     let duration = 0.5
     var originFrame = CGRect.zero
-    weak var cell: CardTableViewCell!
+    weak var cell: CardViewCell!
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
@@ -74,7 +74,7 @@ class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
     let duration = 0.5
     var originFrame = CGRect.zero
-    weak var cell: CardTableViewCell!
+    weak var cell: CardViewCell!
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
