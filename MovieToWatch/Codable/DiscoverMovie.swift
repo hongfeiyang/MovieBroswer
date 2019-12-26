@@ -18,7 +18,7 @@ import Foundation
 // MARK: - DiscoverMovie
 struct DiscoverMovie: Codable {
     let page, totalResults, totalPages: Int
-    let results: [MovieResult]
+    let results: [DiscoverMovieResult]
 
     enum CodingKeys: String, CodingKey {
         case page
@@ -40,7 +40,7 @@ struct DiscoverMovie: Codable {
 //   task.resume()
 
 // MARK: - MovieItem
-struct MovieResult: Codable {
+struct DiscoverMovieResult: Codable {
     let popularity: Double?
     let voteCount: Int?
     let video: Bool
@@ -53,7 +53,8 @@ struct MovieResult: Codable {
     let genreIDS: [Int]
     let title: String?
     let voteAverage: Double?
-    let overview, releaseDate: String?
+    let overview: String?
+    let releaseDate: Date?
 
     enum CodingKeys: String, CodingKey {
         case popularity
@@ -76,21 +77,21 @@ struct MovieResult: Codable {
 
 // MARK: - Helper functions for creating encoders and decoders
 
-func newJSONDecoder() -> JSONDecoder {
-    let decoder = JSONDecoder()
-    if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
-        decoder.dateDecodingStrategy = .iso8601
-    }
-    return decoder
-}
-
-func newJSONEncoder() -> JSONEncoder {
-    let encoder = JSONEncoder()
-    if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
-        encoder.dateEncodingStrategy = .iso8601
-    }
-    return encoder
-}
+//func newJSONDecoder() -> JSONDecoder {
+//    let decoder = JSONDecoder()
+//    if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
+//        decoder.dateDecodingStrategy = .iso8601
+//    }
+//    return decoder
+//}
+//
+//func newJSONEncoder() -> JSONEncoder {
+//    let encoder = JSONEncoder()
+//    if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
+//        encoder.dateEncodingStrategy = .iso8601
+//    }
+//    return encoder
+//}
 
 // MARK: - URLSession response handlers
 

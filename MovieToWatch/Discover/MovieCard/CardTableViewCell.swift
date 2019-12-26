@@ -10,7 +10,7 @@ import UIKit
 
 class CardViewCell: UICollectionViewCell {
     
-    public var content: MovieResult! {
+    public var content: DiscoverMovieResult! {
         didSet {
             if let posterPath = content.posterPath {
                 imageURL = APIConfiguration.parsePosterURL(file_path: posterPath, size: .w780)

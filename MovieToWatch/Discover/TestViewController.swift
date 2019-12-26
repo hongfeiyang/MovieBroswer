@@ -38,11 +38,10 @@ class TestViewController: UIViewController {
         return control
     }()
     
-    private var results = [MovieResult]() {
+    private var results = [DiscoverMovieResult]() {
         didSet {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
-                self.refreshControl.endRefreshing()
             }
         }
     }
@@ -52,7 +51,11 @@ class TestViewController: UIViewController {
     @objc private func refresh() {
         currentPage = 1
         results.removeAll()
-        loadMoreData()
+        loadMoreData() {
+            DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+            }
+        }
     }
 
     private func setupLayout() {

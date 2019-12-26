@@ -77,3 +77,27 @@ extension UIColor {
         return UIColor(red: CGFloat(d/255), green: CGFloat(d/255), blue: CGFloat(d/255), alpha: 1);
     }
 }
+
+
+
+func newJSONDecoder() -> JSONDecoder {
+    let decoder = JSONDecoder()
+    if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        //decoder.dateDecodingStrategy = .iso8601
+    }
+    return decoder
+}
+
+func newJSONEncoder() -> JSONEncoder {
+    let encoder = JSONEncoder()
+    if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        //encoder.dateEncodingStrategy = .iso8601
+    }
+    return encoder
+}

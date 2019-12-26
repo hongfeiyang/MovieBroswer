@@ -120,6 +120,14 @@ struct MovieDetailQuery: CustomStringConvertible {
 
 class Network {
     
+    static func getMovieSearchResults(query: MovieSearchQuery, completion: ((MovieSearchResults) -> Void)?) {
+        guard let url = URL(string: query.description) else {return}
+        URLSession.shared.movieSearchResultsTask(with: url) {(data, response, error) in
+            guard let movieSearchResults = data else {print("movieSearchResultsTask returned nil"); return}
+            completion?(movieSearchResults)
+        }.resume()
+    }
+    
     static func getMovieDetail(query: MovieDetailQuery, completion: ((MovieDetail) -> Void)?) {
         guard let url = URL(string: query.description) else {return}
         URLSession.shared.movieDetailTask(with: url) {(data, response, error) in
@@ -141,7 +149,7 @@ class Network {
         //NSLog("Query send: \(query)")
     }
     
-    static func getDiscoverMovieResults(query: DiscoverMovieQuery, completion: (([MovieResult]) -> Void)? = nil) {
+    static func getDiscoverMovieResults(query: DiscoverMovieQuery, completion: (([DiscoverMovieResult]) -> Void)? = nil) {
         guard let url = URL(string: query.description) else {return}
         URLSession.shared.discoverMovieTask(with: url) {(data, response, error) in
             //NSLog("response received")
@@ -171,9 +179,6 @@ class Network {
 //            dispatchGroup.notify(queue: .main) {
 //                completion?()
 //            }
-            
-            
-            
         }.resume()
         //NSLog("Query send: \(query.description)")
     }

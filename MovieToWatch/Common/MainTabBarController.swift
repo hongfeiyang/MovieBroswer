@@ -12,7 +12,7 @@ class MainTabBarController: UITabBarController {
 
     
     let vc1 = TestViewController()
-    let vc2 = SearchViewController()
+    let vc2 = MovieSearchViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -186,20 +186,7 @@ extension URLSession {
                 completionHandler(nil, response, error)
                 return
             }
-            
-            let decoder = JSONDecoder()
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            decoder.dateDecodingStrategy = .formatted(dateFormatter)
-
-            do {
-                let result = try decoder.decode(T.self, from: data)
-                completionHandler(result, response, nil)
-            } catch let error {
-                print(error)
-                completionHandler(nil, response, nil)
-            }
-            //completionHandler(try? newJSONDecoder().decode(T.self, from: data), response, nil)
+            completionHandler(try? newJSONDecoder().decode(T.self, from: data), response, nil)
         }
     }
 
