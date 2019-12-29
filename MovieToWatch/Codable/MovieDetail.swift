@@ -36,7 +36,15 @@ struct MovieDetail: Codable {
     let video: Bool?
     let voteAverage: Double?
     let voteCount: Int?
-
+    let videos: Videos?
+    let images: Images?
+    let reviews: Reviews?
+    let keywords: Keywords?
+    let releaseDates: ReleaseDates?
+    let similar, recommendations: Recommendations?
+    let lists: Lists?
+    let credits: Credits?
+    
     enum CodingKeys: String, CodingKey {
         case adult
         case backdropPath = "backdrop_path"
@@ -55,6 +63,13 @@ struct MovieDetail: Codable {
         case status, tagline, title, video
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
+        case videos
+        case images
+        case reviews
+        case keywords
+        case releaseDates = "release_dates"
+        case similar, recommendations, lists
+        case credits
     }
 }
 
@@ -72,11 +87,70 @@ struct MovieDetail: Codable {
 struct BelongsToCollection: Codable {
     let id: Int
     let name, posterPath, backdropPath: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case id, name
         case posterPath = "poster_path"
         case backdropPath = "backdrop_path"
+    }
+}
+
+
+// MARK: - Credits
+struct Credits: Codable {
+    let cast: [Cast]
+    let crew: [Crew]
+}
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.castTask(with: url) { cast, response, error in
+//     if let cast = cast {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - Cast
+struct Cast: Codable {
+    let castID: Int?
+    let character, creditID: String?
+    let gender, id: Int?
+    let name: String?
+    let order: Int?
+    let profilePath: String?
+
+    enum CodingKeys: String, CodingKey {
+        case castID = "cast_id"
+        case character
+        case creditID = "credit_id"
+        case gender, id, name, order
+        case profilePath = "profile_path"
+    }
+}
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.crewTask(with: url) { crew, response, error in
+//     if let crew = crew {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - Crew
+struct Crew: Codable {
+    let creditID, department: String?
+    let gender, id: Int?
+    let job, name: String?
+    let profilePath: String?
+
+    enum CodingKeys: String, CodingKey {
+        case creditID = "credit_id"
+        case department, gender, id, job, name
+        case profilePath = "profile_path"
     }
 }
 
@@ -96,6 +170,124 @@ struct Genre: Codable {
     let name: String?
 }
 
+
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.imagesTask(with: url) { images, response, error in
+//     if let images = images {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - Images
+struct Images: Codable {
+    let backdrops, posters: [ImageDetail]
+}
+
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.imageDetailTask(with: url) { backdrop, response, error in
+//     if let backdrop = backdrop {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - ImageDetail
+struct ImageDetail: Codable {
+    let aspectRatio: Double?
+    let filePath: String?
+    let height: Int?
+    let iso639_1: String?
+    let voteAverage: Double?
+    let voteCount, width: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case aspectRatio = "aspect_ratio"
+        case filePath = "file_path"
+        case height
+        case iso639_1 = "iso_639_1"
+        case voteAverage = "vote_average"
+        case voteCount = "vote_count"
+        case width
+    }
+}
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.keywordsTask(with: url) { keywords, response, error in
+//     if let keywords = keywords {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - Keywords
+struct Keywords: Codable {
+    let keywords: [Genre]
+}
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.listsTask(with: url) { lists, response, error in
+//     if let lists = lists {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - Lists
+struct Lists: Codable {
+    let page: Int
+    let results: [ListsResult]
+    let totalPages, totalResults: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case page, results
+        case totalPages = "total_pages"
+        case totalResults = "total_results"
+    }
+}
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.listsResultTask(with: url) { listsResult, response, error in
+//     if let listsResult = listsResult {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - ListsResult
+struct ListsResult: Codable {
+    let resultDescription: String?
+    let favoriteCount, id, itemCount: Int?
+    let iso639_1: String?
+    let listType: String?
+    let name: String?
+    let posterPath: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case resultDescription = "description"
+        case favoriteCount = "favorite_count"
+        case id
+        case itemCount = "item_count"
+        case iso639_1 = "iso_639_1"
+        case listType = "list_type"
+        case name
+        case posterPath = "poster_path"
+    }
+}
+
+
 //
 // To read values from URLs:
 //
@@ -110,7 +302,7 @@ struct Genre: Codable {
 struct ProductionCompany: Codable {
     let id: Int
     let logoPath, name, originCountry: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case logoPath = "logo_path"
@@ -132,11 +324,178 @@ struct ProductionCompany: Codable {
 // MARK: - ProductionCountry
 struct ProductionCountry: Codable {
     let iso3166_1, name: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case iso3166_1 = "iso_3166_1"
         case name
     }
+}
+
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.recommendationsTask(with: url) { recommendations, response, error in
+//     if let recommendations = recommendations {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - Recommendations
+struct Recommendations: Codable {
+    let page: Int
+    let results: [RecommendationsResult]
+    let totalPages, totalResults: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case page, results
+        case totalPages = "total_pages"
+        case totalResults = "total_results"
+    }
+}
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.recommendationsResultTask(with: url) { recommendationsResult, response, error in
+//     if let recommendationsResult = recommendationsResult {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - RecommendationsResult
+struct RecommendationsResult: Codable {
+    let id: Int?
+    let video: Bool?
+    let voteCount: Int?
+    let voteAverage: Double?
+    let title, releaseDate: String?
+    let originalLanguage: String?
+    let originalTitle: String?
+    let genreIDS: [Int]?
+    let backdropPath: String?
+    let adult: Bool?
+    let overview, posterPath: String?
+    let popularity: Double?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, video
+        case voteCount = "vote_count"
+        case voteAverage = "vote_average"
+        case title
+        case releaseDate = "release_date"
+        case originalLanguage = "original_language"
+        case originalTitle = "original_title"
+        case genreIDS = "genre_ids"
+        case backdropPath = "backdrop_path"
+        case adult, overview
+        case posterPath = "poster_path"
+        case popularity
+    }
+}
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.releaseDatesTask(with: url) { releaseDates, response, error in
+//     if let releaseDates = releaseDates {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - ReleaseDates
+struct ReleaseDates: Codable {
+    let results: [ReleaseDatesResult]
+}
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.releaseDatesResultTask(with: url) { releaseDatesResult, response, error in
+//     if let releaseDatesResult = releaseDatesResult {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - ReleaseDatesResult
+struct ReleaseDatesResult: Codable {
+    let iso3166_1: String
+    let releaseDates: [ReleaseDate]
+    
+    enum CodingKeys: String, CodingKey {
+        case iso3166_1 = "iso_3166_1"
+        case releaseDates = "release_dates"
+    }
+}
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.releaseDateTask(with: url) { releaseDate, response, error in
+//     if let releaseDate = releaseDate {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - ReleaseDate
+struct ReleaseDate: Codable {
+    let certification, iso639_1: String?
+    let note: String?
+    let releaseDate: String?
+    let type: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case certification
+        case iso639_1 = "iso_639_1"
+        case note
+        case releaseDate = "release_date"
+        case type
+    }
+}
+
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.reviewsTask(with: url) { reviews, response, error in
+//     if let reviews = reviews {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - Reviews
+struct Reviews: Codable {
+    let page: Int
+    let results: [ReviewsResult]
+    let totalPages, totalResults: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case page, results
+        case totalPages = "total_pages"
+        case totalResults = "total_results"
+    }
+}
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.reviewsResultTask(with: url) { reviewsResult, response, error in
+//     if let reviewsResult = reviewsResult {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - ReviewsResult
+struct ReviewsResult: Codable {
+    let author, content, id: String?
+    let url: String?
 }
 
 //
@@ -152,7 +511,7 @@ struct ProductionCountry: Codable {
 // MARK: - SpokenLanguage
 struct SpokenLanguage: Codable {
     let iso639_1, name: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case iso639_1 = "iso_639_1"
         case name
@@ -177,6 +536,50 @@ struct SpokenLanguage: Codable {
 //    return encoder
 //}
 
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.videosTask(with: url) { videos, response, error in
+//     if let videos = videos {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - Videos
+struct Videos: Codable {
+    let results: [VideosResult]
+}
+
+//
+// To read values from URLs:
+//
+//   let task = URLSession.shared.videosResultTask(with: url) { videosResult, response, error in
+//     if let videosResult = videosResult {
+//       ...
+//     }
+//   }
+//   task.resume()
+
+// MARK: - VideosResult
+struct VideosResult: Codable {
+    let id: String?
+    let iso639_1: String?
+    let iso3166_1: String?
+    let key, name: String?
+    let site: String?
+    let size: Int?
+    let type: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case iso639_1 = "iso_639_1"
+        case iso3166_1 = "iso_3166_1"
+        case key, name, site, size, type
+    }
+}
+
+
 // MARK: - URLSession response handlers
 
 extension URLSession {
@@ -186,10 +589,19 @@ extension URLSession {
                 completionHandler(nil, response, error)
                 return
             }
-            completionHandler(try? newJSONDecoder().decode(T.self, from: data), response, nil)
+                        
+            do {
+                let data = try newJSONDecoder().decode(T.self, from: data)
+                completionHandler(data, response, nil)
+            } catch let error {
+                print(error.localizedDescription)
+                completionHandler(nil, response, nil)
+            }
+            
+            
         }
     }
-
+    
     func movieDetailTask(with url: URL, completionHandler: @escaping (MovieDetail?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         return self.codableTask(with: url, completionHandler: completionHandler)
     }

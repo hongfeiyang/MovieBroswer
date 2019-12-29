@@ -85,7 +85,9 @@ struct MovieDetailQuery: CustomStringConvertible {
     
     let movieID: Int
     var language: String?
-    var append_to_response: String?
+    var append_to_response: String? = "videos,images,reviews,keywords,popular,release_dates,similar,recommendations,lists,credits"
+    
+    var include_image_language: String? = "en,null"
     
     init(movieID: Int) {
         self.movieID = movieID
@@ -110,7 +112,11 @@ struct MovieDetailQuery: CustomStringConvertible {
         }
         
         if let append_to_response = append_to_response {
-            result += "&append_to_response=\(append_to_response)"
+            result += "&append_to_response=\(append_to_response.replacingOccurrences(of: ",", with: "%2C"))"
+        }
+        
+        if let include_image_language = include_image_language {
+            result += "&include_image_language=\(include_image_language.replacingOccurrences(of: ",", with: "%2C"))"
         }
         
         return result
@@ -146,7 +152,7 @@ class Network {
 //            _ = MovieMO(data: movieDetail)
 
         }.resume()
-        //NSLog("Query send: \(query)")
+//        NSLog("Query send: \(query)")
     }
     
     static func getDiscoverMovieResults(query: DiscoverMovieQuery, completion: (([DiscoverMovieResult]) -> Void)? = nil) {

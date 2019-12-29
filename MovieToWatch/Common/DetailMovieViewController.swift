@@ -33,6 +33,7 @@ class DetailMovieViewController: UIViewController {
             Network.getMovieDetail(query: detailQuery) { [weak self] movieDetail in
                 self?.content = movieDetail
                 self?.updateShortMovieView()
+                self?.updateViewFromModel()
             }
         }
     }
@@ -94,9 +95,15 @@ class DetailMovieViewController: UIViewController {
         return view
     }()
     
+    private var creditsView = CreditsView()
+    
     //public lazy var scrollViewWidthConstraint: NSLayoutConstraint = scrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
     
     private func setupLayout() {
+        
+        let sectionPadding = CGFloat(10)
+        
+        creditsView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -104,7 +111,7 @@ class DetailMovieViewController: UIViewController {
         contentView.addSubview(imageView)
         contentView.addSubview(shortInfoView)
         contentView.addSubview(dismissButton)
-        
+        contentView.addSubview(creditsView)
         
         let constraints = [
 
@@ -128,7 +135,12 @@ class DetailMovieViewController: UIViewController {
             shortInfoView.heightAnchor.constraint(equalToConstant: CGFloat(Constants.MOIVE_SUMMARY_VIEW_HEIGHT)),
             shortInfoView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor),
             
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            creditsView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            creditsView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            creditsView.heightAnchor.constraint(greaterThanOrEqualToConstant: 300),
+            creditsView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: sectionPadding),
+            
+            creditsView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             dismissButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
             dismissButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
@@ -165,8 +177,15 @@ extension DetailMovieViewController: UIScrollViewDelegate {
 
 extension DetailMovieViewController {
     private func updateShortMovieView() {
+//        let info = ShortMovieInfo(title: content.title, tagLine: content.tagline, rating: content.voteAverage)
+//        shortInfoView.info = info
+    }
+    
+    private func updateViewFromModel() {
         let info = ShortMovieInfo(title: content.title, tagLine: content.tagline, rating: content.voteAverage)
         shortInfoView.info = info
+        creditsView.credits = content.credits
+        
     }
     
     private func fetchAndSetImage() {
