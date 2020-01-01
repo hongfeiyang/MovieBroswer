@@ -36,8 +36,8 @@ struct MovieDetail: Codable {
     let video: Bool?
     let voteAverage: Double?
     let voteCount: Int?
-    let videos: Videos?
-    let images: Images?
+    let videos: MovieVideos
+    let images: MovieImages
     let reviews: Reviews?
     let keywords: Keywords?
     let releaseDates: ReleaseDates?
@@ -183,7 +183,7 @@ struct Genre: Codable {
 //   task.resume()
 
 // MARK: - Images
-struct Images: Codable {
+struct MovieImages: Codable {
     let backdrops, posters: [ImageDetail]
 }
 
@@ -547,7 +547,7 @@ struct SpokenLanguage: Codable {
 //   task.resume()
 
 // MARK: - Videos
-struct Videos: Codable {
+struct MovieVideos: Codable {
     let results: [VideosResult]
 }
 

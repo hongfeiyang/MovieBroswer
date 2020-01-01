@@ -22,18 +22,7 @@ class CreditsView: UIView {
         didSet {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
-                
-                // update director button
-                let attributes: [NSAttributedString.Key: Any] = [
-                    .foregroundColor: UIColor.secondaryLabel,
-                    .font: UIFont.systemFont(ofSize: 15, weight: .regular)
-                ]
-                let attributedString = NSMutableAttributedString(string: "Director: \(self.directorCrew?.name ?? "")", attributes: attributes)
-                let addedAttributes: [NSAttributedString.Key: Any] = [
-                    .foregroundColor: UIColor.label,
-                ]
-                attributedString.addAttributes(addedAttributes, range: .init(location: 0, length: "Director:".count))
-                self.directorButton.setAttributedTitle(attributedString, for: .normal)
+                self.directorButton.updateContent(content: self.directorCrew?.name)
             }
         }
     }
@@ -48,59 +37,56 @@ class CreditsView: UIView {
         }
     }
     
-    var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Cast"
-        label.textAlignment = .left
-        label.textColor = .label
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    var titleButton = BaseButton(topic: "Cast", content: "")
+    
+    var directorButton = BaseButton(topic: "Director: ", content: "")
+    
+    var allCrewButton = BaseButton(topic: "All Cast and Crew", content: "")
+    
+
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .secondarySystemGroupedBackground
+        collectionView.backgroundColor = .secondarySystemBackground
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(CreditsCell.self, forCellWithReuseIdentifier: "CastCell")
         return collectionView
     }()
     
-    lazy var directorButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        button.setTitleColor(.label, for: .normal)
-        //button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    
     
     private func setupLayout() {
         
         let padding = CGFloat(5)
+        titleButton.translatesAutoresizingMaskIntoConstraints = false
+        directorButton.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        allCrewButton.translatesAutoresizingMaskIntoConstraints = false
         
         let constraints = [
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: padding),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: 20),
+            titleButton.topAnchor.constraint(equalTo: topAnchor, constant: padding),
+            titleButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            titleButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            titleButton.heightAnchor.constraint(equalToConstant: 40),
             
+            collectionView.topAnchor.constraint(equalTo: titleButton.bottomAnchor, constant: padding),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: 180),
-            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: padding * 4),
+            collectionView.heightAnchor.constraint(equalToConstant: 180),
             
             directorButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: padding),
-            directorButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
-            directorButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-            directorButton.heightAnchor.constraint(equalToConstant: 20),
+            directorButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            directorButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            directorButton.heightAnchor.constraint(equalToConstant: 40),
+            
+            allCrewButton.topAnchor.constraint(equalTo: directorButton.bottomAnchor, constant: padding),
+            allCrewButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            allCrewButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            allCrewButton.heightAnchor.constraint(equalToConstant: 40),
+            
+            allCrewButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -padding),
         ]
         
         NSLayoutConstraint.activate(constraints)
@@ -109,9 +95,11 @@ class CreditsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(titleLabel)
+        addSubview(titleButton)
         addSubview(collectionView)
         addSubview(directorButton)
+        addSubview(allCrewButton)
+        backgroundColor = .secondarySystemBackground
         setupLayout()
     }
     
@@ -137,9 +125,10 @@ extension CreditsView: UICollectionViewDelegate, UICollectionViewDelegateFlowLay
         let cell = cell as! CreditsCell
         cell.nameLabel.text = casts[indexPath.item].name
         cell.characterLabel.text = casts[indexPath.item].character
-        if let profilePath = casts[indexPath.item].profilePath {
-            cell.profileImageURL = APIConfiguration.parsePosterURL(file_path: profilePath, size: .w154)
-        }
+        cell.profileImageView.image = nil
+        cell.profileImageURL = APIConfiguration.parsePosterURL(file_path: casts[indexPath.item].profilePath, size: .w154)
+        cell.profileImageView.image = UIImage(systemName: "photo")
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -231,6 +220,8 @@ class CreditsCell: UICollectionViewCell {
         addSubview(nameLabel)
         addSubview(characterLabel)
         setupLayout()
+        backgroundColor = .tertiarySystemBackground
+        
     }
     
     required init?(coder: NSCoder) {
@@ -240,12 +231,12 @@ class CreditsCell: UICollectionViewCell {
 
 extension CreditsCell {
     private func fetchAndSetImage() {
-
+        
+//        DispatchQueue.main.async {
+//            self.profileImageView.image = nil
+//        }
+//        
         guard let url = profileImageURL else {print("failed to have a valid image url"); return}
-
-        DispatchQueue.main.async {
-            self.profileImageView.image = UIImage(named: "photo")
-        }
 
         Cache.shared.cacheImage(url: url) { [weak self] (url, image) in
             if url == self?.profileImageURL {

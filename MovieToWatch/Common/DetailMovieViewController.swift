@@ -10,11 +10,7 @@ import UIKit
 
 class DetailMovieViewController: UIViewController {
 
-    public var content: MovieDetail! {
-        didSet {
-            
-        }
-    }
+    public var content: MovieDetail!
     
     public var imageURLString: String? {
         didSet {
@@ -32,7 +28,6 @@ class DetailMovieViewController: UIViewController {
             
             Network.getMovieDetail(query: detailQuery) { [weak self] movieDetail in
                 self?.content = movieDetail
-                self?.updateShortMovieView()
                 self?.updateViewFromModel()
             }
         }
@@ -51,10 +46,8 @@ class DetailMovieViewController: UIViewController {
     public lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.delegate = self
-        scrollView.alwaysBounceVertical = true
+        scrollView.alwaysBounceVertical = false
         scrollView.contentInsetAdjustmentBehavior = .never
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
         return scrollView
     }()
     
@@ -62,7 +55,7 @@ class DetailMovieViewController: UIViewController {
     
     private var dismissButton: UIButton =  {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
+        
         button.setImage(.checkmark, for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         //button.backgroundColor = .white
@@ -78,32 +71,60 @@ class DetailMovieViewController: UIViewController {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         return imageView
     }()
     
     
     private var shortInfoView: ShortMovieInfoView = {
         let view = ShortMovieInfoView()
-        view.translatesAutoresizingMaskIntoConstraints = false
+        
         return view
     }()
     
     private var contentView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
+        
         return view
     }()
     
-    private var creditsView = CreditsView()
+    private lazy var creditsView: CreditsView = {
+        let view = CreditsView()
+        view.allCrewButton.addTarget(self, action: #selector(allCrewButtonTapped), for: .touchUpInside)
+        return view
+    }()
     
-    //public lazy var scrollViewWidthConstraint: NSLayoutConstraint = scrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
+    @objc func allCrewButtonTapped() {
+        let vc = AllCrewViewController()
+        vc.data = content.credits
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    private lazy var movieImagesView: MovieImagesView = {
+        let view = MovieImagesView()
+        return view
+    }()
+    
+    private lazy var movieVideosView: MovieVideosView = {
+        let view = MovieVideosView()
+        return view
+    }()
+    
     
     private func setupLayout() {
         
         let sectionPadding = CGFloat(10)
         
+        dismissButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        shortInfoView.translatesAutoresizingMaskIntoConstraints = false
         creditsView.translatesAutoresizingMaskIntoConstraints = false
+        movieImagesView.translatesAutoresizingMaskIntoConstraints = false
+        movieVideosView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -112,6 +133,8 @@ class DetailMovieViewController: UIViewController {
         contentView.addSubview(shortInfoView)
         contentView.addSubview(dismissButton)
         contentView.addSubview(creditsView)
+        contentView.addSubview(movieImagesView)
+        contentView.addSubview(movieVideosView)
         
         let constraints = [
 
@@ -137,10 +160,20 @@ class DetailMovieViewController: UIViewController {
             
             creditsView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             creditsView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            creditsView.heightAnchor.constraint(greaterThanOrEqualToConstant: 300),
+            creditsView.heightAnchor.constraint(equalToConstant: 325),
             creditsView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: sectionPadding),
             
-            creditsView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            movieImagesView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            movieImagesView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            movieImagesView.heightAnchor.constraint(greaterThanOrEqualToConstant: 175),
+            movieImagesView.topAnchor.constraint(equalTo: creditsView.bottomAnchor, constant: sectionPadding),
+            
+            movieVideosView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            movieVideosView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            movieVideosView.heightAnchor.constraint(greaterThanOrEqualToConstant: 175),
+            movieVideosView.topAnchor.constraint(equalTo: movieImagesView.bottomAnchor, constant: sectionPadding),
+            
+            movieVideosView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             dismissButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
             dismissButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
@@ -176,16 +209,18 @@ extension DetailMovieViewController: UIScrollViewDelegate {
 }
 
 extension DetailMovieViewController {
-    private func updateShortMovieView() {
-//        let info = ShortMovieInfo(title: content.title, tagLine: content.tagline, rating: content.voteAverage)
-//        shortInfoView.info = info
-    }
+
     
     private func updateViewFromModel() {
         let info = ShortMovieInfo(title: content.title, tagLine: content.tagline, rating: content.voteAverage)
         shortInfoView.info = info
+        if let path = content.posterPath {
+            imageURL = APIConfiguration.parsePosterURL(file_path: path, size: .original)
+            fetchAndSetImage()
+        }
         creditsView.credits = content.credits
-        
+        movieImagesView.data = content.images
+        movieVideosView.data = content.videos
     }
     
     private func fetchAndSetImage() {

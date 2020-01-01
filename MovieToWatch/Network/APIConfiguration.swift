@@ -59,7 +59,10 @@ struct APIConfiguration {
         }
     }
     
-    static func parsePosterURL(file_path: String, size: APIConfiguration.Images.Poster_sizes) -> URL? {
-        return URL(string: "\(APIConfiguration.Images.secure_base_url)\(size.rawValue)\(file_path)")
+    static func parsePosterURL(file_path: String?, size: APIConfiguration.Images.Poster_sizes) -> URL? {
+        if let file_path = file_path {
+            return URL(string: "\(APIConfiguration.Images.secure_base_url)\(size.rawValue)\(file_path)")
+        }
+        return nil
     }
 }

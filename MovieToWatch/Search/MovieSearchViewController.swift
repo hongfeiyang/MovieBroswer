@@ -42,23 +42,20 @@ class MovieSearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setupLayout()
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchController
         searchController.delegate = self
         navigationItem.searchController?.obscuresBackgroundDuringPresentation = false
         navigationItem.searchController?.searchResultsUpdater = self
         navigationItem.hidesSearchBarWhenScrolling = false
-        
         self.title = "Search"
-
         
-        setupLayout()
     }
 }
 
 
-extension MovieSearchViewController: UISearchControllerDelegate {
+extension MovieSearchViewController: UISearchControllerDelegate, UISearchBarDelegate {
     
     func didPresentSearchController(_ searchController: UISearchController) {
         print("Did present")
@@ -68,17 +65,20 @@ extension MovieSearchViewController: UISearchControllerDelegate {
         print("Did dismiss")
     }
     func willDismissSearchController(_ searchController: UISearchController) {
-        
+        clear()
     }
     func willPresentSearchController(_ searchController: UISearchController) {
         
     }
-    
 }
 
 extension MovieSearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else {return}
+        if text == "" {
+            clear()
+            return
+        }
         searchQuery.query = text
         Network.getMovieSearchResults(query: searchQuery) { [weak self] searchResults in
             // Change datasource and reload should occur in the same call block to sync table rows numbers
@@ -87,6 +87,13 @@ extension MovieSearchViewController: UISearchResultsUpdating {
                 self?.results = searchResults.results
                 self?.tableView.reloadData()
             }
+        }
+    }
+    
+    private func clear() {
+        results = []
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
     }
 }
@@ -111,6 +118,10 @@ extension MovieSearchViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let vc = DetailMovieViewController()
+        vc.movieID = results[indexPath.row].id
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     

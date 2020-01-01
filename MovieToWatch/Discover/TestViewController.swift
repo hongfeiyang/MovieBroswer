@@ -245,6 +245,7 @@ extension TestViewController {
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = self
         //vc.isModalInPresentation = true
+        //navigationController?.pushViewController(vc, animated: true)
         present(vc, animated: true, completion: nil)
     }
     
