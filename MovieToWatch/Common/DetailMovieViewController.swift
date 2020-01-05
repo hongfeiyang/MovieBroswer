@@ -28,7 +28,10 @@ class DetailMovieViewController: UIViewController {
             
             Network.getMovieDetail(query: detailQuery) { [weak self] movieDetail in
                 self?.content = movieDetail
-                self?.updateViewFromModel()
+                DispatchQueue.main.async {
+                    self?.updateViewFromModel()
+                }
+                
             }
         }
     }
@@ -48,6 +51,7 @@ class DetailMovieViewController: UIViewController {
         scrollView.delegate = self
         scrollView.alwaysBounceVertical = false
         scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.contentInset = .init(top: 0, left: 0, bottom: self.tabBarController?.tabBar.frame.height ?? 0, right: 0)
         return scrollView
     }()
     
@@ -110,21 +114,35 @@ class DetailMovieViewController: UIViewController {
         return view
     }()
     
+    private lazy var movieReviewView: MovieReviewView = {
+        let view = MovieReviewView()
+        view.allReviewsButton.addTarget(self, action: #selector(viewAllReviews), for: .touchUpInside)
+        return view
+    }()
+    
+    @objc private func viewAllReviews() {
+        let vc = AllReviewsController()
+        vc.page = content.reviews.page
+        vc.totalPages = content.reviews.totalPages
+        vc.totalResults = content.reviews.totalResults
+        vc.dataSource = content.reviews.results
+        
+        present(vc, animated: true, completion: nil)
+    }
     
     private func setupLayout() {
         
         let sectionPadding = CGFloat(10)
         
         dismissButton.translatesAutoresizingMaskIntoConstraints = false
-        
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         shortInfoView.translatesAutoresizingMaskIntoConstraints = false
         creditsView.translatesAutoresizingMaskIntoConstraints = false
         movieImagesView.translatesAutoresizingMaskIntoConstraints = false
         movieVideosView.translatesAutoresizingMaskIntoConstraints = false
+        movieReviewView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -135,6 +153,7 @@ class DetailMovieViewController: UIViewController {
         contentView.addSubview(creditsView)
         contentView.addSubview(movieImagesView)
         contentView.addSubview(movieVideosView)
+        contentView.addSubview(movieReviewView)
         
         let constraints = [
 
@@ -165,15 +184,20 @@ class DetailMovieViewController: UIViewController {
             
             movieImagesView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             movieImagesView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            movieImagesView.heightAnchor.constraint(greaterThanOrEqualToConstant: 175),
+            movieImagesView.heightAnchor.constraint(equalToConstant: 175),
             movieImagesView.topAnchor.constraint(equalTo: creditsView.bottomAnchor, constant: sectionPadding),
             
             movieVideosView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             movieVideosView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            movieVideosView.heightAnchor.constraint(greaterThanOrEqualToConstant: 175),
+            movieVideosView.heightAnchor.constraint(equalToConstant: 175),
             movieVideosView.topAnchor.constraint(equalTo: movieImagesView.bottomAnchor, constant: sectionPadding),
             
-            movieVideosView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            movieReviewView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            movieReviewView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            movieReviewView.heightAnchor.constraint(equalToConstant: 135),
+            movieReviewView.topAnchor.constraint(equalTo: movieVideosView.bottomAnchor, constant: sectionPadding),
+            
+            movieReviewView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             dismissButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
             dismissButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
@@ -221,6 +245,7 @@ extension DetailMovieViewController {
         creditsView.credits = content.credits
         movieImagesView.data = content.images
         movieVideosView.data = content.videos
+        movieReviewView.data = content.reviews
     }
     
     private func fetchAndSetImage() {

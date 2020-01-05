@@ -129,5 +129,9 @@ extension MovieSearchViewController: UITableViewDelegate, UITableViewDataSource 
         return 90
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+       searchController.searchBar.resignFirstResponder()
+    }
+    
 }
 

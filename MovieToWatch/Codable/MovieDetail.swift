@@ -38,7 +38,7 @@ struct MovieDetail: Codable {
     let voteCount: Int?
     let videos: MovieVideos
     let images: MovieImages
-    let reviews: Reviews?
+    let reviews: MovieReviews
     let keywords: Keywords?
     let releaseDates: ReleaseDates?
     let similar, recommendations: Recommendations?
@@ -470,7 +470,7 @@ struct ReleaseDate: Codable {
 //   task.resume()
 
 // MARK: - Reviews
-struct Reviews: Codable {
+struct MovieReviews: Codable {
     let page: Int
     let results: [ReviewsResult]
     let totalPages, totalResults: Int

@@ -52,6 +52,7 @@ class BaseButton: UIButton {
     
     convenience init(topic: String, content: String) {
         self.init(frame: .zero)
+        
         topicLabel.text = topic
         contentLabel.text = content
     }

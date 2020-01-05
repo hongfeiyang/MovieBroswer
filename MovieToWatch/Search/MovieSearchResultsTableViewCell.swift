@@ -70,11 +70,20 @@ class MovieSearchResultsTableViewCell: UITableViewCell {
     }
     
     private func updateView() {
-        titleLabel.text = content.title
-        if let date = content.releaseDate, let year = Calendar.current.dateComponents([.year], from: date).year {
-            releaseDateLabel.text = String(year)
-        }
+
         DispatchQueue.main.async { [weak self] in
+            self?.titleLabel.text = self?.content.title
+            if let date = self?.content.releaseDate {
+                
+                if date == Date.distantPast {
+                    self?.releaseDateLabel.text = "Unknown"
+                } else if let year = Calendar.current.dateComponents([.year], from: date).year {
+                    self?.releaseDateLabel.text = String(year)
+                } else {
+                    self?.releaseDateLabel.text = "Unknown"
+                }
+            }
+
             self?.posterImageView.image = nil
         }
         if let posterPath = content.posterPath, let url = APIConfiguration.parsePosterURL(file_path: posterPath, size: .w92) {

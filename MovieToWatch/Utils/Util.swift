@@ -85,7 +85,13 @@ func newJSONDecoder() -> JSONDecoder {
     if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        //decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        decoder.dateDecodingStrategy = .custom({ (decoder) -> Date in
+            let container = try decoder.singleValueContainer()
+            let dateString = try container.decode(String.self)
+            let date = dateFormatter.date(from: dateString)
+            return date ?? Date.distantPast
+        })
         //decoder.dateDecodingStrategy = .iso8601
     }
     return decoder

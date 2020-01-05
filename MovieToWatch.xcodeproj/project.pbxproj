@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8D0A2F2C23BF05B5000F0519 /* MovieReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0A2F2B23BF05B5000F0519 /* MovieReviewView.swift */; };
 		8D12BE5023A699CE006C72B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12BE4F23A699CE006C72B4 /* AppDelegate.swift */; };
 		8D12BE5223A699CE006C72B4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12BE5123A699CE006C72B4 /* SceneDelegate.swift */; };
 		8D12BE5423A699CE006C72B4 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12BE5323A699CE006C72B4 /* MainViewController.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8D0A2F2B23BF05B5000F0519 /* MovieReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieReviewView.swift; sourceTree = "<group>"; };
 		8D12BE4C23A699CE006C72B4 /* MovieToWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieToWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D12BE4F23A699CE006C72B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8D12BE5123A699CE006C72B4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				8DAEF42123B9C872008AE0EA /* AllCrewViewController.swift */,
 				8D76955923BC9B3B003A255C /* MovieImagesView.swift */,
 				8D76955B23BCF1FC003A255C /* MovieVideosView.swift */,
+				8D0A2F2B23BF05B5000F0519 /* MovieReviewView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				8D4CFE9723B0EE4F00985287 /* CoreDataManager.swift in Sources */,
 				8D76955C23BCF1FC003A255C /* MovieVideosView.swift in Sources */,
 				8D63680423B470AF009CD78C /* MovieSearchQuery.swift in Sources */,
+				8D0A2F2C23BF05B5000F0519 /* MovieReviewView.swift in Sources */,
 				8DA5DB6723B260D900895DEF /* MovieMO+CoreDataClass.swift in Sources */,
 				8DB9468C23ACAB5300AFD13C /* Constants.swift in Sources */,
 			);

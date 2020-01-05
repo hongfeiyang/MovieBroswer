@@ -41,34 +41,30 @@ struct MovieSearchResults: Codable {
 // MARK: - Result
 struct MovieSearchResult: Codable {
     let popularity: Double?
-    let voteCount: Int?
-    let video: Bool?
-    let posterPath: String?
     let id: Int?
-    let adult: Bool?
-    let backdropPath: String?
-    let originalLanguage: String?
-    let originalTitle: String?
-    let genreIDS: [Int]?
-    let title: String?
+    let video: Bool?
+    let voteCount: Int?
     let voteAverage: Double?
-    let overview: String?
-    let releaseDate: Date?
+    let title: String?
+    let releaseDate: Date
+    let originalLanguage, originalTitle: String?
+    let genreIDS: [Int]
+    let backdropPath: String?
+    let adult: Bool?
+    let overview, posterPath: String?
 
     enum CodingKeys: String, CodingKey {
-        case popularity
+        case popularity, id, video
         case voteCount = "vote_count"
-        case video
-        case posterPath = "poster_path"
-        case id, adult
-        case backdropPath = "backdrop_path"
+        case voteAverage = "vote_average"
+        case title
+        case releaseDate = "release_date"
         case originalLanguage = "original_language"
         case originalTitle = "original_title"
         case genreIDS = "genre_ids"
-        case title
-        case voteAverage = "vote_average"
-        case overview
-        case releaseDate = "release_date"
+        case backdropPath = "backdrop_path"
+        case adult, overview
+        case posterPath = "poster_path"
     }
 }
 
@@ -100,7 +96,14 @@ extension URLSession {
                 completionHandler(nil, response, error)
                 return
             }
-            completionHandler(try? newJSONDecoder().decode(T.self, from: data), response, nil)
+            do {
+                let data = try newJSONDecoder().decode(T.self, from: data)
+                completionHandler(data, response, nil)
+            } catch let error {
+                print(error.localizedDescription)
+                completionHandler(nil, response, nil)
+            }
+            
         }
     }
 
