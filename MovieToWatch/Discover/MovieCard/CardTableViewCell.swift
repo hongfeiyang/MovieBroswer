@@ -12,11 +12,11 @@ class CardViewCell: UICollectionViewCell {
     
     public var content: DiscoverMovieResult! {
         didSet {
-            if let posterPath = content.posterPath {
-                imageURL = APIConfiguration.parsePosterURL(file_path: posterPath, size: .w780)
+            imageURL = APIConfiguration.parsePosterURL(file_path: content.posterPath, size: .w780)
+            DispatchQueue.main.async { [weak self] in
+                self?.updateShortMovieInfoView()
             }
             
-            updateShortMovieInfoView()
         }
     }
     
@@ -133,11 +133,17 @@ extension CardViewCell {
     
     private func fetchAndSetImage() {
 
-        guard let url = imageURL else {print("failed to have a valid image url"); return}
+        DispatchQueue.main.async {
+            self.posterImageView.image = nil
+        }
+        
+        guard let url = imageURL else {
+            print("failed to have a valid image url")
+            return
+        }
 
         DispatchQueue.main.async {
             self.activityIndicatorView.startAnimating()
-            self.posterImageView.image = nil
         }
 
         Cache.shared.cacheImage(url: url) { (url, image) in

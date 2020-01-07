@@ -121,7 +121,7 @@ extension AllReviewsController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewCell") as! ReviewCell
         
         if let author = dataSource[indexPath.row].author {
-            cell.authorLabel.text = "Author: \(author)"
+            cell.authorLabel.text = "By: \(author)"
         } else {
             cell.authorLabel.text = "Unknown Author"
         }
