@@ -40,7 +40,6 @@ class MovieSearchViewController: UIViewController {
         setupNavigationBar()
         view.addSubview(tableView)
         tableView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
-        
     }
 }
 
@@ -48,11 +47,11 @@ class MovieSearchViewController: UIViewController {
 extension MovieSearchViewController: UISearchControllerDelegate, UISearchBarDelegate {
     
     func didPresentSearchController(_ searchController: UISearchController) {
-        print("Did present")
+        
     }
     
     func didDismissSearchController(_ searchController: UISearchController) {
-        print("Did dismiss")
+        
     }
     func willDismissSearchController(_ searchController: UISearchController) {
         clear()
