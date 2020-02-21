@@ -13,11 +13,10 @@ class MovieSearchViewController: UIViewController {
     var searchQuery = MovieSearchQuery(query: "")
     var results = [MovieSearchResult]()
     
-    private lazy var searchController = UISearchController(searchResultsController: nil)
+    var searchController = UISearchController(searchResultsController: nil)
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
         tableView.keyboardDismissMode = .interactive
@@ -26,23 +25,7 @@ class MovieSearchViewController: UIViewController {
         return tableView
     }()
     
-    private func setupLayout() {
-        
-        view.addSubview(tableView)
-
-        let constraints = [
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ]
-        
-        NSLayoutConstraint.activate(constraints)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupLayout()
+    func setupNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchController
         searchController.delegate = self
@@ -50,6 +33,13 @@ class MovieSearchViewController: UIViewController {
         navigationItem.searchController?.searchResultsUpdater = self
         navigationItem.hidesSearchBarWhenScrolling = false
         self.title = "Search"
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupNavigationBar()
+        view.addSubview(tableView)
+        tableView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
         
     }
 }
@@ -119,8 +109,8 @@ extension MovieSearchViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let vc = DetailMovieViewController()
-        vc.movieID = results[indexPath.row].id
+        let vc = MovieDetailViewController()
+        vc.movieId = results[indexPath.row].id
         navigationController?.pushViewController(vc, animated: true)
     }
     

@@ -237,7 +237,7 @@ extension DetailMovieViewController {
     
     private func updateViewFromModel() {
         let info = ShortMovieInfo(title: content.title, tagLine: content.tagline, rating: content.voteAverage)
-        shortInfoView.info = info
+        //shortInfoView.info = info
         if let path = content.posterPath {
             imageURL = APIConfiguration.parsePosterURL(file_path: path, size: .original)
             fetchAndSetImage()

@@ -10,19 +10,12 @@ import UIKit
 
 class CreditsView: UIView {
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
     
     var credits: Credits? {
         didSet {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
-                self.directorButton.updateContent(content: self.directorCrew?.name)
+                self.directorButton.contentLabel.text = self.directorCrew?.name
             }
         }
     }

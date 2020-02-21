@@ -7,38 +7,37 @@
 //
 
 import UIKit
+import SDWebImage
 
 class CardViewCell: UICollectionViewCell {
     
-    public var content: DiscoverMovieResult! {
+    var viewModel: MovieCardViewModel! {
         didSet {
-            imageURL = APIConfiguration.parsePosterURL(file_path: content.posterPath, size: .w780)
-            DispatchQueue.main.async { [weak self] in
-                self?.updateShortMovieInfoView()
-            }
-            
+            self.imageURL = viewModel.imageURL
+            self.shortInfoView.titleLabel.text = viewModel.title
+            self.shortInfoView.tagLineLabel.text = viewModel.overview
+            self.shortInfoView.ratingLabel.text = viewModel.voteAverage
         }
     }
     
     public var imageURL: URL? {
         didSet {
-            fetchAndSetImage()
+            self.posterImageView.sd_setImage(with: imageURL) { [weak self] (_, _, _, _) in
+                guard let self = self else {return}
+                self.activityIndicatorView.stopAnimating()
+            }
         }
     }
     
     
     private var activityIndicatorView: UIActivityIndicatorView = {
         let indicatorView = UIActivityIndicatorView()
-        
         indicatorView.hidesWhenStopped = true
         indicatorView.style = .large
         indicatorView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
         return indicatorView
     }()
-    
 
-    
     public var posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -46,7 +45,6 @@ class CardViewCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
     
     private var shortInfoView: ShortMovieInfoView = {
         let view = ShortMovieInfoView()
@@ -75,10 +73,6 @@ class CardViewCell: UICollectionViewCell {
     
         backgroundColor = .systemGroupedBackground
         layer.cornerRadius = CGFloat(Constants.CARD_CORNER_RADIUS)
-        layer.shadowColor = UIColor.systemGroupedBackground.cgColor
-        layer.shadowRadius = CGFloat(Constants.CARD_SHADOW_RADIUS)
-        layer.shadowOpacity = Constants.CARD_SHADOW_OPACITY
-        layer.masksToBounds = true
         clipsToBounds = true
         
         contentView.addSubview(posterImageView)
@@ -91,10 +85,7 @@ class CardViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
+
 }
 
 
@@ -104,10 +95,8 @@ class LoadingCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         activityIndicator.style = .large
         activityIndicator.startAnimating()
-        
         addSubview(activityIndicator)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         let constraints = [
@@ -123,36 +112,4 @@ class LoadingCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-}
-
-extension CardViewCell {
-    public func updateShortMovieInfoView() {
-        let info = ShortMovieInfo(title: content.title, tagLine: content.overview, rating: content.voteAverage ?? 0)
-        shortInfoView.info = info
-    }
-    
-    private func fetchAndSetImage() {
-
-        DispatchQueue.main.async {
-            self.posterImageView.image = nil
-        }
-        
-        guard let url = imageURL else {
-            print("failed to have a valid image url")
-            return
-        }
-
-        DispatchQueue.main.async {
-            self.activityIndicatorView.startAnimating()
-        }
-
-        Cache.shared.cacheImage(url: url) { (url, image) in
-            if url == self.imageURL {
-                DispatchQueue.main.async {
-                    self.activityIndicatorView.stopAnimating()
-                    self.posterImageView.image = image
-                }
-            }
-        }
-    }
 }

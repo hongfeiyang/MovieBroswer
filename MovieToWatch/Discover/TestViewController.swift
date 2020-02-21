@@ -9,23 +9,18 @@
 import Foundation
 import UIKit
 
-
-
 class TestViewController: UIViewController {
-    
-    
+
     private var cardPresentAnimator = CardPresentAnimator()
     private var cardDismissAnimator = CardDismissAnimator()
     private var currentPage = 0
     private var pageIsLoadingMoreContent = false
 
     private lazy var collectionView: UICollectionView = {
-        
         let flowLayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.backgroundColor = .systemBackground
         collectionView.refreshControl = refreshControl
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(CardViewCell.self, forCellWithReuseIdentifier: "Cell")
@@ -58,32 +53,21 @@ class TestViewController: UIViewController {
         }
     }
 
-    private func setupLayout() {
-        
-        let constraints = [
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(constraints)
+    func setupNavigationBar() {
+        navigationController?.delegate = self
+        navigationController?.navigationBar.prefersLargeTitles = true
+        self.title = "Discover"
+        let barItem = UIBarButtonItem(title: "Rank By", style: .plain, target: self, action: #selector(changeOrder))
+        navigationItem.rightBarButtonItem = barItem
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(collectionView)
-        setupLayout()
+        collectionView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+        setupNavigationBar()
         refresh()
-        navigationController?.navigationBar.prefersLargeTitles = true
-        self.title = "Discover"
-        
-        let barItem = UIBarButtonItem(title: "Rank By", style: .plain, target: self, action: #selector(changeOrder))
-        navigationItem.rightBarButtonItem = barItem
     }
-    
-    
-    
     
     @objc private func changeOrder() {
         let vc = UIAlertController(title: "Rank By", message: "Choose a ranking method", preferredStyle: .actionSheet)
@@ -112,15 +96,9 @@ class TestViewController: UIViewController {
             self.discoverMovieQuery.order = .desc
             self.refresh()
         }
-        
         let cancel = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
-        
-        vc.addAction(action1)
-        vc.addAction(action2)
-        vc.addAction(action3)
-        vc.addAction(action4)
-        vc.addAction(action5)
-        vc.addAction(cancel)
+        let actions = [action1, action2, action3, action4, action5, cancel]
+        actions.forEach{vc.addAction($0)}
         present(vc, animated: true)
     }
     
@@ -134,12 +112,8 @@ extension TestViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CardViewCell
-
+        cell.viewModel = MovieCardViewModel(content: results[indexPath.item])
         return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        configureCell(cell as! CardViewCell, at: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -150,7 +124,6 @@ extension TestViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = UIScreen.main.bounds.width - 20 * 2
         let height = width * 6/5
-        
         return CGSize(width: width, height: height)
     }
     
@@ -163,21 +136,17 @@ extension TestViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
         let yOffset = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         let triggerOffset = CGFloat(100)
-        
         if yOffset > contentHeight - scrollView.frame.height + triggerOffset && !pageIsLoadingMoreContent {
             currentPage += 1
             loadMoreData() {
                 self.pageIsLoadingMoreContent = false
             }
             self.pageIsLoadingMoreContent = true
-            
         }
     }
-    
 }
 
 
@@ -228,11 +197,6 @@ extension TestViewController {
         }
     }
     
-    private func configureCell(_ cell: CardViewCell, at indexPath: IndexPath) {
-        let result = results[indexPath.row]
-        cell.content = result
-    }
-    
     private func selectRow(_ cell: CardViewCell, at indexPath: IndexPath) {
         let vc = DetailMovieViewController()
         //vc.content = result
@@ -244,10 +208,23 @@ extension TestViewController {
         vc.posterImage = cell.posterImageView.image
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = self
-        //vc.isModalInPresentation = true
-        //navigationController?.pushViewController(vc, animated: true)
+        vc.isModalInPresentation = true
+//        navigationController?.pushViewController(vc, animated: true)
         present(vc, animated: true, completion: nil)
     }
     
+}
+
+extension TestViewController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        switch operation {
+        case .push:
+            return cardPresentAnimator
+        case .pop:
+            return cardDismissAnimator
+        default:
+            return nil
+        }
+    }
 }
 

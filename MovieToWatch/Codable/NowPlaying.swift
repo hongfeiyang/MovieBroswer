@@ -70,7 +70,7 @@ struct NowPlayingResult: Codable {
     let voteCount: Int?
     let video: Bool?
     let posterPath: String?
-    let id: Int?
+    let id: Int
     let adult: Bool?
     let backdropPath: String?
     let originalLanguage: String?
@@ -94,6 +94,10 @@ struct NowPlayingResult: Codable {
         case voteAverage = "vote_average"
         case overview
         case releaseDate = "release_date"
+    }
+    
+    func toMovieCategoryItem() -> MovieItemInCategory {
+        return MovieItemInCategory(id: id, title: title, posterPath: posterPath)
     }
 }
 

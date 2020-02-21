@@ -9,23 +9,27 @@
 import UIKit
 
 class MainMovieViewController: UIViewController {
-
-    let query = NowPlayingQuery(language: nil, page: 1, region: "AU")
-    let page = 1
     
+    
+    var nowPlayingResult = [NowPlayingResult]()
+    var topRatedResult = [TopRatedResult]()
+    
+    let nowPlayingQuery = NowPlayingQuery(language: nil, page: 1, region: "AU")
+    let nowPlayingPage = 1
+    
+    let topRatedQuery = TopRatedQuery(language: nil, page: 1, region: "AU")
+    let topRatedPage = 1
+
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let view = UICollectionView(frame: .zero , collectionViewLayout: layout)
         view.delegate = self
         view.dataSource = self
-        view.register(NowPlayingCell.self, forCellWithReuseIdentifier: "NowPlayingCell")
+        view.register(MovieCategoryCell.self, forCellWithReuseIdentifier: "CategoryCell")
         view.backgroundColor = .systemBackground
         return view
     }()
         
-    var dataSource = [NowPlayingResult]()
-    
-    
     private func setupLayout() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         let constraints = [
@@ -41,9 +45,17 @@ class MainMovieViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(collectionView)
         setupLayout()
-        Network.getNowPlaying(query: query) { [weak self] (nowPlaying) in
+        
+        Network.getNowPlaying(query: nowPlayingQuery) { [weak self] (result) in
             DispatchQueue.main.async {
-                self?.dataSource = nowPlaying.results
+                self?.nowPlayingResult = result.results
+                self?.collectionView.reloadData()
+            }
+        }
+        
+        Network.getTopRated(query: topRatedQuery) { [weak self] (result) in
+            DispatchQueue.main.async {
+                self?.topRatedResult = result.results
                 self?.collectionView.reloadData()
             }
         }
@@ -52,49 +64,30 @@ class MainMovieViewController: UIViewController {
 
 extension MainMovieViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.count
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NowPlayingCell", for: indexPath) as! NowPlayingCell
-        cell.label.text = dataSource[indexPath.row].title
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! MovieCategoryCell
+        cell.resetContent()
+        switch(indexPath.row) {
+        case 0:
+            cell.dataSource = nowPlayingResult.map {
+                $0.toMovieCategoryItem()
+            }
+        case 1:
+            cell.dataSource = topRatedResult.map {
+                $0.toMovieCategoryItem()
+            }
+        default:
+            break
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: 80, height: 80)
+        return .init(width: UIScreen.main.bounds.width, height: 200)
     }
 }
 
-class NowPlayingCell: UICollectionViewCell {
-    
-    var label: UILabel = {
-        let label = UILabel()
-        label.textColor = .label
-        label.font = UIFont.systemFont(ofSize: 15, weight: .thin)
-        return label
-    }()
-    
-    private func setupLayout() {
-        label.translatesAutoresizingMaskIntoConstraints = false
-        let constraints = [
-            label.topAnchor.constraint(equalTo: topAnchor),
-            label.bottomAnchor.constraint(equalTo: bottomAnchor),
-            label.leadingAnchor.constraint(equalTo: leadingAnchor),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor),
-        ]
-        NSLayoutConstraint.activate(constraints)
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .systemGroupedBackground
-        addSubview(label)
-        setupLayout()
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
+

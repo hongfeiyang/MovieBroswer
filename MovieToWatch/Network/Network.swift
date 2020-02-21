@@ -53,4 +53,17 @@ class Network {
         }.resume()
         //NSLog("Query send: \(query.description)")
     }
+    
+    
+    static func getTopRated(query: TopRatedQuery, completion: ((TopRated) -> Void)?) {
+        guard let url = URL(string: query.description) else {return}
+        URLSession.shared.topRatedTask(with: url) {(data, response, error) in
+            //NSLog("response received")
+            guard let data = data else {print("fail to parse TopRated"); return}
+            //NSLog("response parsed")
+            completion?(data)
+            
+        }.resume()
+        //NSLog("Query send: \(query.description)")
+    }
 }

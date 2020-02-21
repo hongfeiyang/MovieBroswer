@@ -24,8 +24,4 @@ class MainTabBarController: UITabBarController {
         viewControllers = vcs.map { UINavigationController(rootViewController: $0)}
         // Do any additional setup after loading the view.
     }
-    
-
-   
-
 }
