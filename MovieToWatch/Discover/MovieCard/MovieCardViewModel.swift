@@ -15,7 +15,7 @@ struct MovieCardViewModel {
     let voteAverage: String
     
     init(content: DiscoverMovieResult) {
-        self.imageURL = APIConfiguration.parsePosterURL(file_path: content.posterPath, size: .w780)
+        self.imageURL = APIConfiguration.parsePosterURL(file_path: content.posterPath, size: .original)
         self.title = content.title ?? ""
         self.overview = content.overview ?? ""
         self.voteAverage = String(content.voteAverage ?? 0)

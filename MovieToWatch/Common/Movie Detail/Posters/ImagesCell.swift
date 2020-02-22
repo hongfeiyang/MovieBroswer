@@ -33,7 +33,7 @@ class ImagesCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .tertiarySystemBackground
+        backgroundColor = .tertiarySystemGroupedBackground
         addSubview(profileImageView)
         profileImageView.fillSuperview()
     }

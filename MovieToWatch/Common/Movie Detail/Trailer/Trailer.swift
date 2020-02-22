@@ -24,10 +24,12 @@ class VideosSectionCell: MovieDetailSectionBaseCell {
     var allVideosButton = BaseButton(topic: "Videos", content: "view all")
     
     lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = BetterSnappingLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .secondarySystemBackground
+        collectionView.decelerationRate = .fast
+        collectionView.contentInset = .init(top: 0, left: 10, bottom: 0, right: 10)
+        collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(VideosCell.self, forCellWithReuseIdentifier: "VideosCell")
@@ -37,15 +39,14 @@ class VideosSectionCell: MovieDetailSectionBaseCell {
     
     lazy var stackView: UIStackView = {
         let view = VerticalStackView(arrangedSubviews: [
+            self.allVideosButton,
             self.collectionView,
-            self.allVideosButton
         ], spacing: 0)
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .secondarySystemBackground
         addSubview(stackView)
         stackView.fillSuperview()
     }
@@ -69,7 +70,11 @@ extension VideosSectionCell: UICollectionViewDelegate, UICollectionViewDelegateF
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: collectionView.frame.height*1920/1080, height: collectionView.frame.height)
+        
+        let adjustedHight = collectionView.frame.height - 5*2
+        let adjustedWidth = adjustedHight * 1920/1080
+        
+        return .init(width: adjustedWidth, height: adjustedHight)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

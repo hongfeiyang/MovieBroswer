@@ -15,6 +15,7 @@ class MovieDetailSectionBaseCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = .secondarySystemGroupedBackground
     }
     
     required init?(coder: NSCoder) {

@@ -11,9 +11,9 @@ import UIKit
 class BaseButton: UIButton {
 
     
-    var topicLabel = UILabel(text: "", font: .systemFont(ofSize: 18, weight: .regular), numberOfLines: 0, textColor: .label, textAlignment: .left)
+    var topicLabel = UILabel(text: "", font: .systemFont(ofSize: 21, weight: .medium), numberOfLines: 0, textColor: .label, textAlignment: .left)
     
-    var contentLabel = UILabel(text: "", font: .systemFont(ofSize: 18, weight: .regular), numberOfLines: 0, textColor: .secondaryLabel, textAlignment: .right)
+    var contentLabel = UILabel(text: "", font: .systemFont(ofSize: 18, weight: .light), numberOfLines: 0, textColor: .secondaryLabel, textAlignment: .right)
     
     lazy var stackView: UIStackView = {
         let view = UIStackView(arrangedSubviews: [
@@ -32,7 +32,7 @@ class BaseButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(stackView)
-        stackView.fillSuperview()
+        stackView.fillSuperview(padding: .init(top: 0, left: 10, bottom: 0, right: 10))
     }
     
     required init?(coder: NSCoder) {

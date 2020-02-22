@@ -35,11 +35,10 @@ class TestViewController: UIViewController {
     
     private var results = [DiscoverMovieResult]() {
         didSet {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
+            DispatchQueue.main.async { self.collectionView.reloadData() }
         }
     }
+    
     private var discoverMovieQuery = DiscoverMovieQuery()
     
     
@@ -47,14 +46,11 @@ class TestViewController: UIViewController {
         currentPage = 1
         results.removeAll()
         loadMoreData() {
-            DispatchQueue.main.async {
-                self.refreshControl.endRefreshing()
-            }
+            DispatchQueue.main.async { self.refreshControl.endRefreshing() }
         }
     }
 
     func setupNavigationBar() {
-        navigationController?.delegate = self
         navigationController?.navigationBar.prefersLargeTitles = true
         self.title = "Discover"
         let barItem = UIBarButtonItem(title: "Rank By", style: .plain, target: self, action: #selector(changeOrder))
@@ -198,33 +194,14 @@ extension TestViewController {
     }
     
     private func selectRow(_ cell: CardViewCell, at indexPath: IndexPath) {
-        let vc = DetailMovieViewController()
-        //vc.content = result
-        let result = results[indexPath.row]
+        let vc = MovieDetailViewController()
         
-        vc.movieID = result.id
-        vc.imageURLString = result.posterPath
+        let result = results[indexPath.row]
+        vc.movieId = result.id
         vc.hidesBottomBarWhenPushed = true
-        vc.posterImage = cell.posterImageView.image
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = self
         vc.isModalInPresentation = true
-//        navigationController?.pushViewController(vc, animated: true)
         present(vc, animated: true, completion: nil)
     }
-    
 }
-
-extension TestViewController: UINavigationControllerDelegate {
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        switch operation {
-        case .push:
-            return cardPresentAnimator
-        case .pop:
-            return cardDismissAnimator
-        default:
-            return nil
-        }
-    }
-}
-

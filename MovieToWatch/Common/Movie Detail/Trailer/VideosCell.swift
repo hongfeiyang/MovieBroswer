@@ -36,7 +36,7 @@ class VideosCell: UICollectionViewCell {
         
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .tertiarySystemBackground
+        backgroundColor = .tertiarySystemGroupedBackground
         addSubview(videoView)
         videoView.fillSuperview()
     }

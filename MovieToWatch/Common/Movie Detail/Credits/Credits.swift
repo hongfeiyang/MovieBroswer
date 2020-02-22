@@ -38,14 +38,16 @@ class CreditsSectionCell: MovieDetailSectionBaseCell {
     var allCrewButton = BaseButton(topic: "All Cast and Crew", content: "")
     
     lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = BetterSnappingLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .secondarySystemBackground
+        collectionView.decelerationRate = .fast
+        collectionView.contentInset = .init(top: 0, left: 10, bottom: 0, right: 10)
+        collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(CastCell.self, forCellWithReuseIdentifier: "CastCell")
-        collectionView.heightAnchor.constraint(equalToConstant: 180).isActive = true
+        collectionView.heightAnchor.constraint(equalToConstant: 210).isActive = true
         return collectionView
     }()
     
@@ -55,13 +57,12 @@ class CreditsSectionCell: MovieDetailSectionBaseCell {
             self.collectionView,
             self.directorButton,
             self.allCrewButton
-        ], spacing: 0)
+        ])
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .secondarySystemBackground
         addSubview(stackView)
         stackView.fillSuperview()
     }
@@ -85,7 +86,7 @@ extension CreditsSectionCell: UICollectionViewDelegate, UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return .init(width: 90, height: collectionView.frame.height)
+        return .init(width: 90, height: collectionView.frame.height - 5*2)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

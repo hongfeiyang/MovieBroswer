@@ -14,14 +14,13 @@ class CastCell: UICollectionViewCell {
         didSet {
             nameLabel.text = viewModel.name
             characterLabel.text = viewModel.character
-            profileImageView.image = nil
             profileImageURL = APIConfiguration.parsePosterURL(file_path: viewModel.profilePath, size: .w154)
         }
     }
 
-    var nameLabel = UILabel(text: "", font: .systemFont(ofSize: 10, weight: .light), numberOfLines: 0, textColor: .label)
+    var nameLabel = UILabel(text: "", font: .systemFont(ofSize: 12, weight: .regular), numberOfLines: 0, textColor: .label)
     
-    var characterLabel = UILabel(text: "", font: .systemFont(ofSize: 10, weight: .ultraLight), numberOfLines: 0, textColor: .label)
+    var characterLabel = UILabel(text: "", font: .systemFont(ofSize: 12, weight: .light), numberOfLines: 0, textColor: .secondaryLabel)
 
     var profileImageView: UIImageView = {
         let view = UIImageView()
@@ -33,7 +32,7 @@ class CastCell: UICollectionViewCell {
     
     var profileImageURL: URL? {
         didSet {
-            profileImageView.sd_setImage(with: profileImageURL, completed: nil)
+            profileImageView.sd_setImage(with: profileImageURL, placeholderImage: UIImage(systemName: "person.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .ultraLight))?.withTintColor(.systemGray, renderingMode: .alwaysOriginal))
         }
     }
     
@@ -42,13 +41,13 @@ class CastCell: UICollectionViewCell {
             self.profileImageView,
             self.nameLabel,
             self.characterLabel
-        ], spacing: 5)
+        ], spacing: 1)
         return view
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .tertiarySystemBackground
+        backgroundColor = .tertiarySystemGroupedBackground
         addSubview(stackView)
         stackView.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor)
     }
