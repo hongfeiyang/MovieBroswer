@@ -8,9 +8,9 @@
 
 import UIKit
 
-class MovieHeader: MovieDetailSectionBaseCell {
+class MovieHeader: UICollectionReusableView {
     
-    override var movieDetail: MovieDetail? {
+    var movieDetail: MovieDetail? {
         didSet {
             posterImagePath = APIConfiguration.parsePosterURL(file_path: movieDetail?.posterPath, size: .original)
             titleLabel.text = movieDetail?.title
@@ -42,23 +42,23 @@ class MovieHeader: MovieDetailSectionBaseCell {
     
     var imageViewTopConstraint: NSLayoutConstraint?
     var imageViewWidthConstraint: NSLayoutConstraint?
-    var imageViewHeightConstraint: NSLayoutConstraint?
+    var imageViewBottomConstraint: NSLayoutConstraint?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemRed
+        backgroundColor = .secondarySystemGroupedBackground
         addSubview(posterImageView)
         addSubview(stackView)
         
         stackView.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 0, left: 20, bottom: 20, right: 20))
         
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         posterImageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         imageViewTopConstraint = posterImageView.topAnchor.constraint(equalTo: topAnchor)
-        imageViewWidthConstraint = posterImageView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width)
-        imageViewHeightConstraint = posterImageView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 3/2)
-        [imageViewTopConstraint, imageViewHeightConstraint, imageViewWidthConstraint].forEach { $0?.isActive = true }
+        imageViewWidthConstraint = posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 2/3)
+        imageViewBottomConstraint = posterImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        [imageViewTopConstraint, imageViewBottomConstraint, imageViewWidthConstraint].forEach { $0?.isActive = true }
     }
     
     required init?(coder: NSCoder) {

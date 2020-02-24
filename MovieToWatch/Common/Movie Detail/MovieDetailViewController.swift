@@ -37,6 +37,8 @@ class MovieDetailViewController: BaseCollectionViewController {
     let imagesCellId = "imagesCellId"
     let videosCellId = "videosCellId"
     let reviewsCellId = "reviewsCellId"
+    let overviewCellId = "overviewCellId"
+    let basicInfoCellId = "basicInfoCellId"
     
     let movidHeaderId = "movieHeaderId"
     
@@ -75,11 +77,15 @@ class MovieDetailViewController: BaseCollectionViewController {
         super.viewDidLoad()
         collectionView.alwaysBounceVertical = true
         collectionView.delegate = self
-        collectionView.register(MovieHeader.self, forCellWithReuseIdentifier: movidHeaderId)
+        
+        collectionView.register(BasicInfoSectionCell.self, forCellWithReuseIdentifier: basicInfoCellId)
+        collectionView.register(OverviewSectionCell.self, forCellWithReuseIdentifier: overviewCellId)
         collectionView.register(CreditsSectionCell.self, forCellWithReuseIdentifier: creditsCellId)
         collectionView.register(ImagesSectionCell.self, forCellWithReuseIdentifier: imagesCellId)
         collectionView.register(VideosSectionCell.self, forCellWithReuseIdentifier: videosCellId)
         collectionView.register(ReviewsSectionCell.self, forCellWithReuseIdentifier: reviewsCellId)
+        
+        collectionView.register(MovieHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: movidHeaderId)
         
     }
     
@@ -107,12 +113,14 @@ class MovieDetailViewController: BaseCollectionViewController {
         var cell: MovieDetailSectionBaseCell!
         
         if indexPath.item == 0 {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: movidHeaderId, for: indexPath) as! MovieHeader
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: basicInfoCellId, for: indexPath) as! BasicInfoSectionCell
         } else if indexPath.item == 1 {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: creditsCellId, for: indexPath) as! CreditsSectionCell
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: overviewCellId, for: indexPath) as! OverviewSectionCell
         } else if indexPath.item == 2 {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: imagesCellId, for: indexPath) as! ImagesSectionCell
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: creditsCellId, for: indexPath) as! CreditsSectionCell
         } else if indexPath.item == 3 {
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: imagesCellId, for: indexPath) as! ImagesSectionCell
+        } else if indexPath.item == 4 {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: videosCellId, for: indexPath) as! VideosSectionCell
         } else {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewsCellId, for: indexPath) as! ReviewsSectionCell
@@ -122,7 +130,7 @@ class MovieDetailViewController: BaseCollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return 6
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -135,14 +143,15 @@ class MovieDetailViewController: BaseCollectionViewController {
         
         let dummyCell: MovieDetailSectionBaseCell
         
-        
         if indexPath.item == 0 {
-            return .init(width: topPosterWidth, height: topPosterHeight)
+            dummyCell = BasicInfoSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
         } else if indexPath.item == 1 {
-            dummyCell = CreditsSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
+            dummyCell = OverviewSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
         } else if indexPath.item == 2 {
-            dummyCell = ImagesSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
+            dummyCell = CreditsSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
         } else if indexPath.item == 3 {
+            dummyCell = ImagesSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
+        } else if indexPath.item == 4 {
             dummyCell = VideosSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
         } else {
             dummyCell = ReviewsSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
@@ -156,19 +165,19 @@ class MovieDetailViewController: BaseCollectionViewController {
         return .init(width: collectionView.frame.width, height: height)
     }
     
-//    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//
-//        switch kind {
-//        case UICollectionView.elementKindSectionHeader:
-//            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: movidHeaderId, for: indexPath) as! MovieHeader
-//            cell.movieDetail = movieDetail
-//            return cell
-//        default:
-//            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: movidHeaderId, for: indexPath)
-//            return cell
-//        }
-//
-//    }
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: movidHeaderId, for: indexPath) as! MovieHeader
+            cell.movieDetail = movieDetail
+            return cell
+        default:
+            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: movidHeaderId, for: indexPath)
+            return cell
+        }
+
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 10
@@ -178,26 +187,21 @@ class MovieDetailViewController: BaseCollectionViewController {
         return 10
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        return .init(width: topPosterWidth, height: topPosterHeight)
-//    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return .init(width: topPosterWidth, height: topPosterHeight)
+    }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        guard let cell = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: .init(item: 0, section: 0)) as? MovieHeader else {return}
-        print("ScrollViewDidScroll ==================>", scrollView.contentOffset)
-//        if scrollView.contentOffset.y > 0 {
-//            // push poster image up at X/Y scrolling speed when scrolling up
-//            cell.clipsToBounds = true
-//            cell.imageViewTopConstraint?.constant = scrollView.contentOffset.y//*2/5
-//            //cell.imageViewWidthConstraint?.constant = UIScreen.main.bounds.width
-////            cell.imageViewHeightConstraint?.constant = UIScreen.main.bounds.width * 3/2
-//        } else {
-//            // expand poster image proportionally when scrolling down
-//            cell.clipsToBounds = false
-//            cell.imageViewTopConstraint?.constant = 0
-//            //cell.imageViewWidthConstraint?.constant = UIScreen.main.bounds.width -  scrollView.contentOffset.y/3*2
-////            cell.imageViewHeightConstraint?.constant = UIScreen.main.bounds.width * 3/2 -  scrollView.contentOffset.y
-//        }
+        guard let cell = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: .init(item: 0, section: 0)) as? MovieHeader else {return}
+        if scrollView.contentOffset.y > 0 {
+            // push poster image up at X/Y scrolling speed when scrolling up
+            cell.clipsToBounds = true
+            cell.imageViewTopConstraint?.constant = 0
+        } else {
+            // expand poster image proportionally when scrolling down
+            cell.clipsToBounds = false
+            cell.imageViewTopConstraint?.constant = scrollView.contentOffset.y
+        }
     }
     
 }
