@@ -72,7 +72,7 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
 class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
-    let duration = 0.5
+    let duration = 0.6
     var originFrame = CGRect.zero
     weak var cell: CardViewCell!
     
@@ -83,39 +83,36 @@ class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let containerView = transitionContext.containerView
         guard let fromView = transitionContext.view(forKey: .from) else {fatalError("There is no fromView in card dismiss animator")}
-        guard let fromVC = transitionContext.viewController(forKey: .from) as? DetailMovieViewController else {fatalError("There is no fromVC in card dismiss animator")}
+        
+        guard let fromVC = transitionContext.viewController(forKey: .from) as? MovieDetailViewController else {fatalError("There is no fromVC in card dismiss animator")}
+
         fromView.translatesAutoresizingMaskIntoConstraints = false
         containerView.removeConstraints(containerView.constraints)
+        fromView.removeConstraints(fromView.constraints)
+        containerView.addSubview(fromView)
         
-        // deactivate old width and height constraints of fromView to prevent constraint conflicts
-        let _cardWidthConstraint = fromView.constraints.first { (constraint) -> Bool in
-            constraint.firstItem as! UIView == fromView && constraint.firstAttribute == .width
-        }!
+        let centerXAnchor = fromView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
+        let widthAnchor = fromView.widthAnchor.constraint(equalToConstant: containerView.frame.width)
+        let heightAnchor = fromView.heightAnchor.constraint(equalToConstant: containerView.frame.height)
+        let centerYAnchor = fromView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        [centerXAnchor, centerYAnchor, widthAnchor, heightAnchor].forEach {
+            $0.isActive = true
+        }
         
-        let _cardHeightConstraint = fromView.constraints.first { (constraint) -> Bool in
-            constraint.firstItem as! UIView == fromView && constraint.firstAttribute == .height
-        }!
-        
-        _cardWidthConstraint.isActive = false
-        _cardHeightConstraint.isActive = false
-        
-        // add new constraints to prepare for shrinking animation, initially set to full screen size
-        let cardWidthConstraint = fromView.widthAnchor.constraint(equalToConstant: containerView.frame.width)
-        let cardHeightConstraint = fromView.heightAnchor.constraint(equalToConstant: containerView.frame.height)
-        let cardTopAnchorConstraint = fromView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0)
-        let cardCenterXAnchorConstraint = fromView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
-   
-        NSLayoutConstraint.activate([cardWidthConstraint, cardHeightConstraint, cardTopAnchorConstraint, cardCenterXAnchorConstraint])
         fromView.clipsToBounds = true // for corner radius animation
-        
+
         containerView.layoutIfNeeded()
-        
+
+        UIView.animate(withDuration: duration/2) {
+            fromVC.collectionView.setContentOffset(.zero, animated: false)
+            //fromVC.collectionView.scrollToItem(at: .init(row: 0, section: 0), at: .bottom, animated: false)
+        }
+
         UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.0, options: [], animations: {
-//            fromView.transform = CGAffineTransform.identity
-            cardTopAnchorConstraint.constant = self.originFrame.origin.y
-            cardWidthConstraint.constant = self.originFrame.width
-            cardHeightConstraint.constant = self.originFrame.height
-            cardCenterXAnchorConstraint.constant = self.originFrame.midX - containerView.frame.midX
+            centerYAnchor.constant = self.originFrame.midY - containerView.frame.midY
+            widthAnchor.constant = self.originFrame.width
+            heightAnchor.constant = self.originFrame.height
+            //centerXAnchor.constant = self.originFrame.midX - containerView.frame.midX
             fromView.layer.cornerRadius = CGFloat(Constants.CARD_CORNER_RADIUS)
             containerView.layoutIfNeeded()
         }) { (finished) in
@@ -124,10 +121,6 @@ class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             transitionContext.completeTransition(finished)
         }
         
-        UIView.animate(withDuration: duration * 0.6) {
-            fromVC.scrollView.contentOffset = .zero
-        }
+        
     }
-    
-    
 }

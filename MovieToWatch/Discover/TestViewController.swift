@@ -195,13 +195,17 @@ extension TestViewController {
     
     private func selectRow(_ cell: CardViewCell, at indexPath: IndexPath) {
         let vc = MovieDetailViewController()
-        
         let result = results[indexPath.row]
         vc.movieId = result.id
+        //let nc = UINavigationController(rootViewController: vc)
+        
         vc.hidesBottomBarWhenPushed = true
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = self
         vc.isModalInPresentation = true
+        
+        
+        
         present(vc, animated: true, completion: nil)
     }
 }
