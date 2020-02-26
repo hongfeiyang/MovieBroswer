@@ -105,7 +105,7 @@ class MovieDetailViewController: BaseCollectionViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.navigationBar.isHidden = navigationController?.viewControllers.count == 1 ? true : false
+        navigationController?.navigationBar.isHidden = false
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
