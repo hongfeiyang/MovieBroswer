@@ -10,7 +10,7 @@ import UIKit
 
 class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
-    let duration = 0.5
+    let duration = 0.7
     var originFrame = CGRect.zero
     weak var cell: CardViewCell!
     
@@ -21,7 +21,7 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         
         guard let toView = transitionContext.view(forKey: .to) else {print("there is no toView"); return}
-        
+
         let containerView = transitionContext.containerView
         let initialFrame = originFrame
         let finalFrame = toView.frame
@@ -41,11 +41,13 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             cardHeightConstraint,
         ]
         NSLayoutConstraint.activate(toViewConstraints)
-        toView.layer.cornerRadius = CGFloat(Constants.CARD_CORNER_RADIUS)
         
-        containerView.layoutIfNeeded()
+        toView.layer.cornerRadius = CGFloat(Constants.CARD_CORNER_RADIUS)
+        toView.clipsToBounds = true
         cell.isHidden = true
+        
         // animate expansion to fill out the space
+        containerView.layoutIfNeeded()
         UIView.animate(withDuration: duration/2, animations: {
             cardWidthConstraint.constant = finalFrame.width
             cardHeightConstraint.constant = finalFrame.height
@@ -72,7 +74,7 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
 class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
-    let duration = 0.6
+    let duration = 0.7
     var originFrame = CGRect.zero
     weak var cell: CardViewCell!
     
@@ -84,7 +86,7 @@ class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         let containerView = transitionContext.containerView
         guard let fromView = transitionContext.view(forKey: .from) else {fatalError("There is no fromView in card dismiss animator")}
         
-        guard let fromVC = transitionContext.viewController(forKey: .from) as? MovieDetailViewController else {fatalError("There is no fromVC in card dismiss animator")}
+        guard let nc = transitionContext.viewController(forKey: .from) as? UINavigationController, let fromVC = nc.viewControllers[0] as? MovieDetailViewController else {fatalError("There is no fromVC in card dismiss animator")}
 
         fromView.translatesAutoresizingMaskIntoConstraints = false
         containerView.removeConstraints(containerView.constraints)

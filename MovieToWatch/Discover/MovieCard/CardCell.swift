@@ -9,13 +9,14 @@
 import UIKit
 
 class CardViewCell: UICollectionViewCell {
-    
-    var viewModel: MovieCardViewModel! {
+        
+    var movieDetail: MovieDetail? {
         didSet {
-            self.imageURL = viewModel.imageURL
-            self.shortInfoView.titleLabel.text = viewModel.title
-            self.shortInfoView.tagLineLabel.text = viewModel.overview
-            self.shortInfoView.ratingLabel.text = viewModel.voteAverage
+            let url = APIConfiguration.parsePosterURL(file_path: movieDetail?.posterPath, size: .original)
+            self.imageURL = url
+            self.shortInfoView.titleLabel.text = movieDetail?.title
+            self.shortInfoView.tagLineLabel.text = movieDetail?.tagline
+            self.shortInfoView.ratingLabel.text = String(movieDetail?.voteAverage ?? 0)
         }
     }
     
@@ -29,7 +30,7 @@ class CardViewCell: UICollectionViewCell {
     }
     
     
-    private var activityIndicatorView: UIActivityIndicatorView = {
+    var activityIndicatorView: UIActivityIndicatorView = {
         let indicatorView = UIActivityIndicatorView()
         indicatorView.hidesWhenStopped = true
         indicatorView.style = .large
@@ -37,7 +38,7 @@ class CardViewCell: UICollectionViewCell {
         return indicatorView
     }()
 
-    public var posterImageView: UIImageView = {
+    var posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -45,7 +46,7 @@ class CardViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    private var shortInfoView: ShortMovieInfoView = {
+    var shortInfoView: ShortMovieInfoView = {
         let view = ShortMovieInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -90,21 +91,14 @@ class CardViewCell: UICollectionViewCell {
 
 class LoadingCollectionViewCell: UICollectionViewCell {
     
-    private var activityIndicator = UIActivityIndicatorView()
+    var activityIndicator = UIActivityIndicatorView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         activityIndicator.style = .large
-        activityIndicator.startAnimating()
+        activityIndicator.color = .label
         addSubview(activityIndicator)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        let constraints = [
-            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
-            activityIndicator.widthAnchor.constraint(equalToConstant: 40),
-        ]
-        
-        NSLayoutConstraint.activate(constraints)
+        activityIndicator.fillSuperview()        
     }
     
     required init?(coder: NSCoder) {

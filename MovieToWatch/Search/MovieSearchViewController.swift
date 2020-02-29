@@ -10,8 +10,15 @@ import UIKit
 
 class MovieSearchViewController: UIViewController {
 
-    var searchQuery = MovieSearchQuery(query: "")
+    var searchQuery = MovieSearchQuery(query: "", language: nil, page: nil, include_adult: nil, region: nil, year: nil, primary_release_year: nil)
+    var totalResultPages: Int?
     var results = [MovieSearchResult]()
+    
+    let resultCell = "resultCell"
+    let loadingCell = "loadingCell"
+    
+    var pageIsLoadingMoreContent = false
+    var currentPage = 0
     
     var searchController = UISearchController(searchResultsController: nil)
     
@@ -21,7 +28,8 @@ class MovieSearchViewController: UIViewController {
         tableView.delegate = self
         tableView.keyboardDismissMode = .interactive
         tableView.backgroundColor = .systemBackground
-        tableView.register(MovieSearchResultsTableViewCell.self, forCellReuseIdentifier: "searchTableViewCell")
+        tableView.register(MovieSearchResultsTableViewCell.self, forCellReuseIdentifier: resultCell)
+        tableView.register(loadingTableViewCell.self, forCellReuseIdentifier: loadingCell)
         return tableView
     }()
     
@@ -40,6 +48,11 @@ class MovieSearchViewController: UIViewController {
         setupNavigationBar()
         view.addSubview(tableView)
         tableView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+    }
+        
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
     }
 }
 
@@ -69,20 +82,31 @@ extension MovieSearchViewController: UISearchResultsUpdating {
             return
         }
         searchQuery.query = text
-        Network.getMovieSearchResults(query: searchQuery) { [weak self] searchResults in
-            // Change datasource and reload should occur in the same call block to sync table rows numbers
-            // May still have problems here
+        currentPage = 1
+        searchQuery.page = currentPage
+        
+        loadMoreData() { [weak self] searchResults in
             DispatchQueue.main.async {
-                self?.results = searchResults.results
+                guard let results = searchResults?.results else {return}
+                // Change datasource and reload should occur in the same call block to sync table rows numbers
+                self?.results = results
+                self?.totalResultPages = searchResults?.totalPages
                 self?.tableView.reloadData()
             }
         }
     }
     
     private func clear() {
-        results = []
         DispatchQueue.main.async {
+            self.results = []
             self.tableView.reloadData()
+        }
+    }
+    
+    func loadMoreData(completion: ((MovieSearchResults?)->Void)? = nil) {
+        
+        Network.getMovieSearchResults(query: searchQuery) { searchResults in
+            completion?(searchResults)
         }
     }
 }
@@ -92,34 +116,75 @@ extension MovieSearchViewController: UITableViewDelegate, UITableViewDataSource 
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return results.count
+        return results.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "searchTableViewCell") as! MovieSearchResultsTableViewCell
-        
-        // Potential list out of index error here, but i dont know why
-        let thisResult = results[indexPath.row]
-        cell.content = thisResult
-        //cell.textLabel?.text = thisResult.title
-        return cell
+        if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: loadingCell) as! loadingTableViewCell
+            if let total = totalResultPages, currentPage < total {
+                cell.activityIndicator.startAnimating()
+                cell.lastPageLabel.isHidden = true
+            } else {
+                cell.activityIndicator.stopAnimating()
+                cell.lastPageLabel.isHidden = false
+            }
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: resultCell) as! MovieSearchResultsTableViewCell
+            let thisResult = results[indexPath.row]
+            cell.content = thisResult
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
         
-        let vc = MovieDetailViewController()
-        vc.movieId = results[indexPath.row].id
-        navigationController?.pushViewController(vc, animated: true)
+        if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
+            tableView.deselectRow(at: indexPath, animated: false)
+        } else {
+            tableView.deselectRow(at: indexPath, animated: true)
+            let vc = MovieDetailViewController()
+            vc.movieId = results[indexPath.row].id
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 90
+        if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
+            return 100
+        } else {
+            return 100
+        }
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
        searchController.searchBar.resignFirstResponder()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let yOffset = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let triggerOffset = CGFloat(100)
+        if yOffset > contentHeight - scrollView.frame.height - triggerOffset && !pageIsLoadingMoreContent {
+            // do not initiate search when current page reaches the end total pages (response would be [] anyway, this is to save due to max number of requests limit)
+            if let total = totalResultPages, total <= currentPage {
+                return
+            }
+            currentPage += 1
+            searchQuery.page = currentPage
+            loadMoreData() { [weak self] searchResults in
+                DispatchQueue.main.async {
+                    guard let results = searchResults?.results else {self?.pageIsLoadingMoreContent = false; return}
+                    // Change datasource and reload should occur in the same call block to sync table rows numbers
+                    self?.results += results
+                    self?.tableView.reloadData()
+                    self?.pageIsLoadingMoreContent = false
+                }
+            }
+            self.pageIsLoadingMoreContent = true
+        }
     }
     
 }

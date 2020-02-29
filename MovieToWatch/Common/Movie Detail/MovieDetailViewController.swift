@@ -48,6 +48,7 @@ class MovieDetailViewController: BaseCollectionViewController {
         }
     }
     
+    var backupPosterImage: UIImage?
     
     var movieId: Int! {
         didSet {
@@ -75,7 +76,7 @@ class MovieDetailViewController: BaseCollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.alwaysBounceVertical = true
+//        collectionView.alwaysBounceVertical = true
         collectionView.delegate = self
         
         collectionView.register(BasicInfoSectionCell.self, forCellWithReuseIdentifier: basicInfoCellId)
@@ -103,8 +104,8 @@ class MovieDetailViewController: BaseCollectionViewController {
         view.addGestureRecognizer(gesterRecognizer)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         navigationController?.navigationBar.isHidden = false
     }
     
@@ -170,6 +171,7 @@ class MovieDetailViewController: BaseCollectionViewController {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: movidHeaderId, for: indexPath) as! MovieHeader
+            cell.backupPosterImage = backupPosterImage
             cell.movieDetail = movieDetail
             return cell
         default:
@@ -188,7 +190,7 @@ class MovieDetailViewController: BaseCollectionViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: topPosterWidth, height: topPosterHeight)
+        return .init(width: collectionView.frame.width, height: collectionView.frame.height)
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {

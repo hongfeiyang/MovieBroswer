@@ -46,7 +46,7 @@ struct MovieSearchResult: Codable {
     let voteCount: Int?
     let voteAverage: Double?
     let title: String?
-    let releaseDate: Date
+    let releaseDate: Date?
     let originalLanguage, originalTitle: String?
     let genreIDS: [Int]
     let backdropPath: String?
@@ -93,6 +93,7 @@ extension URLSession {
     fileprivate func codableTask<T: Codable>(with url: URL, completionHandler: @escaping (T?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         return self.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
+                
                 completionHandler(nil, response, error)
                 return
             }
@@ -101,6 +102,14 @@ extension URLSession {
                 completionHandler(data, response, nil)
             } catch let error {
                 print(error.localizedDescription)
+                print("unparsed data")
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
+                    print(json)
+                } catch {
+                    print(String(data: data, encoding: .utf8) ?? "it's not even a utf8 string!")
+                }
+                
                 completionHandler(nil, response, nil)
             }
             

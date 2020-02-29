@@ -22,16 +22,16 @@ struct ShortMovieInfo {
 
 class ShortMovieInfoView: UIView {
 
-    var titleLabel = UILabel(text: "", font: .systemFont(ofSize: 22, weight: .semibold), numberOfLines: 1, textColor: .label)
-    var ratingLabel = UILabel(text: "", font: .systemFont(ofSize: 20, weight: .heavy), textColor: .secondaryLabel, textAlignment: .right)
-    var tagLineLabel = UILabel(text: "", font: .systemFont(ofSize: 12, weight: .light), numberOfLines: 0, textColor: .secondaryLabel)
+    var titleLabel = UILabel(text: "", font: .systemFont(ofSize: 23, weight: .semibold), numberOfLines: 1, textColor: .label)
+    var ratingLabel = UILabel(text: "", font: .systemFont(ofSize: 20, weight: .bold), textColor: .secondaryLabel, textAlignment: .right)
+    var tagLineLabel = UILabel(text: "", font: .systemFont(ofSize: 18, weight: .light), numberOfLines: 2, textColor: .secondaryLabel)
 
     lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
-            self.titleLabel,
+            VerticalStackView(arrangedSubviews: [self.titleLabel, self.tagLineLabel], spacing: 1),
             self.ratingLabel
         ])
-        stackView.spacing = 5
+        stackView.spacing = 1
         return stackView
     }()
     

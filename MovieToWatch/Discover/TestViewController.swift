@@ -15,6 +15,9 @@ class TestViewController: UIViewController {
     private var cardDismissAnimator = CardDismissAnimator()
     private var currentPage = 0
     private var pageIsLoadingMoreContent = false
+    
+    private let cellId = "cellId"
+    private let loadingCellId = "loadingCellId"
 
     private lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -23,7 +26,8 @@ class TestViewController: UIViewController {
         collectionView.refreshControl = refreshControl
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(CardViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.register(CardViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(LoadingCollectionViewCell.self, forCellWithReuseIdentifier: loadingCellId)
         return collectionView
     }()
     
@@ -33,12 +37,8 @@ class TestViewController: UIViewController {
         return control
     }()
     
-    private var results = [DiscoverMovieResult]() {
-        didSet {
-            DispatchQueue.main.async { self.collectionView.reloadData() }
-        }
-    }
-    
+    private var results = [MovieDetail]()
+
     private var discoverMovieQuery = DiscoverMovieQuery()
     
     
@@ -103,13 +103,21 @@ class TestViewController: UIViewController {
 
 extension TestViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return results.count
+        return results.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CardViewCell
-        cell.viewModel = MovieCardViewModel(content: results[indexPath.item])
-        return cell
+        
+        if indexPath.row == collectionView.numberOfItems(inSection: 0) - 1 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: loadingCellId, for: indexPath) as! LoadingCollectionViewCell
+            cell.activityIndicator.startAnimating()
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CardViewCell
+            cell.movieDetail = results[indexPath.item]
+            return cell
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -118,9 +126,14 @@ extension TestViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = UIScreen.main.bounds.width - 20 * 2
-        let height = width * 6/5
-        return CGSize(width: width, height: height)
+        
+        if indexPath.row == collectionView.numberOfItems(inSection: 0) - 1 {
+            return CGSize(width: collectionView.frame.width, height: 100)
+        } else {
+            let width = UIScreen.main.bounds.width - 20 * 2
+            let height = width * 6/5
+            return CGSize(width: width, height: height)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -135,7 +148,7 @@ extension TestViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let yOffset = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         let triggerOffset = CGFloat(100)
-        if yOffset > contentHeight - scrollView.frame.height + triggerOffset && !pageIsLoadingMoreContent {
+        if yOffset > contentHeight - scrollView.frame.height - triggerOffset && !pageIsLoadingMoreContent {
             currentPage += 1
             loadMoreData() {
                 self.pageIsLoadingMoreContent = false
@@ -187,23 +200,40 @@ extension TestViewController {
     
     private func loadMoreData(completion: (() -> Void)? = nil) {
         discoverMovieQuery.page = currentPage
-        Network.getDiscoverMovieResults(query: discoverMovieQuery) { results in
-            self.results += results
-            completion?()
+        Network.getDiscoverMovieResults(query: discoverMovieQuery) { [weak self] results in
+            guard let self = self else {return}
+            let group = DispatchGroup()
+            for result in results {
+                let query = MovieDetailQuery(movieID: result.id)
+                group.enter()
+                Network.getMovieDetail(query: query) { [weak self] (movieDetail) in
+                    guard let self = self else {return}
+                    self.results.append(movieDetail)
+                    group.leave()
+                }
+            }
+            
+            group.notify(queue: .main) {
+                completion?()
+                self.collectionView.reloadData()
+            }
+            
         }
     }
     
     private func selectRow(_ cell: CardViewCell, at indexPath: IndexPath) {
         let vc = MovieDetailViewController()
         let result = results[indexPath.row]
-        vc.movieId = result.id
-        //let nc = UINavigationController(rootViewController: vc)
+        vc.movieDetail = result
+        vc.backupPosterImage = cell.posterImageView.image
+//        vc.movieId = result.id
+        let nc = UINavigationController(rootViewController: vc)
         
-        vc.hidesBottomBarWhenPushed = true
-        vc.modalPresentationStyle = .custom
-        vc.transitioningDelegate = self
-        vc.isModalInPresentation = true
+        nc.hidesBottomBarWhenPushed = true
+        nc.modalPresentationStyle = .custom
+        nc.transitioningDelegate = self
+        nc.isModalInPresentation = true
 
-        present(vc, animated: true, completion: nil)
+        present(nc, animated: true, completion: nil)
     }
 }

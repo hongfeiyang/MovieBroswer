@@ -10,91 +10,55 @@ import UIKit
 
 class MovieSearchResultsTableViewCell: UITableViewCell {
 
-    public var content: MovieSearchResult! {
+    public var content: MovieSearchResult? {
         didSet {
             updateView()
         }
     }
-    
-    
-    private var posterImageView: UIImageView = {
+        
+    var posterImageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(systemName: "photo")
-        //view.backgroundColor = .secondarySystemFill
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.contentMode = .scaleAspectFit
+        view.widthAnchor.constraint(equalToConstant: 60).isActive = true
         return view
     }()
     
-    private var titleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = ""
-        label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-        label.textAlignment = .left
-        label.textColor = .label
-        return label
-    }()
+    var titleLabel = UILabel(text: "", font: .systemFont(ofSize: 17, weight: .semibold), numberOfLines: 3, textColor: .label, textAlignment: .left)
     
-    private var releaseDateLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = ""
-        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        label.textColor = .secondaryLabel
-        label.textAlignment = .left
-        return label
-    }()
+    var releaseDateLabel = UILabel(text: "", font: .systemFont(ofSize: 15, weight: .regular), numberOfLines: 1, textColor: .label, textAlignment: .left)
     
-    private func setupLayout() {
+    lazy var stackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [
+            self.posterImageView,
+            UIStackView(arrangedSubviews: [
+                UIView(vContentHugging: .defaultLow, vCompressionResistancePriority: .defaultLow),
+                self.titleLabel,
+                self.releaseDateLabel,
+                UIView(vContentHugging: .defaultLow, vCompressionResistancePriority: .defaultLow),
+            ], axis: .vertical, spacing: 2, distribution: .equalSpacing, alignment: .fill),
+        ], axis: .horizontal, spacing: 10, distribution: .fill, alignment: .fill)
         
-        let padding = CGFloat(5)
-        
-        let constraints = [
-            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding),
-            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding),
-            posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            posterImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 2/3),
-            
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -padding/2),
-            titleLabel.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: padding * 2),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -padding),
-            
-            releaseDateLabel.topAnchor.constraint(equalTo: contentView.centerYAnchor, constant: padding/2),
-            releaseDateLabel.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: padding * 2),
-            releaseDateLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -padding),
-        ]
-        NSLayoutConstraint.activate(constraints)
-    }
-    
+        return view
+    }()
+
     private func updateView() {
+        
+        posterImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: content?.posterPath, size: .w92))
 
         DispatchQueue.main.async { [weak self] in
-            self?.titleLabel.text = self?.content.title
-            if let date = self?.content.releaseDate {
-                
-                if date == Date.distantPast {
-                    self?.releaseDateLabel.text = "Unknown"
-                } else if let year = Calendar.current.dateComponents([.year], from: date).year {
-                    self?.releaseDateLabel.text = String(year)
-                } else {
-                    self?.releaseDateLabel.text = "Unknown"
-                }
+            
+            if let originalTitle = self?.content?.originalTitle, let title = self?.content?.title {
+                self?.titleLabel.text = "\(title) (\(originalTitle))"
+            } else {
+                self?.titleLabel.text = self?.content?.title
             }
-
-            self?.posterImageView.image = nil
-        }
-        if let posterPath = content.posterPath, let url = APIConfiguration.parsePosterURL(file_path: posterPath, size: .w92) {
-            Cache.shared.cacheImage(url: url) { [weak self] (originalURL, image) in
-                guard originalURL == url else {return}
-                DispatchQueue.main.async {
-                    self?.posterImageView.image = image
-                }
+            
+            if let date = self?.content?.releaseDate, let year = Calendar.current.dateComponents([.year], from: date).year {
+                self?.releaseDateLabel.text = String(year)
+            } else {
+                self?.releaseDateLabel.text = "Unknown"
             }
         }
-        
     }
     
     override func awakeFromNib() {
@@ -105,11 +69,9 @@ class MovieSearchResultsTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         backgroundColor = .secondarySystemBackground
+        addSubview(stackView)
+        stackView.fillSuperview(padding: .init(top: 5, left: 5, bottom: 5, right: 5))
         
-        contentView.addSubview(posterImageView)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(releaseDateLabel)
-        setupLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -122,4 +84,26 @@ class MovieSearchResultsTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+}
+
+class loadingTableViewCell: UITableViewCell {
+    
+    var activityIndicator = UIActivityIndicatorView(style: .large)
+    
+    var lastPageLabel = UILabel(text: "你到底了", font: .systemFont(ofSize: 20, weight: .regular), numberOfLines: 1, textColor: .label, textAlignment: .center)
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        addSubview(lastPageLabel)
+        addSubview(activityIndicator)
+        activityIndicator.color = .label
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.fillSuperview()
+        lastPageLabel.fillSuperview()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 }

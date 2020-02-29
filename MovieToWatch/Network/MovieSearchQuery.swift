@@ -9,18 +9,29 @@
 import Foundation
 
 
-struct MovieSearchQuery: CustomStringConvertible {
+struct MovieSearchQuery: Codable {
     
     let baseURL = "https://api.themoviedb.org/3/search/movie"
     
+    var api_key: String = API_KEY
     var language: String?
-    var query: String
+    var query: String = ""
     var page: Int?
     var include_adult: Bool?
     var region: String?
     var year: String?
     var primary_release_year: String?
     
+    enum CodingKeys: String, CodingKey {
+        case api_key = "api_key"
+        case language = "language"
+        case query = "query"
+        case page = "page"
+        case include_adult = "include_adult"
+        case region = "region"
+        case year = "year"
+        case primary_release_year = "primary_release_year"
+    }
     
     init(query: String) {
         self.query = query
@@ -34,34 +45,5 @@ struct MovieSearchQuery: CustomStringConvertible {
         self.region = region
         self.year = year
         self.primary_release_year = primary_release_year
-    }
-    
-    var description: String {
-        
-        var result = baseURL + "?" + "api_key=\(API_KEY)"
-        result += "&query=\(query.replacingOccurrences(of: " ", with: "%20"))"
-        
-        if let language = language {
-            result += "&language=\(language)"
-        }
-        if let region = region {
-            result += "&region=\(region)"
-        }
-        
-        if let primary_release_year = primary_release_year {
-            result += "&primary_release_year=\(primary_release_year)"
-        }
-
-        if let include_adult = include_adult {
-            result += "&include_adult=\(include_adult)"
-        }
-        if let year = year {
-            result += "&year=\(year)"
-        }
-        if let page = page {
-            result += "&page=\(page)"
-        }
-
-        return result
     }
 }

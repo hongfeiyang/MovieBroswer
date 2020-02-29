@@ -17,12 +17,15 @@ class MovieHeader: UICollectionReusableView {
             tagLineLabel.text = movieDetail?.tagline
         }
     }
-
-     var posterImagePath: URL? {
-         didSet {
-             posterImageView.sd_setImage(with: posterImagePath, completed: nil)
-         }
-     }
+    
+    var backupPosterImage: UIImage?
+    
+    var posterImagePath: URL? {
+        didSet {
+            //posterImageView.sd_setImage(with: posterImagePath, placeholderImage: backupPosterImage, options: .avoidAutoSetImage, context: nil)
+            posterImageView.sd_setImage(with: posterImagePath, placeholderImage: backupPosterImage)
+        }
+    }
     
     var posterImageView: UIImageView = {
         let view = UIImageView()
@@ -41,9 +44,9 @@ class MovieHeader: UICollectionReusableView {
     
     var gradientLayer: CAGradientLayer = {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.secondarySystemGroupedBackground.cgColor]
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        gradientLayer.colors = [UIColor.secondarySystemGroupedBackground.cgColor, UIColor.clear.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0)
         return gradientLayer
     }()
     
@@ -56,23 +59,22 @@ class MovieHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .secondarySystemGroupedBackground
+        posterImageView.layer.addSublayer(gradientLayer)
         addSubview(posterImageView)
-        
         addSubview(titleView)
-        titleView.layer.addSublayer(gradientLayer)
         titleView.addSubview(stackView)
         
         
         stackView.anchor(top: nil, leading: titleView.leadingAnchor, bottom: titleView.bottomAnchor, trailing: titleView.trailingAnchor, padding: .init(top: 0, left: 20, bottom: 20, right: 20))
     
-        titleView.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, size: .init(width: 0, height: 400))
+        titleView.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, size: .init(width: 0, height: 200))
         
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
 
         posterImageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         imageViewTopConstraint = posterImageView.topAnchor.constraint(equalTo: topAnchor)
         imageViewWidthConstraint = posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 2/3)
-        imageViewBottomConstraint = posterImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        imageViewBottomConstraint = posterImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -(UIScreen.main.bounds.height - UIScreen.main.bounds.width*3/2))
         [imageViewTopConstraint, imageViewBottomConstraint, imageViewWidthConstraint].forEach { $0?.isActive = true }
     }
     
@@ -82,6 +84,12 @@ class MovieHeader: UICollectionReusableView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        gradientLayer.frame = titleView.bounds
+        gradientLayer.removeAllAnimations()
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        gradientLayer.frame = CGRect(origin: CGPoint(x: 0, y: posterImageView.bounds.maxY - 150) , size: CGSize(width: posterImageView.bounds.width, height: 150))
+        CATransaction.commit()
+        
+        
     }
 }

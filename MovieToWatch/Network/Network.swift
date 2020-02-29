@@ -11,11 +11,13 @@ import Foundation
 
 class Network {
     
-    static func getMovieSearchResults(query: MovieSearchQuery, completion: ((MovieSearchResults) -> Void)?) {
-        guard let url = URL(string: query.description) else {return}
+    static func getMovieSearchResults(query: MovieSearchQuery, completion: ((MovieSearchResults?) -> Void)?) {
+
+        var components = URLComponents(string: query.baseURL)
+        components?.queryItems = query.URLQueryItems
+        guard let url = components?.url else {return}
         URLSession.shared.movieSearchResultsTask(with: url) {(data, response, error) in
-            guard let movieSearchResults = data else {print("movieSearchResultsTask returned nil"); return}
-            completion?(movieSearchResults)
+            completion?(data)
         }.resume()
     }
     
