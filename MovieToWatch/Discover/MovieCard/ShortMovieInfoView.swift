@@ -22,15 +22,16 @@ struct ShortMovieInfo {
 
 class ShortMovieInfoView: UIView {
 
-    var titleLabel = UILabel(text: "", font: .systemFont(ofSize: 22, weight: .regular), textColor: .label)
-    var ratingLabel = UILabel(text: "", font: .systemFont(ofSize: 20, weight: .heavy), textColor: .secondaryLabel)
+    var titleLabel = UILabel(text: "", font: .systemFont(ofSize: 22, weight: .semibold), numberOfLines: 1, textColor: .label)
+    var ratingLabel = UILabel(text: "", font: .systemFont(ofSize: 20, weight: .heavy), textColor: .secondaryLabel, textAlignment: .right)
     var tagLineLabel = UILabel(text: "", font: .systemFont(ofSize: 12, weight: .light), numberOfLines: 0, textColor: .secondaryLabel)
 
     lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
-            VerticalStackView(arrangedSubviews: [self.titleLabel, self.tagLineLabel], spacing: 5),
+            self.titleLabel,
             self.ratingLabel
         ])
+        stackView.spacing = 5
         return stackView
     }()
     
@@ -38,7 +39,6 @@ class ShortMovieInfoView: UIView {
         let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.systemUltraThinMaterial)
         let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect, style: UIVibrancyEffectStyle.label)
         let vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
-        vibrancyView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return vibrancyView
     }()
     
@@ -52,9 +52,10 @@ class ShortMovieInfoView: UIView {
         super.init(frame: frame)
         addSubview(blurView)
         blurView.contentView.addSubview(vibrancyView)
+        vibrancyView.fillSuperview()
         vibrancyView.contentView.addSubview(stackView)
-        stackView.anchor(top: vibrancyView.topAnchor, leading: vibrancyView.leadingAnchor, bottom: vibrancyView.bottomAnchor, trailing: vibrancyView.trailingAnchor, padding: .init(top: 15, left: 15, bottom: 15, right: 15))
-        blurView.anchor(top: topAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor)
+        stackView.fillSuperview(padding: .init(top: 10, left: 10, bottom: 10, right: 10))
+        blurView.fillSuperview()
     }
     
     required init?(coder: NSCoder) {

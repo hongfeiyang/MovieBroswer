@@ -60,7 +60,7 @@ class TestViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(collectionView)
-        collectionView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+        collectionView.fillSuperview()
         setupNavigationBar()
         refresh()
     }
@@ -203,9 +203,7 @@ extension TestViewController {
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = self
         vc.isModalInPresentation = true
-        
-        
-        
+
         present(vc, animated: true, completion: nil)
     }
 }
