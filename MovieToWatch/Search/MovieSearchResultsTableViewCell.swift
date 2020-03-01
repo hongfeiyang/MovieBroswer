@@ -53,7 +53,8 @@ class MovieSearchResultsTableViewCell: UITableViewCell {
                 self?.titleLabel.text = self?.content?.title
             }
             
-            if let date = self?.content?.releaseDate, let year = Calendar.current.dateComponents([.year], from: date).year {
+            if let date = self?.content?.releaseDate, date != Date.distantPast, let year = Calendar.current.dateComponents([.year], from: date).year {
+                // Note: custom date decoder will yield 'distantPast' for default optional value when date is nil
                 self?.releaseDateLabel.text = String(year)
             } else {
                 self?.releaseDateLabel.text = "Unknown"

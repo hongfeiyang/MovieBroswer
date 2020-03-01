@@ -98,6 +98,8 @@ extension MovieSearchViewController: UISearchResultsUpdating {
     
     private func clear() {
         DispatchQueue.main.async {
+            self.searchQuery.query = ""
+            self.searchQuery.page = nil
             self.results = []
             self.tableView.reloadData()
         }

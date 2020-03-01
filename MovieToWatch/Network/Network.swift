@@ -21,25 +21,17 @@ class Network {
         }.resume()
     }
     
-    static func getMovieDetail(query: MovieDetailQuery, completion: ((MovieDetail) -> Void)?) {
+    static func getMovieDetail(query: MovieDetailQuery, completion: ((MovieDetail?) -> Void)?) {
         guard let url = URL(string: query.description) else {return}
         URLSession.shared.movieDetailTask(with: url) {(data, response, error) in
-            //NSLog("response received")
-            guard let movieDetail = data else {print("movieDetailTask returned nil"); return}
-            //NSLog("response parsed")
-            completion?(movieDetail)
-            
+            completion?(data)
         }.resume()
     }
     
-    static func getDiscoverMovieResults(query: DiscoverMovieQuery, completion: (([DiscoverMovieResult]) -> Void)?) {
+    static func getDiscoverMovieResults(query: DiscoverMovieQuery, completion: ((DiscoverMovie?) -> Void)?) {
         guard let url = URL(string: query.description) else {return}
         URLSession.shared.discoverMovieTask(with: url) {(data, response, error) in
-            //NSLog("response received")
-            guard let data = data else {print("fail to parse DiscoverMovie"); return}
-            //NSLog("response parsed")
-            completion?(data.results)
-
+            completion?(data)
         }.resume()
         //NSLog("Query send: \(query.description)")
     }

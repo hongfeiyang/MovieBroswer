@@ -44,9 +44,28 @@ class TestViewController: UIViewController {
     
     @objc private func refresh() {
         currentPage = 1
-        results.removeAll()
-        loadMoreData() {
-            DispatchQueue.main.async { self.refreshControl.endRefreshing() }
+        
+        loadMoreData() { [weak self] discoverMovie in
+            
+            guard let self = self else {return}
+            guard let results = discoverMovie?.results else {return}
+            self.results.removeAll()
+            let group = DispatchGroup()
+            for result in results {
+                let query = MovieDetailQuery(movieID: result.id)
+                group.enter()
+                Network.getMovieDetail(query: query) { [weak self] (movieDetail) in
+                    if let movieDetail = movieDetail {
+                        self?.results.append(movieDetail)
+                    }
+                    group.leave()
+                }
+            }
+            
+            group.notify(queue: .main) {
+                self.collectionView.reloadData()
+                self.refreshControl.endRefreshing()
+            }
         }
     }
 
@@ -148,10 +167,31 @@ extension TestViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let yOffset = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         let triggerOffset = CGFloat(100)
+        print(pageIsLoadingMoreContent)
         if yOffset > contentHeight - scrollView.frame.height - triggerOffset && !pageIsLoadingMoreContent {
             currentPage += 1
-            loadMoreData() {
-                self.pageIsLoadingMoreContent = false
+            loadMoreData() { [weak self] discoverMovie in
+                
+                guard let self = self else {return}
+                guard let results = discoverMovie?.results else {return}
+                
+                let group = DispatchGroup()
+                for result in results {
+                    let query = MovieDetailQuery(movieID: result.id)
+                    group.enter()
+                    Network.getMovieDetail(query: query) { [weak self] (movieDetail) in
+                        if let movieDetail = movieDetail {
+                            self?.results.append(movieDetail)
+                        }
+                        group.leave()
+                    }
+                }
+                
+                group.notify(queue: .main) {
+                    self.collectionView.reloadData()
+                    self.refreshControl.endRefreshing()
+                    self.pageIsLoadingMoreContent = false
+                }
             }
             self.pageIsLoadingMoreContent = true
         }
@@ -198,26 +238,10 @@ extension TestViewController: UIViewControllerTransitioningDelegate {
 
 extension TestViewController {
     
-    private func loadMoreData(completion: (() -> Void)? = nil) {
+    private func loadMoreData(completion: ((DiscoverMovie?) -> Void)? = nil) {
         discoverMovieQuery.page = currentPage
-        Network.getDiscoverMovieResults(query: discoverMovieQuery) { [weak self] results in
-            guard let self = self else {return}
-            let group = DispatchGroup()
-            for result in results {
-                let query = MovieDetailQuery(movieID: result.id)
-                group.enter()
-                Network.getMovieDetail(query: query) { [weak self] (movieDetail) in
-                    guard let self = self else {return}
-                    self.results.append(movieDetail)
-                    group.leave()
-                }
-            }
-            
-            group.notify(queue: .main) {
-                completion?()
-                self.collectionView.reloadData()
-            }
-            
+        Network.getDiscoverMovieResults(query: discoverMovieQuery) {discoverMovie in
+            completion?(discoverMovie)
         }
     }
     
