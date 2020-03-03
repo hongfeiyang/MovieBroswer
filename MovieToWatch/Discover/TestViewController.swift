@@ -116,7 +116,6 @@ class TestViewController: UIViewController {
         actions.forEach{vc.addAction($0)}
         present(vc, animated: true)
     }
-    
 }
 
 
@@ -167,7 +166,6 @@ extension TestViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let yOffset = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         let triggerOffset = CGFloat(100)
-        print(pageIsLoadingMoreContent)
         if yOffset > contentHeight - scrollView.frame.height - triggerOffset && !pageIsLoadingMoreContent {
             currentPage += 1
             loadMoreData() { [weak self] discoverMovie in
@@ -250,14 +248,15 @@ extension TestViewController {
         let result = results[indexPath.row]
         vc.movieDetail = result
         vc.backupPosterImage = cell.posterImageView.image
-//        vc.movieId = result.id
+        //        vc.movieId = result.id
         let nc = UINavigationController(rootViewController: vc)
         
         nc.hidesBottomBarWhenPushed = true
         nc.modalPresentationStyle = .custom
         nc.transitioningDelegate = self
         nc.isModalInPresentation = true
-
-        present(nc, animated: true, completion: nil)
+        
+        
+        self.present(nc, animated: true)
     }
 }

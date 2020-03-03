@@ -47,8 +47,19 @@ class MovieDetailViewController: BaseCollectionViewController {
             DispatchQueue.main.async { self.collectionView.reloadData() }
         }
     }
+
+    var backupImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        
+        return view
+    }()
     
-    var backupPosterImage: UIImage?
+    var backupPosterImage: UIImage? {
+        didSet {
+            backupImageView.image = backupPosterImage
+        }
+    }
     
     var movieId: Int! {
         didSet {
@@ -74,9 +85,25 @@ class MovieDetailViewController: BaseCollectionViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    
+    var imageViewTopConstraint: NSLayoutConstraint?
+    var imageViewWidthConstraint: NSLayoutConstraint?
+    var imageViewHeightConstraint: NSLayoutConstraint?
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-//        collectionView.alwaysBounceVertical = true
+        let backgroundView = UIView()
+        collectionView.backgroundView = backgroundView
+        backgroundView.addSubview(backupImageView)
+        backupImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        backupImageView.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
+        imageViewTopConstraint = backupImageView.topAnchor.constraint(equalTo: backgroundView.topAnchor)
+        imageViewWidthConstraint = backupImageView.widthAnchor.constraint(equalTo: backupImageView.heightAnchor, multiplier: 2/3)
+        imageViewHeightConstraint = backupImageView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width*3/2)
+        [imageViewTopConstraint, imageViewWidthConstraint, imageViewHeightConstraint].forEach { $0?.isActive = true }
+        
         collectionView.delegate = self
         
         collectionView.register(BasicInfoSectionCell.self, forCellWithReuseIdentifier: basicInfoCellId)
@@ -97,8 +124,6 @@ class MovieDetailViewController: BaseCollectionViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        navigationController?.navigationBar.isHidden = false
-//        setupNavigationBar()
         
         let gesterRecognizer = UITapGestureRecognizer(target: self, action: #selector(leftItemTapped))
         view.addGestureRecognizer(gesterRecognizer)
@@ -182,7 +207,7 @@ class MovieDetailViewController: BaseCollectionViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -190,7 +215,9 @@ class MovieDetailViewController: BaseCollectionViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: collectionView.frame.width, height: collectionView.frame.height)
+        let width = collectionView.frame.width
+        let height = width * 3/2
+        return .init(width: width, height: height)
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -198,11 +225,14 @@ class MovieDetailViewController: BaseCollectionViewController {
         if scrollView.contentOffset.y > 0 {
             // push poster image up at X/Y scrolling speed when scrolling up
             cell.clipsToBounds = true
-            cell.imageViewTopConstraint?.constant = 0
+            imageViewHeightConstraint?.constant = UIScreen.main.bounds.width*3/2
+            //imageViewTopConstraint?.constant = -scrollView.contentOffset.y/4
+
         } else {
             // expand poster image proportionally when scrolling down
             cell.clipsToBounds = false
-            cell.imageViewTopConstraint?.constant = scrollView.contentOffset.y
+            imageViewHeightConstraint?.constant = UIScreen.main.bounds.width*3/2 - scrollView.contentOffset.y
+            //imageViewTopConstraint?.constant = 0
         }
     }
     

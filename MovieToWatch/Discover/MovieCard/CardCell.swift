@@ -58,15 +58,13 @@ class CardViewCell: UICollectionViewCell {
             posterImageView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
             posterImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 3/2),
-            
-            shortInfoView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            shortInfoView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            shortInfoView.heightAnchor.constraint(equalToConstant: CGFloat(Constants.MOIVE_SUMMARY_VIEW_HEIGHT)),
-            shortInfoView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
         ]
         
         NSLayoutConstraint.activate(constraints)
     }
+    
+    
+    var summaryInfoConstraints: AnchoredConstraints?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,6 +75,8 @@ class CardViewCell: UICollectionViewCell {
         
         contentView.addSubview(posterImageView)
         contentView.addSubview(shortInfoView)
+        
+        summaryInfoConstraints = shortInfoView.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, size: .init(width: 0, height: 100))
         
         posterImageView.addSubview(activityIndicatorView)
         setupLayout()
