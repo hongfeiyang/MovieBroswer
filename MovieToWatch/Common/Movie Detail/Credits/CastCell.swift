@@ -27,6 +27,7 @@ class CastCell: UICollectionViewCell {
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        view.layer.cornerRadius = 10
         return view
     }()
     
@@ -47,7 +48,6 @@ class CastCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .tertiarySystemGroupedBackground
         addSubview(stackView)
         stackView.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor)
     }

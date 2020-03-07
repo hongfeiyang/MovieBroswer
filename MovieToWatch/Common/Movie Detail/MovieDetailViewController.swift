@@ -39,8 +39,7 @@ class MovieDetailViewController: BaseCollectionViewController {
     let reviewsCellId = "reviewsCellId"
     let overviewCellId = "overviewCellId"
     let basicInfoCellId = "basicInfoCellId"
-    
-    let movidHeaderId = "movieHeaderId"
+    let movieHeaderId = "movieHeaderId"
     
     var movieDetail: MovieDetail? {
         didSet {
@@ -50,8 +49,7 @@ class MovieDetailViewController: BaseCollectionViewController {
 
     var backupImageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
-        
+        view.contentMode = .scaleAspectFill
         return view
     }()
     
@@ -67,6 +65,7 @@ class MovieDetailViewController: BaseCollectionViewController {
             Network.getMovieDetail(query: query) { [weak self] (response) in
                 guard let self = self else {return}
                 self.movieDetail = response
+                self.backupImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: response?.posterPath, size: .original), completed: nil)
             }
         }
     }
@@ -113,7 +112,7 @@ class MovieDetailViewController: BaseCollectionViewController {
         collectionView.register(VideosSectionCell.self, forCellWithReuseIdentifier: videosCellId)
         collectionView.register(ReviewsSectionCell.self, forCellWithReuseIdentifier: reviewsCellId)
         
-        collectionView.register(MovieHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: movidHeaderId)
+        collectionView.register(MovieHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: movieHeaderId)
         
     }
     
@@ -195,12 +194,12 @@ class MovieDetailViewController: BaseCollectionViewController {
 
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: movidHeaderId, for: indexPath) as! MovieHeader
+            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: movieHeaderId, for: indexPath) as! MovieHeader
             cell.backupPosterImage = backupPosterImage
             cell.movieDetail = movieDetail
             return cell
         default:
-            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: movidHeaderId, for: indexPath)
+            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: movieHeaderId, for: indexPath)
             return cell
         }
 
@@ -221,18 +220,18 @@ class MovieDetailViewController: BaseCollectionViewController {
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let cell = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: .init(item: 0, section: 0)) as? MovieHeader else {return}
+        guard let cell = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: movieHeaderId, for: .init(item: 0, section: 0)) as? MovieHeader else {return}
         if scrollView.contentOffset.y > 0 {
             // push poster image up at X/Y scrolling speed when scrolling up
             cell.clipsToBounds = true
             imageViewHeightConstraint?.constant = UIScreen.main.bounds.width*3/2
-            //imageViewTopConstraint?.constant = -scrollView.contentOffset.y/4
+            imageViewTopConstraint?.constant = -scrollView.contentOffset.y*2/3
 
         } else {
             // expand poster image proportionally when scrolling down
             cell.clipsToBounds = false
             imageViewHeightConstraint?.constant = UIScreen.main.bounds.width*3/2 - scrollView.contentOffset.y
-            //imageViewTopConstraint?.constant = 0
+            imageViewTopConstraint?.constant = 0
         }
     }
     

@@ -10,7 +10,7 @@ import UIKit
 
 class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
-    let duration = 0.7
+    let duration = 0.8
     var originFrame = CGRect.zero
     weak var cell: CardViewCell!
     var movieDetail: MovieDetail?
@@ -73,7 +73,7 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         })
 
         // animate spring upwards
-        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [.curveLinear], animations: {
+        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [.curveLinear], animations: {
             cardTopAnchorConstraint.constant = 0
             containerView.layoutIfNeeded()
         })
@@ -86,7 +86,7 @@ class CardPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
 class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
-    let duration = 0.7
+    let duration = 0.8
     var originFrame = CGRect.zero
     weak var cell: CardViewCell!
     
@@ -126,15 +126,20 @@ class CardDismissAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         
         containerView.layoutIfNeeded()
 
-        UIView.animate(withDuration: duration/2) {
-            fromVC.collectionView.setContentOffset(.zero, animated: false)
+        UIView.animate(withDuration: duration) {
             discoverMovieController.navigationController?.navigationBar.transform = .identity
             toVC.tabBar.frame = toVC.tabBar.frame.offsetBy(dx: 0, dy: -tabBarHeight)
-            //fromVC.collectionView.scrollToItem(at: .init(row: 0, section: 0), at: .bottom, animated: false)
+            containerView.layoutIfNeeded()
         }
-
-        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.0, options: [], animations: {
+        
+        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: [.curveEaseOut], animations: {
             centerYAnchor.constant = self.originFrame.midY - containerView.frame.midY
+            fromVC.collectionView.setContentOffset(.zero, animated: false)
+            containerView.layoutIfNeeded()
+        })
+
+        UIView.animate(withDuration: duration/2, animations: {
+            //centerYAnchor.constant = self.originFrame.midY - containerView.frame.midY
             widthAnchor.constant = self.originFrame.width
             heightAnchor.constant = self.originFrame.height
             //centerXAnchor.constant = self.originFrame.midX - containerView.frame.midX

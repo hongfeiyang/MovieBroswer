@@ -33,31 +33,49 @@ class Network {
         URLSession.shared.discoverMovieTask(with: url) {(data, response, error) in
             completion?(data)
         }.resume()
-        //NSLog("Query send: \(query.description)")
     }
     
-    static func getNowPlaying(query: NowPlayingQuery, completion: ((NowPlaying) -> Void)?) {
+    static func getNowPlaying(query: NowPlayingQuery, completion: ((NowPlaying?) -> Void)?) {
         guard let url = URL(string: query.description) else {return}
         URLSession.shared.nowPlayingTask(with: url) {(data, response, error) in
-            //NSLog("response received")
-            guard let data = data else {print("fail to parse NowPlaying"); return}
-            //NSLog("response parsed")
             completion?(data)
-            
         }.resume()
-        //NSLog("Query send: \(query.description)")
+        
     }
-    
-    
-    static func getTopRated(query: TopRatedQuery, completion: ((TopRated) -> Void)?) {
+
+    static func getTopRated(query: TopRatedQuery, completion: ((TopRated?) -> Void)?) {
         guard let url = URL(string: query.description) else {return}
         URLSession.shared.topRatedTask(with: url) {(data, response, error) in
-            //NSLog("response received")
-            guard let data = data else {print("fail to parse TopRated"); return}
-            //NSLog("response parsed")
             completion?(data)
-            
         }.resume()
-        //NSLog("Query send: \(query.description)")
     }
+    
+    static func getUpcoming(query: UpcomingQuery, completion: ((Upcoming?) -> Void)? ) {
+        var components = URLComponents(string: "https://api.themoviedb.org/3/movie/upcoming")
+        components?.queryItems = query.URLQueryItems
+        guard let url = components?.url else {fatalError("Error parse query items for upcoming")}
+        URLSession.shared.upcomingTask(with: url) { (data, response, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                completion?(nil)
+                return
+            }
+            completion?(data)
+        }.resume()
+    }
+    
+    static func getPopular(query: PopularQuery, completion: ((Popular?) -> Void)? ) {
+        var components = URLComponents(string: "https://api.themoviedb.org/3/movie/popular")
+        components?.queryItems = query.URLQueryItems
+        guard let url = components?.url else {fatalError("Error parse query items for popular")}
+        URLSession.shared.popularTask(with: url) { (data, response, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                completion?(nil)
+                return
+            }
+            completion?(data)
+        }.resume()
+    }
+    
 }

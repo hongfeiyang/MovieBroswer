@@ -29,7 +29,8 @@ class ImagesSectionCell: MovieDetailSectionBaseCell {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.decelerationRate = .fast
-        collectionView.contentInset = .init(top: 0, left: 10, bottom: 0, right: 10)
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.contentInset = .init(top: 0, left: 10, bottom: 0, right: 20)
         collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self

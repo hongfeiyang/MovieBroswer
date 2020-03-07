@@ -39,18 +39,21 @@ struct TopRated: Codable {
 //   task.resume()
 
 // MARK: - Result
-struct TopRatedResult: Codable {
-    let popularity: Double?
-    let voteCount: Int?
-    let video: Bool?
-    let posterPath: String?
-    let id: Int
-    let adult: Bool?
-    let backdropPath, originalLanguage, originalTitle: String?
-    let genreIDS: [Int]?
-    let title: String?
-    let voteAverage: Double?
-    let overview, releaseDate: String?
+struct TopRatedResult: Codable, BaseMovieResult {
+    var popularity: Double?
+    var voteCount: Int?
+    var video: Bool?
+    var posterPath: String?
+    var id: Int?
+    var adult: Bool?
+    var backdropPath: String?
+    var originalLanguage: String?
+    var originalTitle: String?
+    var genreIDS: [Int]
+    var title: String?
+    var voteAverage: Double?
+    var overview: String?
+    var releaseDate: String?
 
     enum CodingKeys: String, CodingKey {
         case popularity
@@ -66,10 +69,6 @@ struct TopRatedResult: Codable {
         case voteAverage = "vote_average"
         case overview
         case releaseDate = "release_date"
-    }
-    
-    func toMovieCategoryItem() -> MovieItemInCategory {
-        return MovieItemInCategory(id: id, title: title, posterPath: posterPath)
     }
 }
 

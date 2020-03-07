@@ -16,9 +16,17 @@ class MainTabBarController: UITabBarController {
     let vc3 = MainMovieViewController()
     override func viewDidLoad() {
         super.viewDidLoad()
-        vc1.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
-        vc2.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 2)
-        vc3.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 3)
+        let discoverImage = UIImage.symbolWithTintColor(symbol: "lightbulb", weight: .regular, tintColor: .systemGray)
+        let discoverHighlightedImage = UIImage.symbolWithTintColor(symbol: "lightbulb.fill", weight: .regular, tintColor: .systemBlue)
+        vc1.tabBarItem = UITabBarItem(title: "Discover", image: discoverImage, selectedImage: discoverHighlightedImage)
+        
+        let searchImage = UIImage.symbolWithTintColor(symbol: "magnifyingglass.circle", weight: .regular, tintColor: .systemGray)
+        let searchHighlightedImage = UIImage.symbolWithTintColor(symbol: "magnifyingglass.circle.fill", weight: .regular, tintColor: .systemBlue)
+        vc2.tabBarItem = UITabBarItem(title: "Search", image: searchImage, selectedImage: searchHighlightedImage)
+        
+        let browseImage = UIImage.symbolWithTintColor(symbol: "film", weight: .regular, tintColor: .systemGray)
+        let browseHighlightedImage = UIImage.symbolWithTintColor(symbol: "film.fill", weight: .regular, tintColor: .systemBlue)
+        vc3.tabBarItem = UITabBarItem(title: "Browse", image: browseImage, selectedImage: browseHighlightedImage)
         let vcs = [vc1, vc2, vc3]
         
         viewControllers = vcs.map { UINavigationController(rootViewController: $0)}

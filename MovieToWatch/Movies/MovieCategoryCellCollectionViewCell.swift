@@ -8,52 +8,34 @@
 
 import UIKit
 
-struct MovieItemInCategory {
-    let id: Int
-    let title: String?
-    let posterPath: String?
-}
-
 class MovieCategoryCell: UICollectionViewCell {
 
-    var dataSource = [MovieItemInCategory]() {
+    weak var delegate: UIViewController?
+    
+    var dataSource: [BaseMovieResult]? {
         didSet {
-            DispatchQueue.main.async {
-                self.movieCollectionView.reloadData()
-            }
+            DispatchQueue.main.async { self.movieCollectionView.reloadData() }
         }
     }
-    
-    func resetContent() {
-        dataSource.removeAll()
-    }
-    
+        
     lazy var movieCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = BetterSnappingLayout()
         layout.scrollDirection = .horizontal
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.decelerationRate = .fast
+        view.showsHorizontalScrollIndicator = false
+        view.contentInset = .init(top: 0, left: 20, bottom: 0, right: 20)
         view.register(IndividualMovieCell.self, forCellWithReuseIdentifier: "IndividualMovieCell")
         view.delegate = self
         view.dataSource = self
+        view.backgroundColor = .clear
         return view
     }()
-    
-    private func setupLayout() {
-        movieCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        let constraints = [
-            movieCollectionView.topAnchor.constraint(equalTo: topAnchor),
-            movieCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            movieCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            movieCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-        ]
-        NSLayoutConstraint.activate(constraints)
-    }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemGroupedBackground
         addSubview(movieCollectionView)
-        setupLayout()
+        movieCollectionView.fillSuperview()
     }
     
     required init?(coder: NSCoder) {
@@ -65,14 +47,21 @@ class MovieCategoryCell: UICollectionViewCell {
 
 extension MovieCategoryCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.count
+        return dataSource?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IndividualMovieCell", for: indexPath) as! IndividualMovieCell
-        cell.resetContent()
-        cell.movieItem = dataSource[indexPath.row]
+        cell.movieItem = dataSource?[indexPath.item]
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = dataSource?[indexPath.item]
+        let vc = MovieDetailViewController()
+        vc.movieId = item?.id
+        vc.hidesBottomBarWhenPushed = true
+        delegate?.navigationController?.pushViewController(vc, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -88,53 +77,25 @@ extension MovieCategoryCell: UICollectionViewDelegate, UICollectionViewDataSourc
 
 class IndividualMovieCell: UICollectionViewCell {
     
-    var movieItem: MovieItemInCategory! {
+    var movieItem: BaseMovieResult? {
         didSet {
-            updateViewFromModel()
+            let posterImageURL = APIConfiguration.parsePosterURL(file_path: movieItem?.posterPath, size: .w342)
+            posterImageView.sd_setImage(with: posterImageURL, placeholderImage: UIImage(), completed: nil)
         }
     }
-    
-    func resetContent() {
-        DispatchQueue.main.async {
-            self.posterImageView.image = nil
-        }
-    }
-    
-    private func updateViewFromModel() {
-        
-        let posterImageURL = APIConfiguration.parsePosterURL(file_path: movieItem.posterPath, size: .w342)
-        guard let fullURL = posterImageURL else {return}
-        Cache.shared.cacheImage(url: fullURL) { [weak self] (url, image) in
-            if fullURL == url {
-                DispatchQueue.main.async {
-                    self?.posterImageView.image = image
-                }
-            }
-        }
-    }
-    
+            
     private var posterImageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .scaleAspectFill
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
         return view
     }()
-    
-    private func setupLayout() {
-        posterImageView.translatesAutoresizingMaskIntoConstraints = false
-        let constraints = [
-            posterImageView.topAnchor.constraint(equalTo: topAnchor),
-            posterImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            posterImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            posterImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-        ]
-        NSLayoutConstraint.activate(constraints)
-    }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(posterImageView)
-        setupLayout()
-        backgroundColor = .systemGroupedBackground
+        posterImageView.fillSuperview()
     }
     
     required init?(coder: NSCoder) {

@@ -66,6 +66,14 @@ class CardViewCell: UICollectionViewCell {
     
     var summaryInfoConstraints: AnchoredConstraints?
     
+    override var isHighlighted: Bool {
+        didSet {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.transform = self.isHighlighted ? CGAffineTransform(scaleX: 0.95, y: 0.95) : .identity
+            }, completion: nil)
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     

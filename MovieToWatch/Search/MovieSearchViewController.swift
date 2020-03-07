@@ -47,7 +47,7 @@ class MovieSearchViewController: UIViewController {
         super.viewDidLoad()
         setupNavigationBar()
         view.addSubview(tableView)
-        tableView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+        tableView.fillSuperview()
     }
         
     override func viewWillAppear(_ animated: Bool) {
@@ -148,6 +148,7 @@ extension MovieSearchViewController: UITableViewDelegate, UITableViewDataSource 
             tableView.deselectRow(at: indexPath, animated: true)
             let vc = MovieDetailViewController()
             vc.movieId = results[indexPath.row].id
+            vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
         }
     }

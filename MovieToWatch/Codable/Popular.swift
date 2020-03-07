@@ -1,57 +1,31 @@
-//
-//  NowPlayingQuery.swift
-//  MovieToWatch
-//
-//  Created by Clark on 8/1/20.
-//  Copyright © 2020 Hongfei Yang. All rights reserved.
-//
-
-import Foundation
-
 // This file was generated from JSON Schema using quicktype, do not modify it directly.
 // To parse the JSON, add this file to your project and do:
 //
-//   let nowPlaying = try? newJSONDecoder().decode(NowPlaying.self, from: jsonData)
+//   let popular = try? newJSONDecoder().decode(Popular.self, from: jsonData)
 
 //
 // To read values from URLs:
 //
-//   let task = URLSession.shared.nowPlayingTask(with: url) { nowPlaying, response, error in
-//     if let nowPlaying = nowPlaying {
+//   let task = URLSession.shared.popularTask(with: url) { popular, response, error in
+//     if let popular = popular {
 //       ...
 //     }
 //   }
 //   task.resume()
 
+import Foundation
 
-// MARK: - NowPlaying
-struct NowPlaying: Codable {
-    let results: [NowPlayingResult]
+// MARK: - Popular
+struct Popular: Codable {
+    let results: [PopularResult]
     let page, totalResults: Int
-    let dates: Dates
     let totalPages: Int
 
     enum CodingKeys: String, CodingKey {
         case results, page
         case totalResults = "total_results"
-        case dates
         case totalPages = "total_pages"
     }
-}
-
-//
-// To read values from URLs:
-//
-//   let task = URLSession.shared.datesTask(with: url) { dates, response, error in
-//     if let dates = dates {
-//       ...
-//     }
-//   }
-//   task.resume()
-
-// MARK: - Dates
-struct Dates: Codable {
-    let maximum, minimum: Date?
 }
 
 //
@@ -65,7 +39,7 @@ struct Dates: Codable {
 //   task.resume()
 
 // MARK: - Result
-struct NowPlayingResult: Codable, BaseMovieResult {
+struct PopularResult: Codable, BaseMovieResult {
     var popularity: Double?
     var voteCount: Int?
     var video: Bool?
@@ -80,7 +54,7 @@ struct NowPlayingResult: Codable, BaseMovieResult {
     var voteAverage: Double?
     var overview: String?
     var releaseDate: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case popularity
         case voteCount = "vote_count"
@@ -98,6 +72,7 @@ struct NowPlayingResult: Codable, BaseMovieResult {
     }
 }
 
+
 // MARK: - URLSession response handlers
 
 extension URLSession {
@@ -107,18 +82,11 @@ extension URLSession {
                 completionHandler(nil, response, error)
                 return
             }
-            do {
-                let data = try newJSONDecoder().decode(T.self, from: data)
-                completionHandler(data, response, nil)
-            } catch let error {
-                print(error.localizedDescription)
-                completionHandler(nil, response, nil)
-            }
-            
+            completionHandler(try? newJSONDecoder().decode(T.self, from: data), response, nil)
         }
     }
 
-    func nowPlayingTask(with url: URL, completionHandler: @escaping (NowPlaying?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+    func popularTask(with url: URL, completionHandler: @escaping (Popular?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         return self.codableTask(with: url, completionHandler: completionHandler)
     }
 }
