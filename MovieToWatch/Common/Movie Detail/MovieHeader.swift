@@ -12,67 +12,47 @@ class MovieHeader: UICollectionReusableView {
     
     var movieDetail: MovieDetail? {
         didSet {
-            //posterImagePath = APIConfiguration.parsePosterURL(file_path: movieDetail?.posterPath, size: .original)
             titleLabel.text = movieDetail?.title
             tagLineLabel.text = movieDetail?.tagline
         }
     }
+
+    var titleLabel = UILabel(text: "", font: .systemFont(ofSize: 22, weight: .semibold), numberOfLines: 2, textColor: .label, textAlignment: .center)
+    var tagLineLabel = UILabel(text: "", font: .italicSystemFont(ofSize: 18), numberOfLines: 2, textColor: .label, textAlignment: .center)
+    var containerView: UIView = {
+        let view = UIView()
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 20
+        view.backgroundColor = .systemBackground
+        return view
+    }()
     
-    var backupPosterImage: UIImage?
+    var bottomContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        return view
+    }()
     
-    var posterImagePath: URL? {
-        didSet {
-            //posterImageView.sd_setImage(with: posterImagePath, placeholderImage: backupPosterImage, options: .avoidAutoSetImage, context: nil)
-            //posterImageView.sd_setImage(with: posterImagePath, placeholderImage: backupPosterImage)
-        }
-    }
-    
-//    var posterImageView: UIImageView = {
-//        let view = UIImageView()
-//        view.contentMode = .scaleAspectFill
-//        return view
-//    }()
- 
-    var titleLabel = UILabel(text: "", font: .systemFont(ofSize: 32, weight: .medium), numberOfLines: 0, textColor: .label, textAlignment: .center)
-    
-    var tagLineLabel = UILabel(text: "", font: .systemFont(ofSize: 18, weight: .regular), numberOfLines: 0, textColor: .label, textAlignment: .center)
-    
-    lazy var stackView = VerticalStackView(arrangedSubviews: [
+    lazy var stackView = UIStackView(arrangedSubviews: [
         self.titleLabel,
         self.tagLineLabel
-    ], spacing: 5)
-    
-//    var gradientLayer: CAGradientLayer = {
-//        let gradientLayer = CAGradientLayer()
-//        gradientLayer.colors = [UIColor.secondarySystemGroupedBackground.cgColor, UIColor.clear.cgColor]
-//        gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
-//        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0)
-//        return gradientLayer
-//    }()
-    
-    var titleView = UIView()
-
+    ], axis: .vertical, spacing: 1, distribution: .fill, alignment: .fill)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .clear
-//        posterImageView.layer.addSublayer(gradientLayer)
-//        addSubview(posterImageView)
-        addSubview(titleView)
-        titleView.addSubview(stackView)
         
+        addSubview(bottomContainerView)
+        addSubview(containerView)
+        containerView.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, size: .init(width: 0, height: 100))
+        bottomContainerView.anchor(top: containerView.centerYAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor)
         
-        stackView.anchor(top: nil, leading: titleView.leadingAnchor, bottom: titleView.bottomAnchor, trailing: titleView.trailingAnchor, padding: .init(top: 0, left: 20, bottom: 20, right: 20))
-    
-        titleView.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, size: .init(width: 0, height: 200))
+        containerView.addSubview(stackView)
+        stackView.fillSuperview(padding: .init(top: 10, left: 20, bottom: 10, right: 20))
         
-//        posterImageView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        posterImageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-//        imageViewTopConstraint = posterImageView.topAnchor.constraint(equalTo: topAnchor)
-//        imageViewWidthConstraint = posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 2/3)
-//        imageViewBottomConstraint = posterImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -(UIScreen.main.bounds.height - UIScreen.main.bounds.width*3/2))
-//        [imageViewTopConstraint, imageViewBottomConstraint, imageViewWidthConstraint].forEach { $0?.isActive = true }
+        containerView.layer.shadowOffset = .init(width: 0, height: -4)
+        containerView.layer.shadowColor = UIColor.systemGray.cgColor
+        containerView.layer.shadowOpacity = 0.3
+        containerView.layer.masksToBounds = false
     }
     
     required init?(coder: NSCoder) {
@@ -81,12 +61,5 @@ class MovieHeader: UICollectionReusableView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-//        gradientLayer.removeAllAnimations()
-//        CATransaction.begin()
-//        CATransaction.setDisableActions(true)
-//        gradientLayer.frame = CGRect(origin: CGPoint(x: 0, y: UIScreen.main.bounds.width * 3/2 - 150) , size: CGSize(width: UIScreen.main.bounds.width, height: 150))
-//        CATransaction.commit()
-        
-        
     }
 }

@@ -12,6 +12,7 @@
 		4B7046F524139C460036388B /* BaseMovieResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7046F424139C460036388B /* BaseMovieResult.swift */; };
 		4B7046F72413A2EC0036388B /* Popular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7046F62413A2EC0036388B /* Popular.swift */; };
 		4B7046F92413A3870036388B /* PopularQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7046F82413A3870036388B /* PopularQuery.swift */; };
+		4B87B6FD241427EA00DAA0FF /* IndividualMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B87B6FC241427EA00DAA0FF /* IndividualMovieCell.swift */; };
 		8D0A2F2C23BF05B5000F0519 /* MovieReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0A2F2B23BF05B5000F0519 /* MovieReviewView.swift */; };
 		8D12BE5023A699CE006C72B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12BE4F23A699CE006C72B4 /* AppDelegate.swift */; };
 		8D12BE5223A699CE006C72B4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12BE5123A699CE006C72B4 /* SceneDelegate.swift */; };
@@ -81,6 +82,7 @@
 		4B7046F424139C460036388B /* BaseMovieResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMovieResult.swift; sourceTree = "<group>"; };
 		4B7046F62413A2EC0036388B /* Popular.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Popular.swift; sourceTree = "<group>"; };
 		4B7046F82413A3870036388B /* PopularQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularQuery.swift; sourceTree = "<group>"; };
+		4B87B6FC241427EA00DAA0FF /* IndividualMovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualMovieCell.swift; sourceTree = "<group>"; };
 		8D0A2F2B23BF05B5000F0519 /* MovieReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieReviewView.swift; sourceTree = "<group>"; };
 		8D12BE4C23A699CE006C72B4 /* MovieToWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieToWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D12BE4F23A699CE006C72B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -416,6 +418,7 @@
 			children = (
 				8DBC157523C4EEF100547C57 /* MainMovieViewController.swift */,
 				8DAA63F223D1DB52002CEFF1 /* MovieCategoryCellCollectionViewCell.swift */,
+				4B87B6FC241427EA00DAA0FF /* IndividualMovieCell.swift */,
 			);
 			path = Movies;
 			sourceTree = "<group>";
@@ -540,6 +543,7 @@
 				8DBC157623C4EEF100547C57 /* MainMovieViewController.swift in Sources */,
 				8D1849E223FF78F200BF6666 /* VideosCell.swift in Sources */,
 				8DB9468E23ACBD7800AFD13C /* Network.swift in Sources */,
+				4B87B6FD241427EA00DAA0FF /* IndividualMovieCell.swift in Sources */,
 				8D400AE723B30A08006555D3 /* ImageCacheMO+CoreDataClass.swift in Sources */,
 				8D400AEC23B34911006555D3 /* MainTabBarController.swift in Sources */,
 				8D1849DD23FF64A600BF6666 /* ImagesCell.swift in Sources */,

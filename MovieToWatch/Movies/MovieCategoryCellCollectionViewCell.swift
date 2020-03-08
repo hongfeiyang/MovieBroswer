@@ -17,9 +17,12 @@ class MovieCategoryCell: UICollectionViewCell {
             DispatchQueue.main.async { self.movieCollectionView.reloadData() }
         }
     }
-        
+    
+    var titleLabel = UILabel(text: "", font: .systemFont(ofSize: 22, weight: .bold), numberOfLines: 0, textColor: .label, textAlignment: .left)
+    
     lazy var movieCollectionView: UICollectionView = {
         let layout = BetterSnappingLayout()
+        //layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.scrollDirection = .horizontal
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.decelerationRate = .fast
@@ -29,13 +32,16 @@ class MovieCategoryCell: UICollectionViewCell {
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = .clear
+        view.constrainHeight(constant: 210)
         return view
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(movieCollectionView)
-        movieCollectionView.fillSuperview()
+        addSubview(titleLabel)
+        titleLabel.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor, padding: .init(top: 20, left: 20, bottom: 0, right: 20))
+        movieCollectionView.anchor(top: titleLabel.bottomAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 20, left: 0, bottom: 0, right: 0))
     }
     
     required init?(coder: NSCoder) {
@@ -65,40 +71,14 @@ extension MovieCategoryCell: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: self.frame.height * 2/3, height: self.frame.height)
+        return .init(width: 100, height: collectionView.frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 20
+        return 10
     }
     
-    
-}
-
-class IndividualMovieCell: UICollectionViewCell {
-    
-    var movieItem: BaseMovieResult? {
-        didSet {
-            let posterImageURL = APIConfiguration.parsePosterURL(file_path: movieItem?.posterPath, size: .w342)
-            posterImageView.sd_setImage(with: posterImageURL, placeholderImage: UIImage(), completed: nil)
-        }
-    }
-            
-    private var posterImageView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        view.layer.cornerRadius = 10
-        view.clipsToBounds = true
-        return view
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addSubview(posterImageView)
-        posterImageView.fillSuperview()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
     }
 }

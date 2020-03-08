@@ -30,6 +30,7 @@ class MainTabBarController: UITabBarController {
         let vcs = [vc1, vc2, vc3]
         
         viewControllers = vcs.map { UINavigationController(rootViewController: $0)}
+        selectedIndex = 2
         // Do any additional setup after loading the view.
     }
 }

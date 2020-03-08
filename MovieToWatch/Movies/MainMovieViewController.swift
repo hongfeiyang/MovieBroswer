@@ -40,8 +40,10 @@ class MainMovieViewController: UIViewController {
     }()
     
     lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = BetterSnappingLayout()
+        // layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         let view = UICollectionView(frame: .zero , collectionViewLayout: layout)
+        view.decelerationRate = .fast
         view.showsVerticalScrollIndicator = false
         view.backgroundColor = .systemBackground
         view.delegate = self
@@ -62,6 +64,8 @@ class MainMovieViewController: UIViewController {
     }
 }
 
+
+
 extension MainMovieViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 4
@@ -69,24 +73,49 @@ extension MainMovieViewController: UICollectionViewDelegateFlowLayout, UICollect
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! MovieCategoryCell
-        switch(indexPath.row) {
+        switch(indexPath.item) {
         case 0:
             cell.dataSource = nowPlayingResult
+            cell.titleLabel.text = "In Cinema"
         case 1:
-            cell.dataSource = topRatedResult
+            cell.dataSource = popularResult
+            cell.titleLabel.text = "Popular"
         case 2:
             cell.dataSource = upcomingResult
+            cell.titleLabel.text = "Upcoming"
         case 3:
-            cell.dataSource = popularResult
+            cell.dataSource = topRatedResult
+            cell.titleLabel.text = "Top Rated"
         default:
-            break
+            fatalError("not implemented")
         }
         cell.delegate = self
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: UIScreen.main.bounds.width, height: 200)
+        //return .init(width: UIScreen.main.bounds.width, height: 200)
+        let width = collectionView.frame.width
+        let dummyCell = MovieCategoryCell(frame: .init(origin: .zero, size: .init(width: width, height: 1000)))
+        switch(indexPath.item) {
+        case 0:
+            dummyCell.dataSource = nowPlayingResult
+            dummyCell.titleLabel.text = "In Cinema"
+        case 1:
+            dummyCell.dataSource = popularResult
+            dummyCell.titleLabel.text = "Popular"
+        case 2:
+            dummyCell.dataSource = upcomingResult
+            dummyCell.titleLabel.text = "Upcoming"
+        case 3:
+            dummyCell.dataSource = topRatedResult
+            dummyCell.titleLabel.text = "Top Rated"
+        default:
+            fatalError("not implemented")
+        }
+        dummyCell.layoutIfNeeded()
+        let estimatedSize = dummyCell.systemLayoutSizeFitting(.init(width: width, height: 1000))
+        return .init(width: width, height: estimatedSize.height)
     }
 }
 

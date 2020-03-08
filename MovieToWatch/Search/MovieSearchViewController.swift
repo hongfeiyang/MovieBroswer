@@ -12,7 +12,7 @@ class MovieSearchViewController: UIViewController {
 
     var searchQuery = MovieSearchQuery(query: "", language: nil, page: nil, include_adult: nil, region: nil, year: nil, primary_release_year: nil)
     var totalResultPages: Int?
-    var results = [MovieSearchResult]()
+    var results: [MovieSearchResult]?
     
     let resultCell = "resultCell"
     let loadingCell = "loadingCell"
@@ -87,9 +87,8 @@ extension MovieSearchViewController: UISearchResultsUpdating {
         
         loadMoreData() { [weak self] searchResults in
             DispatchQueue.main.async {
-                guard let results = searchResults?.results else {return}
                 // Change datasource and reload should occur in the same call block to sync table rows numbers
-                self?.results = results
+                self?.results = searchResults?.results
                 self?.totalResultPages = searchResults?.totalPages
                 self?.tableView.reloadData()
             }
@@ -100,7 +99,7 @@ extension MovieSearchViewController: UISearchResultsUpdating {
         DispatchQueue.main.async {
             self.searchQuery.query = ""
             self.searchQuery.page = nil
-            self.results = []
+            self.results = nil
             self.tableView.reloadData()
         }
     }
@@ -118,7 +117,12 @@ extension MovieSearchViewController: UITableViewDelegate, UITableViewDataSource 
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return results.count + 1
+        if let results = results {
+            return results.count + 1
+        } else {
+            return 0
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -134,7 +138,7 @@ extension MovieSearchViewController: UITableViewDelegate, UITableViewDataSource 
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: resultCell) as! MovieSearchResultsTableViewCell
-            let thisResult = results[indexPath.row]
+            let thisResult = results?[indexPath.row]
             cell.content = thisResult
             return cell
         }
@@ -147,7 +151,7 @@ extension MovieSearchViewController: UITableViewDelegate, UITableViewDataSource 
         } else {
             tableView.deselectRow(at: indexPath, animated: true)
             let vc = MovieDetailViewController()
-            vc.movieId = results[indexPath.row].id
+            vc.movieId = results?[indexPath.row].id
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
         }
@@ -178,12 +182,19 @@ extension MovieSearchViewController: UITableViewDelegate, UITableViewDataSource 
             currentPage += 1
             searchQuery.page = currentPage
             loadMoreData() { [weak self] searchResults in
+                guard let self = self else {return}
                 DispatchQueue.main.async {
-                    guard let results = searchResults?.results else {self?.pageIsLoadingMoreContent = false; return}
+                    guard let results = searchResults?.results else {self.pageIsLoadingMoreContent = false; return}
                     // Change datasource and reload should occur in the same call block to sync table rows numbers
-                    self?.results += results
-                    self?.tableView.reloadData()
-                    self?.pageIsLoadingMoreContent = false
+                    
+                    if self.results != nil {
+                        self.results! += results
+                    } else {
+                        self.results = results
+                    }
+                    
+                    self.tableView.reloadData()
+                    self.pageIsLoadingMoreContent = false
                 }
             }
             self.pageIsLoadingMoreContent = true

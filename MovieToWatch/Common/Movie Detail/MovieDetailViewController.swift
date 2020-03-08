@@ -14,7 +14,7 @@ class BaseCollectionViewController: UICollectionViewController, UICollectionView
     init() {
         let layout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: layout)
-        collectionView.backgroundColor = .systemGroupedBackground
+        collectionView.backgroundColor = .clear
         collectionView.contentInsetAdjustmentBehavior = .never
     }
     
@@ -49,6 +49,7 @@ class MovieDetailViewController: BaseCollectionViewController {
 
     var backupImageView: UIImageView = {
         let view = UIImageView()
+        view.backgroundColor = .systemBackground
         view.contentMode = .scaleAspectFill
         return view
     }()
@@ -195,7 +196,6 @@ class MovieDetailViewController: BaseCollectionViewController {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: movieHeaderId, for: indexPath) as! MovieHeader
-            cell.backupPosterImage = backupPosterImage
             cell.movieDetail = movieDetail
             return cell
         default:
@@ -220,16 +220,17 @@ class MovieDetailViewController: BaseCollectionViewController {
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let cell = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: movieHeaderId, for: .init(item: 0, section: 0)) as? MovieHeader else {return}
+        
+        if let cell = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: .init(item: 0, section: 0)) {
+            cell.clipsToBounds = scrollView.contentOffset.y > 0 ? true : false
+        }
+        
         if scrollView.contentOffset.y > 0 {
             // push poster image up at X/Y scrolling speed when scrolling up
-            cell.clipsToBounds = true
             imageViewHeightConstraint?.constant = UIScreen.main.bounds.width*3/2
             imageViewTopConstraint?.constant = -scrollView.contentOffset.y*2/3
-
         } else {
             // expand poster image proportionally when scrolling down
-            cell.clipsToBounds = false
             imageViewHeightConstraint?.constant = UIScreen.main.bounds.width*3/2 - scrollView.contentOffset.y
             imageViewTopConstraint?.constant = 0
         }
