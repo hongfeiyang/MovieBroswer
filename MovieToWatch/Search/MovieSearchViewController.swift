@@ -93,6 +93,12 @@ extension MovieSearchViewController: UISearchResultsUpdating {
                 self?.tableView.reloadData()
             }
         }
+        
+        let item = MultiSearchQuery(query: text)
+        
+        Network.getMultiSearch(query: item) { (results) in
+            print(results.debugDescription)
+        }
     }
     
     private func clear() {

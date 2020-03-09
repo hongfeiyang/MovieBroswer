@@ -9,28 +9,6 @@
 import UIKit
 import SDWebImage
 
-class BaseCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
-    
-    init() {
-        let layout = UICollectionViewFlowLayout()
-        super.init(collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.contentInsetAdjustmentBehavior = .never
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    var topPosterWidth: CGFloat {
-        return UIScreen.main.bounds.width
-    }
-    var topPosterHeight: CGFloat {
-        return topPosterWidth * 3/2
-    }
-}
-
-
 class MovieDetailViewController: BaseCollectionViewController {
     
     let creditsCellId = "creditsCellId"
