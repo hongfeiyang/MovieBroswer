@@ -11,6 +11,10 @@ import Foundation
 
 class Network {
     
+    enum NetworkError: String, Error {
+        case NoDataError = "No Data Error"
+    }
+    
     static func getMovieSearchResults(query: MovieSearchQuery, completion: ((MovieSearchResults?) -> Void)?) {
 
         var components = URLComponents(string: query.baseURL)
@@ -78,32 +82,53 @@ class Network {
         }.resume()
     }
     
-    static func getMultiSearch(query: MultiSearchQuery, completion: ((MultiSearchResults?) -> Void)?) {
+    static func getMultiSearch(query: MultiSearchQuery, completion: @escaping (Result<MultiSearchResults, Error>) -> Void) {
         var components = URLComponents(string: "https://api.themoviedb.org/3/search/multi?")
         components?.queryItems = query.URLQueryItems
         guard let url = components?.url else {fatalError("Error parse query items for multi search")}
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
-                print(error)
-                completion?(nil)
+                completion(.failure(error))
                 return
             }
-            guard let data = data else {print("no data"); return}
-            
+            guard let data = data else {completion(.failure(NetworkError.NoDataError)); return}
             let decoder = JSONDecoder()
             do {
-//                let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-//                let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-//                let string = String(data: jsonData, encoding: .utf8)!
-//                print(string)
-                
                 let multiSearchResults = try decoder.decode(MultiSearchResults.self, from: data)
-                completion?(multiSearchResults)
+                completion(.success(multiSearchResults))
             } catch let error {
-                print("MULTISEARCH", error)
-                completion?(nil)
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
+    static func getTrending(query: TrendingQuery, completion: @escaping (Result<MultiSearchResults?, Error>)->Void) {
+        var components = URLComponents(string: "https://api.themoviedb.org/3/trending/")
+        // this query only needs a single 'api_key' query from the query object
+        let queryItem = query.URLQueryItems?.first(where: { (item) -> Bool in
+            item.name == "api_key"
+        })
+        components?.queryItems = [queryItem!]
+      
+        let additionalPath = "\(query.media_type)/\(query.time_window)"
+        guard let url = components?.url?.appendingPathComponent(additionalPath) else {fatalError("Error parse query items for trending")}
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            //Interceptor.shared.intercept(data: data)
+            guard let data = data else {completion(.success(nil)); return}
+            let decoder = JSONDecoder()
+            do {
+                let multiSearchResults = try decoder.decode(MultiSearchResults.self, from: data)
+                completion(.success(multiSearchResults))
+            } catch let error {
+                completion(.failure(error))
             }
             
         }.resume()
     }
 }
+

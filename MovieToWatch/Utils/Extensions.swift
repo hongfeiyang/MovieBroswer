@@ -232,39 +232,39 @@ extension UIViewController {
         }
     }
 }
-
-extension Encodable {
-    func toJSONData() -> Data? {
-        let jsonEncoder = JSONEncoder()
-        do {
-            let jsonData = try jsonEncoder.encode(self)
-            return jsonData
-        }
-        catch let err {
-            print(err.localizedDescription)
-        }
-        
-        return nil
-    }
-    
-    
-    func toQueryItems() -> [URLQueryItem]? {
-        let jsonEncoder = JSONEncoder()
-        do {
-            let jsonData = try jsonEncoder.encode(self)
-            let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
-            guard let dict = jsonObject as? [String: String?] else { return nil }
-            let queryItems = dict.compactMap { (key, value) in
-                return value != nil ? URLQueryItem(name: key, value: value) : nil
-            }
-            return queryItems
-        } catch let err {
-            print(err.localizedDescription)
-            return nil
-        }
-    }
-    
-}
+//
+//extension Encodable {
+//    func toJSONData() -> Data? {
+//        let jsonEncoder = JSONEncoder()
+//        do {
+//            let jsonData = try jsonEncoder.encode(self)
+//            return jsonData
+//        }
+//        catch let err {
+//            print(err.localizedDescription)
+//        }
+//
+//        return nil
+//    }
+//
+//
+//    func toQueryItems() -> [URLQueryItem]? {
+//        let jsonEncoder = JSONEncoder()
+//        do {
+//            let jsonData = try jsonEncoder.encode(self)
+//            let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
+//            guard let dict = jsonObject as? [String: String?] else { return nil }
+//            let queryItems = dict.compactMap { (key, value) in
+//                return value != nil ? URLQueryItem(name: key, value: value) : nil
+//            }
+//            return queryItems
+//        } catch let err {
+//            print(err.localizedDescription)
+//            return nil
+//        }
+//    }
+//
+//}
 
 
 extension Encodable {
@@ -285,7 +285,7 @@ extension Encodable {
         let coder = JSONEncoder()
         do {
             let jsonData = try coder.encode(self)
-            let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
+            let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [.allowFragments])
             guard let dict = jsonObject as? [String: Any?] else { print("cannot convert jsonObject to dictionary"); return nil }
             
             var items = [URLQueryItem]()
@@ -305,7 +305,7 @@ extension Encodable {
             }
             return items
         } catch let err {
-            print(err.localizedDescription)
+            print(err)
             return nil
         }
     }

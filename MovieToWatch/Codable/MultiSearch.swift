@@ -9,11 +9,11 @@
 import Foundation
 
 
-struct MultiSearchResults: Decodable {
+struct MultiSearchResults: Codable {
     let page: Int
     let total_results: Int
     let total_pages: Int
-    let results: [IMultiSearchResult]
+    let results: [ISearchResult]
     
     enum CodingKeys: CodingKey {
         case page
@@ -21,15 +21,14 @@ struct MultiSearchResults: Decodable {
         case total_pages
         case results
     }
-
-    enum ResultsTypeKey: CodingKey {
-        case media_type
-    }
-
-    enum ResultTypes: String, Decodable {
-        case movie = "movie"
-        case tv = "tv"
-        case person = "person"
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(page, forKey: .page)
+        try container.encode(total_pages, forKey: .total_pages)
+        try container.encode(total_results, forKey: .total_results)
+        try container.encode(results.map{AnyResult($0)}, forKey: .results)
     }
     
     init(from decoder: Decoder) throws {
@@ -38,45 +37,73 @@ struct MultiSearchResults: Decodable {
         self.page = try container.decode(Int.self, forKey: .page)
         self.total_results = try container.decode(Int.self, forKey: .total_results)
         self.total_pages = try container.decode(Int.self, forKey: .total_pages)
-        
-        var unkeyedContainer = try container.nestedUnkeyedContainer(forKey: CodingKeys.results)
-        var results = [IMultiSearchResult]()
-
-        while(!unkeyedContainer.isAtEnd) {
-            let keyedContainer = try unkeyedContainer.nestedContainer(keyedBy: ResultsTypeKey.self)
-            let mediaType = try keyedContainer.decode(ResultTypes.self, forKey: ResultsTypeKey.media_type)
-            switch mediaType {
-            case .tv:
-                results.append(try unkeyedContainer.decode(TvMultiSearchResult.self))
-            case .person:
-                results.append(try unkeyedContainer.decode(PersonMultiSearchResult.self))
-            case .movie:
-                results.append(try unkeyedContainer.decode(MovieMultiSearchResult.self))
-            }
-        }
-        self.results = results
+        self.results = try container.decode([AnyResult].self, forKey: .results).map { $0.result }
     }
 }
 
 
-protocol IMultiSearchResult: Decodable {
-    var media_type: String { get set }
+struct AnyResult: Codable {
+    var result: ISearchResult
+    
+    init(_ result: ISearchResult) {
+        self.result = result
+    }
+    
+    private enum CodingKeys: CodingKey {
+        case media_type
+        case result
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(type(of: result).staticType, forKey: .media_type)
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(MediaType.self, forKey: .media_type)
+        self.result = try type.metaType.init(from: decoder)
+    }
 }
 
-struct MovieMultiSearchResult: IMultiSearchResult {
-    var media_type: String
+enum MediaType: String, Codable {
+    case movie
+    case tv
+    case person
     
-    var posterPath: String?
-    var popularity: Double?
-    var voteCount: Int?
-    var video: Bool?
-    var id: Int?
-    var adult: Bool?
-    var backdropPath, originalLanguage, originalTitle: String?
-    var genreIDS: [Int]
-    var title: String?
-    var voteAverage: Double?
-    var overview, releaseDate: String?
+    var metaType: ISearchResult.Type {
+        switch self {
+        case .movie:
+            return MovieMultiSearchResult.self
+        case .tv:
+            return TvMultiSearchResult.self
+        case .person:
+            return PersonMultiSearchResult.self
+        }
+    }
+}
+
+protocol ISearchResult: Codable {
+    static var staticType: MediaType {get} // type for interminent decoding class
+    var media_type: MediaType { get set } // common type for subclasses
+}
+
+
+struct MovieMultiSearchResult: ISearchResult {
+    static var staticType: MediaType = .movie
+
+    var media_type: MediaType
+    let posterPath: String?
+    let popularity: Double?
+    let voteCount: Int?
+    let video: Bool?
+    let id: Int?
+    let adult: Bool?
+    let backdropPath, originalLanguage, originalTitle: String?
+    let genreIDS: [Int]?
+    let title: String?
+    let voteAverage: Double?
+    let overview, releaseDate: String?
 
     enum CodingKeys: String, CodingKey {
         case posterPath = "poster_path"
@@ -96,73 +123,69 @@ struct MovieMultiSearchResult: IMultiSearchResult {
     }
 }
 
-struct PersonMultiSearchResult: IMultiSearchResult {
-    var media_type: String
+struct PersonMultiSearchResult: ISearchResult {
+    static var staticType: MediaType = .person
     
-    var knownForDepartment: String?
-    var id: Int?
-    var name: String?
-    var knownFor: [KnownFor]?
-    var popularity: Double?
-    var profilePath: String?
-    var gender: Int?
-    var adult: Bool?
+    var media_type: MediaType
+    
+    let id: Int?
+    let name: String?
+    let knownFor: [ISearchResult]
+    let popularity: Double?
+    let profilePath: String?
+    let adult: Bool?
 
     enum CodingKeys: String, CodingKey {
-        case knownForDepartment = "known_for_department"
         case id, name
         case knownFor = "known_for"
         case popularity
         case profilePath = "profile_path"
-        case gender
         case media_type
         case adult
     }
     
-    struct KnownFor: Codable {
-        let releaseDate: String?
-        let id, voteCount: Int?
-        let video: Bool?
-        let mediaType: String
-        let voteAverage: Double?
-        let title: String?
-        let genreIDS: [Int]?
-        let originalTitle, originalLanguage: String?
-        let adult: Bool?
-        let backdropPath, overview, posterPath: String?
-
-        enum CodingKeys: String, CodingKey {
-            case releaseDate = "release_date"
-            case id
-            case voteCount = "vote_count"
-            case video
-            case mediaType = "media_type"
-            case voteAverage = "vote_average"
-            case title
-            case genreIDS = "genre_ids"
-            case originalTitle = "original_title"
-            case originalLanguage = "original_language"
-            case adult
-            case backdropPath = "backdrop_path"
-            case overview
-            case posterPath = "poster_path"
-        }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(id, forKey: .id)
+        try container.encode(name, forKey: .name)
+        try container.encode(popularity, forKey: .popularity)
+        try container.encode(profilePath, forKey: .profilePath)
+        try container.encode(adult, forKey: .adult)
+        try container.encode(media_type, forKey: .media_type)
+        try container.encode(knownFor.map{AnyResult($0)}, forKey: .knownFor)
     }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.id = try container.decode(Int?.self, forKey: .id)
+        self.name = try container.decode(String?.self, forKey: .name)
+        self.popularity = try container.decode(Double?.self, forKey: .popularity)
+        self.profilePath = try container.decode(String?.self, forKey: .profilePath)
+        self.media_type = try container.decode(MediaType.self, forKey: .media_type)
+        self.adult = try container.decode(Bool?.self, forKey: .adult)
+        self.knownFor = try container.decode([AnyResult].self, forKey: .knownFor).map { $0.result }
+    }
+    
+    
 }
 
-struct TvMultiSearchResult: IMultiSearchResult {
-    var media_type: String
+struct TvMultiSearchResult: ISearchResult {
+    static var staticType: MediaType = .tv
     
-    var originalName: String?
-    var genreIDS: [Int]?
-    var name: String?
-    var popularity: Double?
-    var originCountry: [String]?
-    var voteCount: Int?
-    var firstAirDate, backdropPath, originalLanguage: String?
-    var id: Int?
-    var voteAverage: Double?
-    var overview, posterPath: String?
+    var media_type: MediaType
+
+    let originalName: String?
+    let genreIDS: [Int]?
+    let name: String?
+    let popularity: Double?
+    let originCountry: [String]?
+    let voteCount: Int?
+    let firstAirDate, backdropPath, originalLanguage: String?
+    let id: Int?
+    let voteAverage: Double?
+    let overview, posterPath: String?
 
     enum CodingKeys: String, CodingKey {
         case originalName = "original_name"

@@ -16,7 +16,11 @@ struct MultiSearchQuery: Codable {
     var include_adult: Bool?
     var region: String?
     
-    init(query: String) {
+    init(query: String, language: String? = nil, page: Int? = nil, include_adult: Bool? = nil, region: String? = nil) {
         self.query = query
+        self.language = language
+        self.page = page
+        self.include_adult = include_adult
+        self.region = region
     }
 }
