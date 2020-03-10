@@ -14,6 +14,8 @@
 		4B6B1E2524167A10000C5C3E /* MovieSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6B1E2424167A10000C5C3E /* MovieSearchResultCell.swift */; };
 		4B6B1E2724167A32000C5C3E /* BaseSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6B1E2624167A32000C5C3E /* BaseSearchResultCell.swift */; };
 		4B6B1E2924167B03000C5C3E /* DateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6B1E2824167B03000C5C3E /* DateParser.swift */; };
+		4B6BA7302417563E00B38842 /* PersonSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6BA72F2417563E00B38842 /* PersonSearchResultCell.swift */; };
+		4B6BA7372417A1A200B38842 /* TvSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6BA7362417A1A200B38842 /* TvSearchResultCell.swift */; };
 		4B7046F12413955C0036388B /* Upcoming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7046F02413955C0036388B /* Upcoming.swift */; };
 		4B7046F3241398050036388B /* UpComingQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7046F2241398050036388B /* UpComingQuery.swift */; };
 		4B7046F524139C460036388B /* BaseMovieResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7046F424139C460036388B /* BaseMovieResult.swift */; };
@@ -95,6 +97,8 @@
 		4B6B1E2424167A10000C5C3E /* MovieSearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchResultCell.swift; sourceTree = "<group>"; };
 		4B6B1E2624167A32000C5C3E /* BaseSearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSearchResultCell.swift; sourceTree = "<group>"; };
 		4B6B1E2824167B03000C5C3E /* DateParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateParser.swift; sourceTree = "<group>"; };
+		4B6BA72F2417563E00B38842 /* PersonSearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonSearchResultCell.swift; sourceTree = "<group>"; };
+		4B6BA7362417A1A200B38842 /* TvSearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvSearchResultCell.swift; sourceTree = "<group>"; };
 		4B7046F02413955C0036388B /* Upcoming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upcoming.swift; sourceTree = "<group>"; };
 		4B7046F2241398050036388B /* UpComingQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpComingQuery.swift; sourceTree = "<group>"; };
 		4B7046F424139C460036388B /* BaseMovieResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMovieResult.swift; sourceTree = "<group>"; };
@@ -311,8 +315,10 @@
 				8D400AEE23B36A56006555D3 /* MovieSearchViewController.swift */,
 				8D63680623B4DADC009CD78C /* MovieSearchResultsTableViewCell.swift */,
 				4B6B1E22241676ED000C5C3E /* SearchResultsController.swift */,
-				4B6B1E2424167A10000C5C3E /* MovieSearchResultCell.swift */,
 				4B6B1E2624167A32000C5C3E /* BaseSearchResultCell.swift */,
+				4B6B1E2424167A10000C5C3E /* MovieSearchResultCell.swift */,
+				4B6BA72F2417563E00B38842 /* PersonSearchResultCell.swift */,
+				4B6BA7362417A1A200B38842 /* TvSearchResultCell.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -617,6 +623,7 @@
 				8D76955A23BC9B3B003A255C /* MovieImagesView.swift in Sources */,
 				8D58CC4A23FE307200819C94 /* Extensions.swift in Sources */,
 				8D58CC5223FE57F100819C94 /* MovieDetailViewController.swift in Sources */,
+				4B6BA7372417A1A200B38842 /* TvSearchResultCell.swift in Sources */,
 				8D821D7023A8E96E0097F089 /* DetailMovieViewController.swift in Sources */,
 				8D821D7223A8EE7A0097F089 /* CardAnimator.swift in Sources */,
 				8D58CC5723FE715D00819C94 /* Credits.swift in Sources */,
@@ -640,6 +647,7 @@
 				8DA1A05623B5BDF900B28167 /* CreditsView.swift in Sources */,
 				4B7046F72413A2EC0036388B /* Popular.swift in Sources */,
 				8D12BE5223A699CE006C72B4 /* SceneDelegate.swift in Sources */,
+				4B6BA7302417563E00B38842 /* PersonSearchResultCell.swift in Sources */,
 				8DBC156F23C4E6D300547C57 /* MovieDetailQuery.swift in Sources */,
 				8DB298D72403C45000DE7195 /* OverviewSectionCell.swift in Sources */,
 				4B6B1E2724167A32000C5C3E /* BaseSearchResultCell.swift in Sources */,

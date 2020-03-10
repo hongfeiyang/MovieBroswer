@@ -61,7 +61,7 @@ extension UIColor {
         return (red, green, blue, alpha)
     }
     
-    func getComplementaryColor() -> UIColor {
+    var complementaryColor: UIColor {
         var d: Float = 0
 
         // Counting the perceptive luminance - human eye favors green color...
@@ -141,7 +141,20 @@ extension UIImage {
         self.init(cgImage: cgImage)
     }
     
+    var averageColor: UIColor? {
+        guard let inputImage = CIImage(image: self) else { return nil }
+        let extentVector = CIVector(x: inputImage.extent.origin.x, y: inputImage.extent.origin.y, z: inputImage.extent.size.width, w: inputImage.extent.size.height)
 
+        guard let filter = CIFilter(name: "CIAreaAverage", parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector]) else { return nil }
+        guard let outputImage = filter.outputImage else { return nil }
+
+        var bitmap = [UInt8](repeating: 0, count: 4)
+        let context = CIContext(options: [.workingColorSpace: kCFNull as Any])
+        context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
+
+        return UIColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
+    }
+    
     static func symbolWithTintColor(symbol systemName: String, weight: UIImage.SymbolWeight = .regular, tintColor: UIColor = .label) -> UIImage? {
         let configuration = UIImage.SymbolConfiguration(weight: weight)
         let image = UIImage(systemName: systemName, withConfiguration: configuration)
@@ -232,39 +245,7 @@ extension UIViewController {
         }
     }
 }
-//
-//extension Encodable {
-//    func toJSONData() -> Data? {
-//        let jsonEncoder = JSONEncoder()
-//        do {
-//            let jsonData = try jsonEncoder.encode(self)
-//            return jsonData
-//        }
-//        catch let err {
-//            print(err.localizedDescription)
-//        }
-//
-//        return nil
-//    }
-//
-//
-//    func toQueryItems() -> [URLQueryItem]? {
-//        let jsonEncoder = JSONEncoder()
-//        do {
-//            let jsonData = try jsonEncoder.encode(self)
-//            let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
-//            guard let dict = jsonObject as? [String: String?] else { return nil }
-//            let queryItems = dict.compactMap { (key, value) in
-//                return value != nil ? URLQueryItem(name: key, value: value) : nil
-//            }
-//            return queryItems
-//        } catch let err {
-//            print(err.localizedDescription)
-//            return nil
-//        }
-//    }
-//
-//}
+
 
 
 extension Encodable {

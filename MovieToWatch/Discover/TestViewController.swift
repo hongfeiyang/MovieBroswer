@@ -23,6 +23,7 @@ class TestViewController: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.backgroundColor = .systemBackground
+        //collectionView.delaysContentTouches = false
         collectionView.refreshControl = refreshControl
         collectionView.dataSource = self
         collectionView.delegate = self

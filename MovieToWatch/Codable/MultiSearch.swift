@@ -128,6 +128,7 @@ struct PersonMultiSearchResult: ISearchResult {
     
     var media_type: MediaType
     
+    let knownForDepartment: String?
     let id: Int?
     let name: String?
     let knownFor: [ISearchResult]
@@ -142,6 +143,7 @@ struct PersonMultiSearchResult: ISearchResult {
         case profilePath = "profile_path"
         case media_type
         case adult
+        case knownForDepartment = "known_for_department"
     }
     
     func encode(to encoder: Encoder) throws {
@@ -153,6 +155,7 @@ struct PersonMultiSearchResult: ISearchResult {
         try container.encode(profilePath, forKey: .profilePath)
         try container.encode(adult, forKey: .adult)
         try container.encode(media_type, forKey: .media_type)
+        try container.encode(knownForDepartment, forKey: .knownForDepartment)
         try container.encode(knownFor.map{AnyResult($0)}, forKey: .knownFor)
     }
     
@@ -165,6 +168,7 @@ struct PersonMultiSearchResult: ISearchResult {
         self.profilePath = try container.decode(String?.self, forKey: .profilePath)
         self.media_type = try container.decode(MediaType.self, forKey: .media_type)
         self.adult = try container.decode(Bool?.self, forKey: .adult)
+        self.knownForDepartment = try container.decode(String?.self, forKey: .knownForDepartment)
         self.knownFor = try container.decode([AnyResult].self, forKey: .knownFor).map { $0.result }
     }
     

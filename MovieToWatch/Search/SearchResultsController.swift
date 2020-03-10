@@ -11,25 +11,28 @@ import UIKit
 class SearchResultsController: UITableViewController {
     
     var query: MultiSearchQuery?
-    var searchResults: MultiSearchResults?
     var results: [ISearchResult]?
-    var page: Int? { return searchResults?.page }
-    var totalPages: Int? { return searchResults?.total_pages }
-
-    let loadingCell = "loadingCell"
-    let movieResultCell = "movieResultCell"
-    let tvResultCell = "tvResultCell"
-    let personResultCell = "personResultCell"
+    var page: Int?
+    var totalPages: Int?
+    
+    let loadingCellId = "loadingCell"
+    let movieResultCellId = "movieResultCell"
+    let tvResultCellId = "tvResultCell"
+    let personResultCellId = "personResultCell"
     
     var pageIsLoadingMoreContent = false
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag
-        tableView.register(MovieSearchResultCell.self, forCellReuseIdentifier: movieResultCell)
-        tableView.register(loadingTableViewCell.self, forCellReuseIdentifier: loadingCell)
-        tableView.rowHeight = 130//UITableView.automaticDimension
-        //tableView.estimatedRowHeight = 200
+        tableView.separatorStyle = .none
+        tableView.delaysContentTouches = false
+        tableView.register(MovieSearchResultCell.self, forCellReuseIdentifier: movieResultCellId)
+        tableView.register(loadingTableViewCell.self, forCellReuseIdentifier: loadingCellId)
+        tableView.register(PersonSearchResultCell.self, forCellReuseIdentifier: personResultCellId)
+        tableView.register(TvSearchResultCell.self, forCellReuseIdentifier: tvResultCellId)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 200
     }
     
     
@@ -39,12 +42,11 @@ class SearchResultsController: UITableViewController {
         } else {
             return 0
         }
-        
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: loadingCell) as! loadingTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: loadingCellId) as! loadingTableViewCell
             if let page = page, let totalPages = totalPages, page < totalPages {
                 cell.activityIndicator.startAnimating()
                 cell.lastPageLabel.isHidden = true
@@ -54,25 +56,22 @@ class SearchResultsController: UITableViewController {
             }
             return cell
         } else {
-           
+            
             switch results?[indexPath.row].media_type {
             case .movie:
-                let cell = tableView.dequeueReusableCell(withIdentifier: movieResultCell) as! MovieSearchResultCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: movieResultCellId) as! MovieSearchResultCell
                 cell.result = results?[indexPath.row]
                 return cell
             case .tv:
-                let cell = tableView.dequeueReusableCell(withIdentifier: movieResultCell) as! MovieSearchResultCell
-                cell.result = nil
-                cell.titleLabel.text = "A TV"
+                let cell = tableView.dequeueReusableCell(withIdentifier: tvResultCellId) as! TvSearchResultCell
+                cell.result = results?[indexPath.row]
                 return cell
             case .person:
-                let cell = tableView.dequeueReusableCell(withIdentifier: movieResultCell) as! MovieSearchResultCell
-                cell.result = nil
-                cell.titleLabel.text = "A Person"
+                let cell = tableView.dequeueReusableCell(withIdentifier: personResultCellId) as! PersonSearchResultCell
+                cell.result = results?[indexPath.row]
                 return cell
             default:
-                print(results?[indexPath.row])
-                fatalError("not implemented")
+                fatalError("not implemented: \(String(describing: results?[indexPath.row]))")
             }
             
             
@@ -85,45 +84,69 @@ class SearchResultsController: UITableViewController {
             tableView.deselectRow(at: indexPath, animated: false)
         } else {
             tableView.deselectRow(at: indexPath, animated: true)
-//            let vc = MovieDetailViewController()
-//            vc.movieId = results?[indexPath.row].id
-//            vc.hidesBottomBarWhenPushed = true
-//            navigationController?.pushViewController(vc, animated: true)
+            let result = results?[indexPath.row]
+            switch result?.media_type {
+            case .movie:
+                if let id = (result as? MovieMultiSearchResult)?.id {
+                    let vc = MovieDetailViewController()
+                    vc.movieId = id
+                    vc.hidesBottomBarWhenPushed = true
+                    navigationController?.pushViewController(vc, animated: true)
+                }
+            case .tv:
+                break
+            case .person:
+                break
+            default:
+                fatalError("not implemented: \(String(describing: results?[indexPath.row]))")
+            }
         }
     }
     
-    func loadData(completion: (() -> Void)?) {
-        Network.getMultiSearch(query: query!) { [weak self] (res) in
-            guard let self = self else {completion?(); return}
-            switch res {
-            case .success(let multiSearchResults):
-                self.searchResults = multiSearchResults
-                if self.results != nil {
-                    self.results! += multiSearchResults.results
-                } else {
-                    self.results = multiSearchResults.results
-                }
-            case .failure(let error):
-                print(error)
-            }
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                completion?()
-            }
-        }
+    override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)!
+        cell.layoutIfNeeded()
+        UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.9, options: [.curveEaseOut, .allowUserInteraction], animations: {
+            cell.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            cell.layoutIfNeeded()
+        }, completion: nil)
     }
+    
+    override func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)!
+        cell.layoutIfNeeded()
+        UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.9, options: [.curveEaseOut, .allowUserInteraction], animations: {
+            cell.transform = .identity
+            cell.layoutIfNeeded()
+        }, completion: nil)
+    }
+
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let yOffset = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         let triggerOffset = CGFloat(100)
         if yOffset > contentHeight - scrollView.frame.height - triggerOffset && !pageIsLoadingMoreContent {
-            guard let _ = query, let totalPages = totalPages, let page = page, page <= totalPages else { return }
+            guard let _ = results, let _ = query, let totalPages = totalPages, let page = page, page <= totalPages else { return }
             let pageToFetch = page + 1
-            query!.page = pageToFetch
-            loadData {
-                self.pageIsLoadingMoreContent = false
+            
+            let nextQuery = MultiSearchQuery(query: self.query!.query, language: self.query?.language, page: pageToFetch, include_adult: self.query?.include_adult, region: self.query?.region)
+    
+            Network.getMultiSearch(query: nextQuery) { [weak self] (res) in
+                DispatchQueue.main.async {
+                    switch res {
+                    case .success(let multiSearchResults):
+                        if self?.results == nil {
+                            break
+                        }
+                        self?.results! += multiSearchResults.results
+                        self?.tableView.reloadData()
+                        
+                    case .failure(let error):
+                        print(error)
+                    }
+                    self?.pageIsLoadingMoreContent = false
+                }
             }
             self.pageIsLoadingMoreContent = true
         }

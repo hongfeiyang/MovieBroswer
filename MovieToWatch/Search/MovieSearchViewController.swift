@@ -83,13 +83,22 @@ extension MovieSearchViewController: UISearchControllerDelegate, UISearchBarDele
 extension MovieSearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else {return}
-        if text == "" {
-            return
-        }
+        
         let query = MultiSearchQuery(query: text)
-        resultsController.query = query
-        resultsController.results = nil
-        resultsController.searchResults = nil
-        resultsController.loadData(completion: nil)
+        Network.getMultiSearch(query: query) { [weak self] (res) in
+            switch res {
+            case .success(let multiSearchResults):
+                DispatchQueue.main.async {
+                    self?.resultsController.query = query
+                    self?.resultsController.results = multiSearchResults.results
+                    self?.resultsController.page = multiSearchResults.page
+                    self?.resultsController.totalPages = multiSearchResults.total_pages
+                    self?.resultsController.tableView.reloadData()
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
     }
 }

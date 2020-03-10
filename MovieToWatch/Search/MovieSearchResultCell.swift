@@ -17,35 +17,22 @@ class MovieSearchResultCell: BaseSearchResultCell {
             }
         }
     }
-        
-    var posterImageView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 6
-        return view
-    }()
-    
-    var titleLabel = UILabel(text: "", font: .systemFont(ofSize: 17, weight: .semibold), numberOfLines: 3, textColor: .label, textAlignment: .left)
-    
-    var releaseDateLabel = UILabel(text: "", font: .systemFont(ofSize: 15, weight: .regular), numberOfLines: 1, textColor: .label, textAlignment: .left)
-    
-    lazy var stackView: UIStackView = {
-        let view = UIStackView(arrangedSubviews: [
-            self.posterImageView,
-            UIStackView(arrangedSubviews: [
-                self.titleLabel,
-                self.releaseDateLabel,
-            ], axis: .vertical, spacing: 2, distribution: .fillEqually, alignment: .fill),
-        ], axis: .horizontal, spacing: 10, distribution: .fill, alignment: .fill)
-        
-        return view
-    }()
 
     private func updateView(result: MovieMultiSearchResult) {
         
-        posterImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: result.posterPath, size: .w92))
-
+        leftImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: result.posterPath, size: .w92), completed: {[weak self] (image, _, _, _) in
+            if let avgColor = image?.averageColor {
+                self?.containerView.backgroundColor = avgColor
+                self?.titleLabel.textColor = avgColor.complementaryColor
+                self?.subtitleLabel.textColor = avgColor.complementaryColor
+            } else {
+                self?.containerView.backgroundColor = .secondarySystemBackground
+                self?.titleLabel.textColor = .label
+                self?.subtitleLabel.textColor = .secondaryLabel
+            }
+        })
+        
+        
         if let originalTitle = result.originalTitle, let title = result.title, title != originalTitle {
             titleLabel.text = "\(title) (\(originalTitle))"
         } else {
@@ -53,33 +40,21 @@ class MovieSearchResultCell: BaseSearchResultCell {
         }
         
         if let dateString = result.releaseDate, let date = DateParser.shared.parseDate(dateString: dateString), let year = Calendar.current.dateComponents([.year], from: date).year {
-            releaseDateLabel.text = String(year)
-        } else {
-            releaseDateLabel.text = "Unknown"
+            titleLabel.text = titleLabel.text! + " (\(String(year)))" 
         }
         
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
+        subtitleLabel.text = "Movie"
+        
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        posterImageView.constrainWidth(constant: 80)
-        posterImageView.translatesAutoresizingMaskIntoConstraints = false
-        posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 3/2).isActive = true
-        addSubview(stackView)
-        stackView.fillSuperview(padding: .init(top: 5, left: 5, bottom: 5, right: 5))
+        leftImageView.constrainWidth(constant: 60)
+        leftImageView.constrainHeight(constant: 90)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
 }
