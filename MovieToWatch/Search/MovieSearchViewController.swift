@@ -13,17 +13,8 @@ class MovieSearchViewController: UIViewController {
     var resultsController = SearchResultsController()
     
     lazy var searchController = UISearchController(searchResultsController: resultsController)
-    
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView()
-//        tableView.dataSource = self
-//        tableView.delegate = self
-        tableView.keyboardDismissMode = .interactive
-        tableView.backgroundColor = .systemBackground
-//        tableView.register(MovieSearchResultsTableViewCell.self, forCellReuseIdentifier: resultCell)
-//        tableView.register(loadingTableViewCell.self, forCellReuseIdentifier: loadingCell)
-        return tableView
-    }()
+
+    lazy var trendingController = TrendingController()
     
     func setupNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -38,34 +29,21 @@ class MovieSearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
-        view.addSubview(tableView)
-        tableView.fillSuperview()
+        view.addSubview(trendingController.view)
+        addChild(trendingController)
+        trendingController.didMove(toParent: self)
+        trendingController.view.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor)
     }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-        loadTrending()
-    }
-}
-
-extension MovieSearchViewController {
-    func loadTrending() {
-        let item = TrendingQuery(media_type: .all, time_window: .week)
-        Network.getTrending(query: item) { (res) in
-            switch res {
-            case .success(let results):
-                break
-                //print(results)
-            case .failure(let error):
-                print(error)
-            }
-        }
+        view.backgroundColor = .systemBackground
     }
 }
 
 
-extension MovieSearchViewController: UISearchControllerDelegate, UISearchBarDelegate {
+extension MovieSearchViewController: UISearchControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating {
     
     func didPresentSearchController(_ searchController: UISearchController) {
     }
@@ -78,9 +56,7 @@ extension MovieSearchViewController: UISearchControllerDelegate, UISearchBarDele
     
     func willPresentSearchController(_ searchController: UISearchController) {
     }
-}
 
-extension MovieSearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else {return}
         
@@ -99,6 +75,20 @@ extension MovieSearchViewController: UISearchResultsUpdating {
                 print(error)
             }
         }
-        
     }
 }
+//
+//extension MovieSearchViewController {
+//    func loadTrending() {
+//        let item = TrendingQuery(media_type: .all, time_window: .week)
+//        Network.getTrending(query: item) { (res) in
+//            switch res {
+//            case .success(let results):
+//                break
+//                //print(results)
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
+//    }
+//}
