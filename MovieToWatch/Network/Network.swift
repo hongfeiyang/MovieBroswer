@@ -130,5 +130,28 @@ class Network {
             
         }.resume()
     }
+    
+    static func getPersonDetail(query: PersonDetailQuery, completion: @escaping (Result<PersonDetail, Error>) -> Void) {
+        var components = URLComponents(string: "https://api.themoviedb.org/3/person/\(query.person_id)")
+        components?.queryItems = query.URLQueryItems
+
+        guard let url = components?.url else {return}
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let data = data else {completion(.failure(NetworkError.NoDataError)); return}
+            let decoder = JSONDecoder()
+            do {
+                let results = try decoder.decode(PersonDetail.self, from: data)
+                completion(.success(results))
+            } catch let error {
+                completion(.failure(error))
+            }
+        }.resume()
+        
+    }
 }
 

@@ -47,12 +47,18 @@
 		8D1849E423FF8C1800BF6666 /* MovieHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1849E323FF8C1800BF6666 /* MovieHeader.swift */; };
 		8D1AC5862405526200CDDF41 /* GenreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1AC5852405526200CDDF41 /* GenreController.swift */; };
 		8D1AC588240557CB00CDDF41 /* GenreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1AC587240557CB00CDDF41 /* GenreCell.swift */; };
+		8D1C6F73241EED1F007C1995 /* PersonIntroMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1C6F72241EED1F007C1995 /* PersonIntroMovieCell.swift */; };
+		8D1C6F75241EF421007C1995 /* PersonContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1C6F74241EF421007C1995 /* PersonContainerController.swift */; };
 		8D400AE723B30A08006555D3 /* ImageCacheMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AE523B30A08006555D3 /* ImageCacheMO+CoreDataClass.swift */; };
 		8D400AE823B30A08006555D3 /* ImageCacheMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AE623B30A08006555D3 /* ImageCacheMO+CoreDataProperties.swift */; };
 		8D400AEA23B33388006555D3 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AE923B33388006555D3 /* TestViewController.swift */; };
 		8D400AEC23B34911006555D3 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AEB23B34911006555D3 /* MainTabBarController.swift */; };
 		8D400AEF23B36A56006555D3 /* MovieSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AEE23B36A56006555D3 /* MovieSearchViewController.swift */; };
 		8D4CFE9723B0EE4F00985287 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4CFE9623B0EE4F00985287 /* CoreDataManager.swift */; };
+		8D4E16F9241B721200D8D3F4 /* PersonDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4E16F8241B721200D8D3F4 /* PersonDetailViewController.swift */; };
+		8D4E16FB241B751100D8D3F4 /* PersonDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4E16FA241B751100D8D3F4 /* PersonDetail.swift */; };
+		8D4E16FD241B79DF00D8D3F4 /* PersonDetailQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4E16FC241B79DF00D8D3F4 /* PersonDetailQuery.swift */; };
+		8D4E16FF241C8B5700D8D3F4 /* PersonIntroController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4E16FE241C8B5700D8D3F4 /* PersonIntroController.swift */; };
 		8D58CC4823FE307200819C94 /* VerticalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D58CC4523FE307200819C94 /* VerticalStackView.swift */; };
 		8D58CC4923FE307200819C94 /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D58CC4623FE307200819C94 /* UIView+Layout.swift */; };
 		8D58CC4A23FE307200819C94 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D58CC4723FE307200819C94 /* Extensions.swift */; };
@@ -60,6 +66,58 @@
 		8D58CC5423FE589F00819C94 /* MovieDetailSectionBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D58CC5323FE589F00819C94 /* MovieDetailSectionBaseCell.swift */; };
 		8D58CC5723FE715D00819C94 /* Credits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D58CC5623FE715D00819C94 /* Credits.swift */; };
 		8D58CC5923FE7E6900819C94 /* CastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D58CC5823FE7E6900819C94 /* CastCell.swift */; };
+		8D62E5EA242F73AD006EC8D7 /* PersonDetailBaseSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D62E5E9242F73AD006EC8D7 /* PersonDetailBaseSectionCell.swift */; };
+		8D62E5EC242F7415006EC8D7 /* PersonBiographySectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D62E5EB242F7415006EC8D7 /* PersonBiographySectionCell.swift */; };
+		8D62E5EE242F74E5006EC8D7 /* PersonDobSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D62E5ED242F74E5006EC8D7 /* PersonDobSectionCell.swift */; };
+		8D62E5F0242F7F46006EC8D7 /* PersonAlsoKnownAsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D62E5EF242F7F46006EC8D7 /* PersonAlsoKnownAsCell.swift */; };
+		8D62E62224307648006EC8D7 /* NewYorkExtraLarge-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5FC243075FC006EC8D7 /* NewYorkExtraLarge-Black.otf */; };
+		8D62E62324307648006EC8D7 /* NewYorkExtraLarge-BlackItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E607243075FE006EC8D7 /* NewYorkExtraLarge-BlackItalic.otf */; };
+		8D62E62424307648006EC8D7 /* NewYorkExtraLarge-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E603243075FD006EC8D7 /* NewYorkExtraLarge-Bold.otf */; };
+		8D62E62524307648006EC8D7 /* NewYorkExtraLarge-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E60D243075FE006EC8D7 /* NewYorkExtraLarge-BoldItalic.otf */; };
+		8D62E62624307648006EC8D7 /* NewYorkExtraLarge-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E611243075FF006EC8D7 /* NewYorkExtraLarge-Heavy.otf */; };
+		8D62E62724307648006EC8D7 /* NewYorkExtraLarge-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E61B24307600006EC8D7 /* NewYorkExtraLarge-HeavyItalic.otf */; };
+		8D62E62824307648006EC8D7 /* NewYorkExtraLarge-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E61924307600006EC8D7 /* NewYorkExtraLarge-Medium.otf */; };
+		8D62E62924307648006EC8D7 /* NewYorkExtraLarge-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5FD243075FC006EC8D7 /* NewYorkExtraLarge-MediumItalic.otf */; };
+		8D62E62A24307648006EC8D7 /* NewYorkExtraLarge-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E60F243075FF006EC8D7 /* NewYorkExtraLarge-Regular.otf */; };
+		8D62E62B24307648006EC8D7 /* NewYorkExtraLarge-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5F8243075FC006EC8D7 /* NewYorkExtraLarge-RegularItalic.otf */; };
+		8D62E62C24307648006EC8D7 /* NewYorkExtraLarge-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5F4243075FC006EC8D7 /* NewYorkExtraLarge-Semibold.otf */; };
+		8D62E62D24307648006EC8D7 /* NewYorkExtraLarge-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E612243075FF006EC8D7 /* NewYorkExtraLarge-SemiboldItalic.otf */; };
+		8D62E62E24307648006EC8D7 /* NewYorkLarge-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E615243075FF006EC8D7 /* NewYorkLarge-Black.otf */; };
+		8D62E62F24307648006EC8D7 /* NewYorkLarge-BlackItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E606243075FE006EC8D7 /* NewYorkLarge-BlackItalic.otf */; };
+		8D62E63024307648006EC8D7 /* NewYorkLarge-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5FF243075FD006EC8D7 /* NewYorkLarge-Bold.otf */; };
+		8D62E63124307648006EC8D7 /* NewYorkLarge-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E61824307600006EC8D7 /* NewYorkLarge-BoldItalic.otf */; };
+		8D62E63224307648006EC8D7 /* NewYorkLarge-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E605243075FD006EC8D7 /* NewYorkLarge-Heavy.otf */; };
+		8D62E63324307648006EC8D7 /* NewYorkLarge-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E602243075FD006EC8D7 /* NewYorkLarge-HeavyItalic.otf */; };
+		8D62E63424307648006EC8D7 /* NewYorkLarge-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5F5243075FC006EC8D7 /* NewYorkLarge-Medium.otf */; };
+		8D62E63524307648006EC8D7 /* NewYorkLarge-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E616243075FF006EC8D7 /* NewYorkLarge-MediumItalic.otf */; };
+		8D62E63624307648006EC8D7 /* NewYorkLarge-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E613243075FF006EC8D7 /* NewYorkLarge-Regular.otf */; };
+		8D62E63724307648006EC8D7 /* NewYorkLarge-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5F9243075FC006EC8D7 /* NewYorkLarge-RegularItalic.otf */; };
+		8D62E63824307648006EC8D7 /* NewYorkLarge-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E608243075FE006EC8D7 /* NewYorkLarge-Semibold.otf */; };
+		8D62E63924307648006EC8D7 /* NewYorkLarge-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E61724307600006EC8D7 /* NewYorkLarge-SemiboldItalic.otf */; };
+		8D62E63A24307648006EC8D7 /* NewYorkMedium-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E60E243075FF006EC8D7 /* NewYorkMedium-Black.otf */; };
+		8D62E63B24307648006EC8D7 /* NewYorkMedium-BlackItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E61C24307600006EC8D7 /* NewYorkMedium-BlackItalic.otf */; };
+		8D62E63C24307648006EC8D7 /* NewYorkMedium-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5FA243075FC006EC8D7 /* NewYorkMedium-Bold.otf */; };
+		8D62E63D24307648006EC8D7 /* NewYorkMedium-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E62024307601006EC8D7 /* NewYorkMedium-BoldItalic.otf */; };
+		8D62E63E24307648006EC8D7 /* NewYorkMedium-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E610243075FF006EC8D7 /* NewYorkMedium-Heavy.otf */; };
+		8D62E63F24307648006EC8D7 /* NewYorkMedium-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E60C243075FE006EC8D7 /* NewYorkMedium-HeavyItalic.otf */; };
+		8D62E64024307648006EC8D7 /* NewYorkMedium-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E62124307601006EC8D7 /* NewYorkMedium-Medium.otf */; };
+		8D62E64124307648006EC8D7 /* NewYorkMedium-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E600243075FD006EC8D7 /* NewYorkMedium-MediumItalic.otf */; };
+		8D62E64224307648006EC8D7 /* NewYorkMedium-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5F7243075FC006EC8D7 /* NewYorkMedium-Regular.otf */; };
+		8D62E64324307648006EC8D7 /* NewYorkMedium-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5FE243075FD006EC8D7 /* NewYorkMedium-RegularItalic.otf */; };
+		8D62E64424307648006EC8D7 /* NewYorkMedium-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5F3243075FC006EC8D7 /* NewYorkMedium-Semibold.otf */; };
+		8D62E64524307648006EC8D7 /* NewYorkMedium-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E604243075FD006EC8D7 /* NewYorkMedium-SemiboldItalic.otf */; };
+		8D62E64624307648006EC8D7 /* NewYorkSmall-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E609243075FE006EC8D7 /* NewYorkSmall-Black.otf */; };
+		8D62E64724307648006EC8D7 /* NewYorkSmall-BlackItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5F2243075FB006EC8D7 /* NewYorkSmall-BlackItalic.otf */; };
+		8D62E64824307648006EC8D7 /* NewYorkSmall-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E60A243075FE006EC8D7 /* NewYorkSmall-Bold.otf */; };
+		8D62E64924307648006EC8D7 /* NewYorkSmall-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E601243075FD006EC8D7 /* NewYorkSmall-BoldItalic.otf */; };
+		8D62E64A24307648006EC8D7 /* NewYorkSmall-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5F6243075FC006EC8D7 /* NewYorkSmall-Heavy.otf */; };
+		8D62E64B24307648006EC8D7 /* NewYorkSmall-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E5FB243075FC006EC8D7 /* NewYorkSmall-HeavyItalic.otf */; };
+		8D62E64C24307648006EC8D7 /* NewYorkSmall-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E614243075FF006EC8D7 /* NewYorkSmall-Medium.otf */; };
+		8D62E64D24307648006EC8D7 /* NewYorkSmall-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E61D24307600006EC8D7 /* NewYorkSmall-MediumItalic.otf */; };
+		8D62E64E24307648006EC8D7 /* NewYorkSmall-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E60B243075FE006EC8D7 /* NewYorkSmall-Regular.otf */; };
+		8D62E64F24307648006EC8D7 /* NewYorkSmall-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E61E24307601006EC8D7 /* NewYorkSmall-RegularItalic.otf */; };
+		8D62E65024307648006EC8D7 /* NewYorkSmall-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E61A24307600006EC8D7 /* NewYorkSmall-Semibold.otf */; };
+		8D62E65124307648006EC8D7 /* NewYorkSmall-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8D62E61F24307601006EC8D7 /* NewYorkSmall-SemiboldItalic.otf */; };
 		8D63680423B470AF009CD78C /* MovieSearchQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D63680323B470AF009CD78C /* MovieSearchQuery.swift */; };
 		8D63680723B4DADC009CD78C /* MovieSearchResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D63680623B4DADC009CD78C /* MovieSearchResultsTableViewCell.swift */; };
 		8D76955A23BC9B3B003A255C /* MovieImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D76955923BC9B3B003A255C /* MovieImagesView.swift */; };
@@ -141,12 +199,18 @@
 		8D1849E323FF8C1800BF6666 /* MovieHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieHeader.swift; sourceTree = "<group>"; };
 		8D1AC5852405526200CDDF41 /* GenreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreController.swift; sourceTree = "<group>"; };
 		8D1AC587240557CB00CDDF41 /* GenreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreCell.swift; sourceTree = "<group>"; };
+		8D1C6F72241EED1F007C1995 /* PersonIntroMovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonIntroMovieCell.swift; sourceTree = "<group>"; };
+		8D1C6F74241EF421007C1995 /* PersonContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonContainerController.swift; sourceTree = "<group>"; };
 		8D400AE523B30A08006555D3 /* ImageCacheMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCacheMO+CoreDataClass.swift"; sourceTree = "<group>"; };
 		8D400AE623B30A08006555D3 /* ImageCacheMO+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCacheMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		8D400AE923B33388006555D3 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		8D400AEB23B34911006555D3 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		8D400AEE23B36A56006555D3 /* MovieSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchViewController.swift; sourceTree = "<group>"; };
 		8D4CFE9623B0EE4F00985287 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		8D4E16F8241B721200D8D3F4 /* PersonDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailViewController.swift; sourceTree = "<group>"; };
+		8D4E16FA241B751100D8D3F4 /* PersonDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetail.swift; sourceTree = "<group>"; };
+		8D4E16FC241B79DF00D8D3F4 /* PersonDetailQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailQuery.swift; sourceTree = "<group>"; };
+		8D4E16FE241C8B5700D8D3F4 /* PersonIntroController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonIntroController.swift; sourceTree = "<group>"; };
 		8D58CC4523FE307200819C94 /* VerticalStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerticalStackView.swift; sourceTree = "<group>"; };
 		8D58CC4623FE307200819C94 /* UIView+Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		8D58CC4723FE307200819C94 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -154,6 +218,58 @@
 		8D58CC5323FE589F00819C94 /* MovieDetailSectionBaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailSectionBaseCell.swift; sourceTree = "<group>"; };
 		8D58CC5623FE715D00819C94 /* Credits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credits.swift; sourceTree = "<group>"; };
 		8D58CC5823FE7E6900819C94 /* CastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastCell.swift; sourceTree = "<group>"; };
+		8D62E5E9242F73AD006EC8D7 /* PersonDetailBaseSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailBaseSectionCell.swift; sourceTree = "<group>"; };
+		8D62E5EB242F7415006EC8D7 /* PersonBiographySectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonBiographySectionCell.swift; sourceTree = "<group>"; };
+		8D62E5ED242F74E5006EC8D7 /* PersonDobSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDobSectionCell.swift; sourceTree = "<group>"; };
+		8D62E5EF242F7F46006EC8D7 /* PersonAlsoKnownAsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonAlsoKnownAsCell.swift; sourceTree = "<group>"; };
+		8D62E5F2243075FB006EC8D7 /* NewYorkSmall-BlackItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-BlackItalic.otf"; sourceTree = "<group>"; };
+		8D62E5F3243075FC006EC8D7 /* NewYorkMedium-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-Semibold.otf"; sourceTree = "<group>"; };
+		8D62E5F4243075FC006EC8D7 /* NewYorkExtraLarge-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-Semibold.otf"; sourceTree = "<group>"; };
+		8D62E5F5243075FC006EC8D7 /* NewYorkLarge-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-Medium.otf"; sourceTree = "<group>"; };
+		8D62E5F6243075FC006EC8D7 /* NewYorkSmall-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-Heavy.otf"; sourceTree = "<group>"; };
+		8D62E5F7243075FC006EC8D7 /* NewYorkMedium-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-Regular.otf"; sourceTree = "<group>"; };
+		8D62E5F8243075FC006EC8D7 /* NewYorkExtraLarge-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-RegularItalic.otf"; sourceTree = "<group>"; };
+		8D62E5F9243075FC006EC8D7 /* NewYorkLarge-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-RegularItalic.otf"; sourceTree = "<group>"; };
+		8D62E5FA243075FC006EC8D7 /* NewYorkMedium-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-Bold.otf"; sourceTree = "<group>"; };
+		8D62E5FB243075FC006EC8D7 /* NewYorkSmall-HeavyItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-HeavyItalic.otf"; sourceTree = "<group>"; };
+		8D62E5FC243075FC006EC8D7 /* NewYorkExtraLarge-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-Black.otf"; sourceTree = "<group>"; };
+		8D62E5FD243075FC006EC8D7 /* NewYorkExtraLarge-MediumItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-MediumItalic.otf"; sourceTree = "<group>"; };
+		8D62E5FE243075FD006EC8D7 /* NewYorkMedium-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-RegularItalic.otf"; sourceTree = "<group>"; };
+		8D62E5FF243075FD006EC8D7 /* NewYorkLarge-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-Bold.otf"; sourceTree = "<group>"; };
+		8D62E600243075FD006EC8D7 /* NewYorkMedium-MediumItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-MediumItalic.otf"; sourceTree = "<group>"; };
+		8D62E601243075FD006EC8D7 /* NewYorkSmall-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-BoldItalic.otf"; sourceTree = "<group>"; };
+		8D62E602243075FD006EC8D7 /* NewYorkLarge-HeavyItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-HeavyItalic.otf"; sourceTree = "<group>"; };
+		8D62E603243075FD006EC8D7 /* NewYorkExtraLarge-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-Bold.otf"; sourceTree = "<group>"; };
+		8D62E604243075FD006EC8D7 /* NewYorkMedium-SemiboldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-SemiboldItalic.otf"; sourceTree = "<group>"; };
+		8D62E605243075FD006EC8D7 /* NewYorkLarge-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-Heavy.otf"; sourceTree = "<group>"; };
+		8D62E606243075FE006EC8D7 /* NewYorkLarge-BlackItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-BlackItalic.otf"; sourceTree = "<group>"; };
+		8D62E607243075FE006EC8D7 /* NewYorkExtraLarge-BlackItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-BlackItalic.otf"; sourceTree = "<group>"; };
+		8D62E608243075FE006EC8D7 /* NewYorkLarge-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-Semibold.otf"; sourceTree = "<group>"; };
+		8D62E609243075FE006EC8D7 /* NewYorkSmall-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-Black.otf"; sourceTree = "<group>"; };
+		8D62E60A243075FE006EC8D7 /* NewYorkSmall-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-Bold.otf"; sourceTree = "<group>"; };
+		8D62E60B243075FE006EC8D7 /* NewYorkSmall-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-Regular.otf"; sourceTree = "<group>"; };
+		8D62E60C243075FE006EC8D7 /* NewYorkMedium-HeavyItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-HeavyItalic.otf"; sourceTree = "<group>"; };
+		8D62E60D243075FE006EC8D7 /* NewYorkExtraLarge-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-BoldItalic.otf"; sourceTree = "<group>"; };
+		8D62E60E243075FF006EC8D7 /* NewYorkMedium-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-Black.otf"; sourceTree = "<group>"; };
+		8D62E60F243075FF006EC8D7 /* NewYorkExtraLarge-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-Regular.otf"; sourceTree = "<group>"; };
+		8D62E610243075FF006EC8D7 /* NewYorkMedium-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-Heavy.otf"; sourceTree = "<group>"; };
+		8D62E611243075FF006EC8D7 /* NewYorkExtraLarge-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-Heavy.otf"; sourceTree = "<group>"; };
+		8D62E612243075FF006EC8D7 /* NewYorkExtraLarge-SemiboldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-SemiboldItalic.otf"; sourceTree = "<group>"; };
+		8D62E613243075FF006EC8D7 /* NewYorkLarge-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-Regular.otf"; sourceTree = "<group>"; };
+		8D62E614243075FF006EC8D7 /* NewYorkSmall-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-Medium.otf"; sourceTree = "<group>"; };
+		8D62E615243075FF006EC8D7 /* NewYorkLarge-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-Black.otf"; sourceTree = "<group>"; };
+		8D62E616243075FF006EC8D7 /* NewYorkLarge-MediumItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-MediumItalic.otf"; sourceTree = "<group>"; };
+		8D62E61724307600006EC8D7 /* NewYorkLarge-SemiboldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-SemiboldItalic.otf"; sourceTree = "<group>"; };
+		8D62E61824307600006EC8D7 /* NewYorkLarge-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkLarge-BoldItalic.otf"; sourceTree = "<group>"; };
+		8D62E61924307600006EC8D7 /* NewYorkExtraLarge-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-Medium.otf"; sourceTree = "<group>"; };
+		8D62E61A24307600006EC8D7 /* NewYorkSmall-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-Semibold.otf"; sourceTree = "<group>"; };
+		8D62E61B24307600006EC8D7 /* NewYorkExtraLarge-HeavyItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkExtraLarge-HeavyItalic.otf"; sourceTree = "<group>"; };
+		8D62E61C24307600006EC8D7 /* NewYorkMedium-BlackItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-BlackItalic.otf"; sourceTree = "<group>"; };
+		8D62E61D24307600006EC8D7 /* NewYorkSmall-MediumItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-MediumItalic.otf"; sourceTree = "<group>"; };
+		8D62E61E24307601006EC8D7 /* NewYorkSmall-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-RegularItalic.otf"; sourceTree = "<group>"; };
+		8D62E61F24307601006EC8D7 /* NewYorkSmall-SemiboldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkSmall-SemiboldItalic.otf"; sourceTree = "<group>"; };
+		8D62E62024307601006EC8D7 /* NewYorkMedium-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-BoldItalic.otf"; sourceTree = "<group>"; };
+		8D62E62124307601006EC8D7 /* NewYorkMedium-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-Medium.otf"; sourceTree = "<group>"; };
 		8D63680323B470AF009CD78C /* MovieSearchQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchQuery.swift; sourceTree = "<group>"; };
 		8D63680623B4DADC009CD78C /* MovieSearchResultsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchResultsTableViewCell.swift; sourceTree = "<group>"; };
 		8D76955923BC9B3B003A255C /* MovieImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieImagesView.swift; sourceTree = "<group>"; };
@@ -243,6 +359,7 @@
 		8D12BE4323A699CE006C72B4 = {
 			isa = PBXGroup;
 			children = (
+				8D62E5F1243075CF006EC8D7 /* Fonts */,
 				8D12BE4E23A699CE006C72B4 /* MovieToWatch */,
 				8D12BE4D23A699CE006C72B4 /* Products */,
 				5F86C2DD2306D468B5ACE276 /* Pods */,
@@ -336,6 +453,72 @@
 			path = "Previous files";
 			sourceTree = "<group>";
 		};
+		8D62E5E8242F7398006EC8D7 /* PersonDetailSection */ = {
+			isa = PBXGroup;
+			children = (
+				8D62E5E9242F73AD006EC8D7 /* PersonDetailBaseSectionCell.swift */,
+				8D62E5EB242F7415006EC8D7 /* PersonBiographySectionCell.swift */,
+				8D62E5ED242F74E5006EC8D7 /* PersonDobSectionCell.swift */,
+				8D62E5EF242F7F46006EC8D7 /* PersonAlsoKnownAsCell.swift */,
+			);
+			path = PersonDetailSection;
+			sourceTree = "<group>";
+		};
+		8D62E5F1243075CF006EC8D7 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				8D62E5FC243075FC006EC8D7 /* NewYorkExtraLarge-Black.otf */,
+				8D62E607243075FE006EC8D7 /* NewYorkExtraLarge-BlackItalic.otf */,
+				8D62E603243075FD006EC8D7 /* NewYorkExtraLarge-Bold.otf */,
+				8D62E60D243075FE006EC8D7 /* NewYorkExtraLarge-BoldItalic.otf */,
+				8D62E611243075FF006EC8D7 /* NewYorkExtraLarge-Heavy.otf */,
+				8D62E61B24307600006EC8D7 /* NewYorkExtraLarge-HeavyItalic.otf */,
+				8D62E61924307600006EC8D7 /* NewYorkExtraLarge-Medium.otf */,
+				8D62E5FD243075FC006EC8D7 /* NewYorkExtraLarge-MediumItalic.otf */,
+				8D62E60F243075FF006EC8D7 /* NewYorkExtraLarge-Regular.otf */,
+				8D62E5F8243075FC006EC8D7 /* NewYorkExtraLarge-RegularItalic.otf */,
+				8D62E5F4243075FC006EC8D7 /* NewYorkExtraLarge-Semibold.otf */,
+				8D62E612243075FF006EC8D7 /* NewYorkExtraLarge-SemiboldItalic.otf */,
+				8D62E615243075FF006EC8D7 /* NewYorkLarge-Black.otf */,
+				8D62E606243075FE006EC8D7 /* NewYorkLarge-BlackItalic.otf */,
+				8D62E5FF243075FD006EC8D7 /* NewYorkLarge-Bold.otf */,
+				8D62E61824307600006EC8D7 /* NewYorkLarge-BoldItalic.otf */,
+				8D62E605243075FD006EC8D7 /* NewYorkLarge-Heavy.otf */,
+				8D62E602243075FD006EC8D7 /* NewYorkLarge-HeavyItalic.otf */,
+				8D62E5F5243075FC006EC8D7 /* NewYorkLarge-Medium.otf */,
+				8D62E616243075FF006EC8D7 /* NewYorkLarge-MediumItalic.otf */,
+				8D62E613243075FF006EC8D7 /* NewYorkLarge-Regular.otf */,
+				8D62E5F9243075FC006EC8D7 /* NewYorkLarge-RegularItalic.otf */,
+				8D62E608243075FE006EC8D7 /* NewYorkLarge-Semibold.otf */,
+				8D62E61724307600006EC8D7 /* NewYorkLarge-SemiboldItalic.otf */,
+				8D62E60E243075FF006EC8D7 /* NewYorkMedium-Black.otf */,
+				8D62E61C24307600006EC8D7 /* NewYorkMedium-BlackItalic.otf */,
+				8D62E5FA243075FC006EC8D7 /* NewYorkMedium-Bold.otf */,
+				8D62E62024307601006EC8D7 /* NewYorkMedium-BoldItalic.otf */,
+				8D62E610243075FF006EC8D7 /* NewYorkMedium-Heavy.otf */,
+				8D62E60C243075FE006EC8D7 /* NewYorkMedium-HeavyItalic.otf */,
+				8D62E62124307601006EC8D7 /* NewYorkMedium-Medium.otf */,
+				8D62E600243075FD006EC8D7 /* NewYorkMedium-MediumItalic.otf */,
+				8D62E5F7243075FC006EC8D7 /* NewYorkMedium-Regular.otf */,
+				8D62E5FE243075FD006EC8D7 /* NewYorkMedium-RegularItalic.otf */,
+				8D62E5F3243075FC006EC8D7 /* NewYorkMedium-Semibold.otf */,
+				8D62E604243075FD006EC8D7 /* NewYorkMedium-SemiboldItalic.otf */,
+				8D62E609243075FE006EC8D7 /* NewYorkSmall-Black.otf */,
+				8D62E5F2243075FB006EC8D7 /* NewYorkSmall-BlackItalic.otf */,
+				8D62E60A243075FE006EC8D7 /* NewYorkSmall-Bold.otf */,
+				8D62E601243075FD006EC8D7 /* NewYorkSmall-BoldItalic.otf */,
+				8D62E5F6243075FC006EC8D7 /* NewYorkSmall-Heavy.otf */,
+				8D62E5FB243075FC006EC8D7 /* NewYorkSmall-HeavyItalic.otf */,
+				8D62E614243075FF006EC8D7 /* NewYorkSmall-Medium.otf */,
+				8D62E61D24307600006EC8D7 /* NewYorkSmall-MediumItalic.otf */,
+				8D62E60B243075FE006EC8D7 /* NewYorkSmall-Regular.otf */,
+				8D62E61E24307601006EC8D7 /* NewYorkSmall-RegularItalic.otf */,
+				8D62E61A24307600006EC8D7 /* NewYorkSmall-Semibold.otf */,
+				8D62E61F24307601006EC8D7 /* NewYorkSmall-SemiboldItalic.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		8D63680523B4DAA9009CD78C /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,6 +527,18 @@
 				8D400AEE23B36A56006555D3 /* MovieSearchViewController.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		8D8DEB99241B18BF003D927E /* Person Detail */ = {
+			isa = PBXGroup;
+			children = (
+				8D62E5E8242F7398006EC8D7 /* PersonDetailSection */,
+				8D4E16F8241B721200D8D3F4 /* PersonDetailViewController.swift */,
+				8D4E16FE241C8B5700D8D3F4 /* PersonIntroController.swift */,
+				8D1C6F72241EED1F007C1995 /* PersonIntroMovieCell.swift */,
+				8D1C6F74241EF421007C1995 /* PersonContainerController.swift */,
+			);
+			path = "Person Detail";
 			sourceTree = "<group>";
 		};
 		8DA5DAC323B14AFF00895DEF /* CoreDataObjectModel */ = {
@@ -361,6 +556,7 @@
 		8DA5DB4423B1674300895DEF /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				8D8DEB99241B18BF003D927E /* Person Detail */,
 				4B87B6FE24150D0E00DAA0FF /* Movie Collection */,
 				8D400AEB23B34911006555D3 /* MainTabBarController.swift */,
 				4B87B70124150F7C00DAA0FF /* BaseCollectionViewController.swift */,
@@ -391,6 +587,7 @@
 				4B7046F424139C460036388B /* BaseMovieResult.swift */,
 				4B87B70324153BE900DAA0FF /* MultiSearch.swift */,
 				4B6B1E1C24162080000C5C3E /* Trending.swift */,
+				8D4E16FA241B751100D8D3F4 /* PersonDetail.swift */,
 			);
 			path = Codable;
 			sourceTree = "<group>";
@@ -469,6 +666,7 @@
 				4B7046F82413A3870036388B /* PopularQuery.swift */,
 				4B87B70524154BCC00DAA0FF /* MultiSearchQuery.swift */,
 				4B6B1E1E241628E5000C5C3E /* TrendingQuery.swift */,
+				8D4E16FC241B79DF00D8D3F4 /* PersonDetailQuery.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -586,9 +784,57 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D62E64724307648006EC8D7 /* NewYorkSmall-BlackItalic.otf in Resources */,
+				8D62E64924307648006EC8D7 /* NewYorkSmall-BoldItalic.otf in Resources */,
+				8D62E62524307648006EC8D7 /* NewYorkExtraLarge-BoldItalic.otf in Resources */,
+				8D62E62E24307648006EC8D7 /* NewYorkLarge-Black.otf in Resources */,
+				8D62E63724307648006EC8D7 /* NewYorkLarge-RegularItalic.otf in Resources */,
+				8D62E62A24307648006EC8D7 /* NewYorkExtraLarge-Regular.otf in Resources */,
+				8D62E64E24307648006EC8D7 /* NewYorkSmall-Regular.otf in Resources */,
+				8D62E64524307648006EC8D7 /* NewYorkMedium-SemiboldItalic.otf in Resources */,
+				8D62E63A24307648006EC8D7 /* NewYorkMedium-Black.otf in Resources */,
+				8D62E63C24307648006EC8D7 /* NewYorkMedium-Bold.otf in Resources */,
+				8D62E64B24307648006EC8D7 /* NewYorkSmall-HeavyItalic.otf in Resources */,
+				8D62E62F24307648006EC8D7 /* NewYorkLarge-BlackItalic.otf in Resources */,
+				8D62E63424307648006EC8D7 /* NewYorkLarge-Medium.otf in Resources */,
+				8D62E63E24307648006EC8D7 /* NewYorkMedium-Heavy.otf in Resources */,
+				8D62E63324307648006EC8D7 /* NewYorkLarge-HeavyItalic.otf in Resources */,
+				8D62E63024307648006EC8D7 /* NewYorkLarge-Bold.otf in Resources */,
+				8D62E63924307648006EC8D7 /* NewYorkLarge-SemiboldItalic.otf in Resources */,
 				8D12BE5C23A699CF006C72B4 /* LaunchScreen.storyboard in Resources */,
+				8D62E62624307648006EC8D7 /* NewYorkExtraLarge-Heavy.otf in Resources */,
+				8D62E64C24307648006EC8D7 /* NewYorkSmall-Medium.otf in Resources */,
+				8D62E65124307648006EC8D7 /* NewYorkSmall-SemiboldItalic.otf in Resources */,
+				8D62E64624307648006EC8D7 /* NewYorkSmall-Black.otf in Resources */,
+				8D62E62D24307648006EC8D7 /* NewYorkExtraLarge-SemiboldItalic.otf in Resources */,
+				8D62E62424307648006EC8D7 /* NewYorkExtraLarge-Bold.otf in Resources */,
+				8D62E62324307648006EC8D7 /* NewYorkExtraLarge-BlackItalic.otf in Resources */,
+				8D62E64424307648006EC8D7 /* NewYorkMedium-Semibold.otf in Resources */,
+				8D62E62B24307648006EC8D7 /* NewYorkExtraLarge-RegularItalic.otf in Resources */,
+				8D62E64124307648006EC8D7 /* NewYorkMedium-MediumItalic.otf in Resources */,
+				8D62E62C24307648006EC8D7 /* NewYorkExtraLarge-Semibold.otf in Resources */,
+				8D62E65024307648006EC8D7 /* NewYorkSmall-Semibold.otf in Resources */,
 				8D12BE5923A699CF006C72B4 /* Assets.xcassets in Resources */,
+				8D62E63D24307648006EC8D7 /* NewYorkMedium-BoldItalic.otf in Resources */,
+				8D62E63524307648006EC8D7 /* NewYorkLarge-MediumItalic.otf in Resources */,
+				8D62E64324307648006EC8D7 /* NewYorkMedium-RegularItalic.otf in Resources */,
+				8D62E63624307648006EC8D7 /* NewYorkLarge-Regular.otf in Resources */,
+				8D62E63224307648006EC8D7 /* NewYorkLarge-Heavy.otf in Resources */,
+				8D62E62224307648006EC8D7 /* NewYorkExtraLarge-Black.otf in Resources */,
+				8D62E64024307648006EC8D7 /* NewYorkMedium-Medium.otf in Resources */,
+				8D62E64F24307648006EC8D7 /* NewYorkSmall-RegularItalic.otf in Resources */,
+				8D62E64824307648006EC8D7 /* NewYorkSmall-Bold.otf in Resources */,
+				8D62E63B24307648006EC8D7 /* NewYorkMedium-BlackItalic.otf in Resources */,
+				8D62E64A24307648006EC8D7 /* NewYorkSmall-Heavy.otf in Resources */,
+				8D62E63124307648006EC8D7 /* NewYorkLarge-BoldItalic.otf in Resources */,
+				8D62E64D24307648006EC8D7 /* NewYorkSmall-MediumItalic.otf in Resources */,
+				8D62E62924307648006EC8D7 /* NewYorkExtraLarge-MediumItalic.otf in Resources */,
+				8D62E63824307648006EC8D7 /* NewYorkLarge-Semibold.otf in Resources */,
+				8D62E64224307648006EC8D7 /* NewYorkMedium-Regular.otf in Resources */,
+				8D62E63F24307648006EC8D7 /* NewYorkMedium-HeavyItalic.otf in Resources */,
+				8D62E62824307648006EC8D7 /* NewYorkExtraLarge-Medium.otf in Resources */,
 				8D12BE5723A699CE006C72B4 /* Main.storyboard in Resources */,
+				8D62E62724307648006EC8D7 /* NewYorkExtraLarge-HeavyItalic.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -655,21 +901,26 @@
 				8D1849DD23FF64A600BF6666 /* ImagesCell.swift in Sources */,
 				4B87B70224150F7C00DAA0FF /* BaseCollectionViewController.swift in Sources */,
 				4B6B1E2524167A10000C5C3E /* MovieSearchResultCell.swift in Sources */,
+				8D1C6F73241EED1F007C1995 /* PersonIntroMovieCell.swift in Sources */,
 				8DE4DC4A23B458860015445E /* MovieSearchResults.swift in Sources */,
 				8D1AC5862405526200CDDF41 /* GenreController.swift in Sources */,
 				8DA5DB6823B260D900895DEF /* MovieMO+CoreDataProperties.swift in Sources */,
 				8D11617F241954F400B67F07 /* PersonTrendingSectionCell.swift in Sources */,
 				8DB2115624010C4000946AD2 /* BetterSnappingLayout.swift in Sources */,
+				8D4E16FB241B751100D8D3F4 /* PersonDetail.swift in Sources */,
 				8DA5DABF23B13DFC00895DEF /* DataModel.xcdatamodeld in Sources */,
 				8D400AE823B30A08006555D3 /* ImageCacheMO+CoreDataProperties.swift in Sources */,
 				8DAA63F323D1DB52002CEFF1 /* MovieCategoryCellCollectionViewCell.swift in Sources */,
+				8D62E5EE242F74E5006EC8D7 /* PersonDobSectionCell.swift in Sources */,
 				8D58CC5423FE589F00819C94 /* MovieDetailSectionBaseCell.swift in Sources */,
 				8D400AEA23B33388006555D3 /* TestViewController.swift in Sources */,
 				8DAA63F923D457E4002CEFF1 /* TopRatedQuery.swift in Sources */,
 				4B6B1E23241676ED000C5C3E /* SearchResultsController.swift in Sources */,
 				8DAEF42023B9B627008AE0EA /* BaseButton.swift in Sources */,
+				8D62E5EC242F7415006EC8D7 /* PersonBiographySectionCell.swift in Sources */,
 				4B87B70424153BEA00DAA0FF /* MultiSearch.swift in Sources */,
 				8D12BE6C23A79C4B006C72B4 /* APIConfiguration.swift in Sources */,
+				8D62E5EA242F73AD006EC8D7 /* PersonDetailBaseSectionCell.swift in Sources */,
 				8D58CC5923FE7E6900819C94 /* CastCell.swift in Sources */,
 				8D1849E423FF8C1800BF6666 /* MovieHeader.swift in Sources */,
 				8DAEF42223B9C872008AE0EA /* AllCrewViewController.swift in Sources */,
@@ -677,6 +928,7 @@
 				4B6B1E1D24162080000C5C3E /* Trending.swift in Sources */,
 				4B7046F92413A3870036388B /* PopularQuery.swift in Sources */,
 				8D1849E023FF732A00BF6666 /* Trailer.swift in Sources */,
+				8D4E16FF241C8B5700D8D3F4 /* PersonIntroController.swift in Sources */,
 				4B7046F3241398050036388B /* UpComingQuery.swift in Sources */,
 				8DB298DA2403CB9300DE7195 /* BasicInfoSectionCell.swift in Sources */,
 				8D1161722419480300B67F07 /* BaseTrendingCell.swift in Sources */,
@@ -704,6 +956,8 @@
 				8D1849DB23FF5C1700BF6666 /* Poster.swift in Sources */,
 				8D12BE6823A74491006C72B4 /* CardCell.swift in Sources */,
 				4B6B1E21241632EC000C5C3E /* URLSessionInterceptor.swift in Sources */,
+				8D1C6F75241EF421007C1995 /* PersonContainerController.swift in Sources */,
+				8D4E16F9241B721200D8D3F4 /* PersonDetailViewController.swift in Sources */,
 				8D58CC4823FE307200819C94 /* VerticalStackView.swift in Sources */,
 				8DA1A05623B5BDF900B28167 /* CreditsView.swift in Sources */,
 				4B7046F72413A2EC0036388B /* Popular.swift in Sources */,
@@ -712,9 +966,11 @@
 				4B6BA7302417563E00B38842 /* PersonSearchResultCell.swift in Sources */,
 				8D11617424194C8300B67F07 /* TrendingController.swift in Sources */,
 				8DBC156F23C4E6D300547C57 /* MovieDetailQuery.swift in Sources */,
+				8D4E16FD241B79DF00D8D3F4 /* PersonDetailQuery.swift in Sources */,
 				8DB298D72403C45000DE7195 /* OverviewSectionCell.swift in Sources */,
 				4B6B1E2724167A32000C5C3E /* BaseSearchResultCell.swift in Sources */,
 				8D4CFE9723B0EE4F00985287 /* CoreDataManager.swift in Sources */,
+				8D62E5F0242F7F46006EC8D7 /* PersonAlsoKnownAsCell.swift in Sources */,
 				8DAC28EE2419B10C002127AA /* TrendingMovieCell.swift in Sources */,
 				8D76955C23BCF1FC003A255C /* MovieVideosView.swift in Sources */,
 				8D63680423B470AF009CD78C /* MovieSearchQuery.swift in Sources */,

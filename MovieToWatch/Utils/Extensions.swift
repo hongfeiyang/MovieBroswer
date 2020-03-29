@@ -193,6 +193,11 @@ extension UIView {
         setContentCompressionResistancePriority(vCompressionPriority, for: .vertical)
     }
     
+    convenience init(color: UIColor? = nil) {
+        self.init(frame: .zero)
+        backgroundColor = color
+    }
+    
     var firstResponder: UIView? {
         guard !isFirstResponder else { return self }
         for subview in subviews {
@@ -210,6 +215,31 @@ extension UIView {
         view.clipsToBounds = true
         view.layer.cornerRadius = 1
         return view
+    }
+    
+    
+//    func roundCorners(corners: UIRectCorner, radius: CGFloat) {
+//        let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+//        let mask = CAShapeLayer()
+//        mask.path = path.cgPath
+//        layer.mask = mask
+//    }
+    
+
+    func addRoundedCorners(radius: CGFloat, curve: CALayerCornerCurve = .continuous, corners: CACornerMask = []) {
+        layer.cornerRadius = radius
+        layer.cornerCurve = curve
+        layer.maskedCorners = corners
+    }
+    
+    func addShadow(offset: CGSize, color: UIColor, radius: CGFloat, opacity: Float) {
+        layer.masksToBounds = false
+        layer.shadowOffset = offset
+        layer.shadowColor = color.cgColor
+        layer.shadowRadius = radius
+        layer.shadowOpacity = opacity
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
     }
     
     
@@ -288,6 +318,25 @@ extension Encodable {
         } catch let err {
             print(err)
             return nil
+        }
+    }
+}
+
+extension UIFont {
+    static func newYorkFont(ofSize: CGFloat, weight: UIFont.Weight) -> UIFont {
+        switch weight {
+        case .regular:
+            return UIFont(name: "NewYorkSmall-Regular", size: ofSize)!
+        case .bold:
+            return UIFont(name: "NewYorkSmall-Bold", size: ofSize)!
+        case .semibold:
+            return UIFont(name: "NewYorkSmall-Semibold", size: ofSize)!
+        case .medium:
+            return UIFont(name: "NewYorkSmall-Medium", size: ofSize)!
+        case .heavy:
+            return UIFont(name: "NewYorkSmall-Heavy", size: ofSize)!
+        default:
+            return UIFont(name: "NewYorkSmall-Regular", size: ofSize)!
         }
     }
 }

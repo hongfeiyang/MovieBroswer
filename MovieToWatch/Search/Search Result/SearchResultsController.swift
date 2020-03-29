@@ -22,6 +22,8 @@ class SearchResultsController: UITableViewController {
     
     var pageIsLoadingMoreContent = false
     
+    weak var navController: UINavigationController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag
@@ -91,12 +93,17 @@ class SearchResultsController: UITableViewController {
                     let vc = MovieDetailViewController()
                     vc.movieId = id
                     vc.hidesBottomBarWhenPushed = true
-                    navigationController?.pushViewController(vc, animated: true)
+                    navController?.pushViewController(vc, animated: true)
                 }
             case .tv:
                 break
             case .person:
-                break
+                if let id = (result as? PersonMultiSearchResult)?.id {
+                    let vc = PersonContainerController()
+                    vc.personId = id
+                    vc.hidesBottomBarWhenPushed = true
+                    navController?.pushViewController(vc, animated: true)
+                }
             default:
                 fatalError("not implemented: \(String(describing: results?[indexPath.row]))")
             }

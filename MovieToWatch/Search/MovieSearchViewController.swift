@@ -28,6 +28,7 @@ class MovieSearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        resultsController.navController = self.navigationController
         setupNavigationBar()
         view.addSubview(trendingController.view)
         addChild(trendingController)
