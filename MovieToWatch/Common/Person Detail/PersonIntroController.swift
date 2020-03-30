@@ -53,18 +53,8 @@ class PersonIntroController: UIViewController {
     lazy var profileImageView: UIImageView = {
         let view = UIImageView()
         view.clipsToBounds = true
-        view.layer.cornerRadius = 10
-        //view.layer.cornerCurve = .continuous
         view.contentMode = .scaleAspectFill
-        
-        let maskLayer = CAGradientLayer()
-        maskLayer.frame = view.bounds
-        maskLayer.shadowRadius = 5
-        maskLayer.shadowPath = CGPath(roundedRect: view.bounds.insetBy(dx: 5, dy: 5), cornerWidth: 10, cornerHeight: 10, transform: nil)
-        maskLayer.shadowOpacity = 1;
-        maskLayer.shadowOffset = CGSize.zero;
-        maskLayer.shadowColor = UIColor.white.cgColor
-        view.layer.mask = blurEdgeLayer
+//        view.layer.mask = blurEdgeLayer
         
         return view
     }()
@@ -74,14 +64,6 @@ class PersonIntroController: UIViewController {
     var rankingLabel = UILabel(text: "Ranking", font: .systemFont(ofSize: 20, weight: .semibold), numberOfLines: 0, textColor: .label, textAlignment: .center)
     
     lazy var nameLabelContainerView: UIView = {
-//        let effect = UIBlurEffect(style: .systemUltraThinMaterial)
-//        let view = UIVisualEffectView(effect: effect)
-//        let vibrancyEffect = UIVibrancyEffect(blurEffect: effect, style: .label)
-//        let vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
-//        vibrancyEffectView.contentView.addSubview(self.nameLabel)
-//        view.contentView.addSubview(vibrancyEffectView)
-//        vibrancyEffectView.fillSuperview()
-        //view.alpha = 0.1
         let view = UIView()
         view.addSubview(self.nameLabel)
         nameLabel.fillSuperview(padding: .init(top: 0, left: 20, bottom: 0, right: 20))
@@ -115,14 +97,13 @@ class PersonIntroController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+
         view.backgroundColor = .systemBackground
         nameLabel.contentMode = .center
         nameLabel.adjustsFontSizeToFitWidth = true
         nameLabel.minimumScaleFactor = 0
         view.addSubview(profileImageView)
-        profileImageViewConstraints = profileImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, size: .init(width: 0, height: profileImageViewFullHeight))
+        profileImageViewConstraints = profileImageView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: topPadding, left: 0, bottom: 0, right: 0), size: .init(width: 0, height: profileImageViewFullHeight))
         
         view.addSubview(nameLabelContainerView)
         nameLabelConstraints = nameLabelContainerView.anchor(top: nil, leading: view.leadingAnchor, bottom: profileImageView.bottomAnchor, trailing: view.trailingAnchor, size: .init(width: 0, height: NAME_LABEL_FULL_HEIGHT))
@@ -131,10 +112,6 @@ class PersonIntroController: UIViewController {
         collectionView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-    }
 }
 
 

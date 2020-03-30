@@ -18,6 +18,8 @@ class PersonTrendingSectionCell: BaseTrendingSectionCell {
         }
     }
     
+    weak var navController: UINavigationController?
+    
     private let cellId = "cellId"
     
     override func setupCollectionView() {
@@ -52,6 +54,17 @@ class PersonTrendingSectionCell: BaseTrendingSectionCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! TrendingPersonCell
         cell.result = dataSource?[indexPath.item]
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let result = dataSource?[indexPath.item]
+        
+        if let id = result?.id {
+            let vc = PersonContainerController()
+            vc.personId = id
+            vc.hidesBottomBarWhenPushed = true
+            navController?.pushViewController(vc, animated: true)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

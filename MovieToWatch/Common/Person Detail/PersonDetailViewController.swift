@@ -10,8 +10,7 @@ import UIKit
 
 
 class PersonDetailController: UIViewController {
-    
-    
+
     var personDetail: PersonDetail? {
         didSet {
             DispatchQueue.main.async {
@@ -47,10 +46,6 @@ class PersonDetailController: UIViewController {
         collectionView.contentInsetAdjustmentBehavior = .never
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        //personId = 1341 // 3223 // 6193 // 3223
-    }
 }
 
 

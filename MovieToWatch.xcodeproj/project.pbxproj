@@ -152,6 +152,7 @@
 		8DBC157123C4EAEE00547C57 /* NowPlaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBC157023C4EAEE00547C57 /* NowPlaying.swift */; };
 		8DBC157323C4EC1300547C57 /* NowPlayingQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBC157223C4EC1300547C57 /* NowPlayingQuery.swift */; };
 		8DBC157623C4EEF100547C57 /* MainMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBC157523C4EEF100547C57 /* MainMovieViewController.swift */; };
+		8DC0096124321641001A918F /* BaseNavItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC0096024321641001A918F /* BaseNavItemController.swift */; };
 		8DE4DC4A23B458860015445E /* MovieSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE4DC4923B458860015445E /* MovieSearchResults.swift */; };
 /* End PBXBuildFile section */
 
@@ -304,6 +305,7 @@
 		8DBC157023C4EAEE00547C57 /* NowPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlaying.swift; sourceTree = "<group>"; };
 		8DBC157223C4EC1300547C57 /* NowPlayingQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingQuery.swift; sourceTree = "<group>"; };
 		8DBC157523C4EEF100547C57 /* MainMovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMovieViewController.swift; sourceTree = "<group>"; };
+		8DC0096024321641001A918F /* BaseNavItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavItemController.swift; sourceTree = "<group>"; };
 		8DE4DC4923B458860015445E /* MovieSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchResults.swift; sourceTree = "<group>"; };
 		CDD65CAC38C12666A0F2E5B0 /* Pods_MovieToWatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieToWatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -553,6 +555,7 @@
 				8D400AEB23B34911006555D3 /* MainTabBarController.swift */,
 				4B87B70124150F7C00DAA0FF /* BaseCollectionViewController.swift */,
 				8DBC156B23C4E64E00547C57 /* Movie Detail */,
+				8DC0096024321641001A918F /* BaseNavItemController.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -924,6 +927,7 @@
 				8D58CC5923FE7E6900819C94 /* CastCell.swift in Sources */,
 				8D1849E423FF8C1800BF6666 /* MovieHeader.swift in Sources */,
 				8DAEF42223B9C872008AE0EA /* AllCrewViewController.swift in Sources */,
+				8DC0096124321641001A918F /* BaseNavItemController.swift in Sources */,
 				8D12BE5023A699CE006C72B4 /* AppDelegate.swift in Sources */,
 				4B6B1E1D24162080000C5C3E /* Trending.swift in Sources */,
 				4B7046F92413A3870036388B /* PopularQuery.swift in Sources */,

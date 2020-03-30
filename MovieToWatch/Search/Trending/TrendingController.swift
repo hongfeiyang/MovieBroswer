@@ -67,6 +67,7 @@ class TrendingController: UICollectionViewController, UICollectionViewDelegateFl
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: personSectionCellId, for: indexPath) as! PersonTrendingSectionCell
             cell.dataSource = personResult
+            cell.navController = navigationController
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: trendingMovieCellId, for: indexPath) as! TrendingMovieCell

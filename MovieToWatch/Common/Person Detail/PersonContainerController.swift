@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PersonContainerController: UIViewController {
+class PersonContainerController: BaseNavItemController {
     
     var introController = PersonIntroController()
     var detailController = PersonDetailController()
@@ -27,23 +27,19 @@ class PersonContainerController: UIViewController {
         }
     }
     
+    let window = UIApplication.shared.windows[0]
+    lazy var topPadding = window.safeAreaInsets.top
+    lazy var bottomPadding = window.safeAreaInsets.bottom
     
     var detailControllerConstraints: AnchoredConstraints?
-    var detailControllerHeight: CGFloat!
-    var profileImageViewFullHeight: CGFloat!
+    lazy var detailControllerHeight: CGFloat = UIScreen.main.bounds.height - topPadding - profileImageViewCompactHeight
+    lazy var profileImageViewFullHeight: CGFloat = UIScreen.main.bounds.height - topPadding - bottomPadding - self.introController.MOVIE_COLLECTION_VIEW_HEIGHT
     var profileImageViewCompactHeight: CGFloat = 90
     var profileImageViewCompactWidth: CGFloat = 60
     var profileImageViewCompactTrailingOffset: CGFloat = 20
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let window = UIApplication.shared.windows[0]
-        let topPadding = window.safeAreaInsets.top
-        let bottomPadding = window.safeAreaInsets.bottom
-        
-        detailControllerHeight = UIScreen.main.bounds.height - topPadding - profileImageViewCompactHeight
-        profileImageViewFullHeight = UIScreen.main.bounds.height - topPadding - bottomPadding - self.introController.MOVIE_COLLECTION_VIEW_HEIGHT
 
         view.addSubview(introController.view)
         addChild(introController)
@@ -61,15 +57,14 @@ class PersonContainerController: UIViewController {
         detailController.didMove(toParent: self)
         detailController.view.addGestureRecognizer(detailControllerPanGestureRecogniser)
         
-        detailControllerConstraints = detailController.view.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, size: .init(width: 0, height: detailControllerHeight))
+        detailControllerConstraints = detailController.view.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: topPadding, left: 0, bottom: 0, right: 0), size: .init(width: 0, height: detailControllerHeight))
         detailController.view.addRoundedCorners(radius: 12, curve: .circular, corners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
         detailController.view.addShadow(offset: .init(width: 1, height: -3), color: .label, radius: 6, opacity: 0.5)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        detailControllerConstraints?.top?.constant = detailControllerHeight + profileImageViewCompactHeight
-        personId = 1100//3223//1245
+        detailControllerConstraints?.top?.constant = UIScreen.main.bounds.height
     }
     
     lazy var introControllerPanGestureRecogniser: UIPanGestureRecognizer = {
@@ -153,15 +148,13 @@ class PersonContainerController: UIViewController {
         animator.isUserInteractionEnabled = false
         return animator
     }()
-    
 
-    
     private func showDetail() {
         self.view.layoutIfNeeded()
-        self.introController.profileImageViewConstraints?.leading?.constant = UIScreen.main.bounds.width - profileImageViewCompactWidth - profileImageViewCompactTrailingOffset
-        self.introController.profileImageViewConstraints?.height?.constant = profileImageViewCompactHeight
-        self.introController.profileImageViewConstraints?.trailing?.constant = -profileImageViewCompactTrailingOffset
-        self.detailControllerConstraints?.top?.constant = profileImageViewCompactHeight
+        introController.profileImageViewConstraints?.leading?.constant = UIScreen.main.bounds.width - profileImageViewCompactWidth - profileImageViewCompactTrailingOffset
+        introController.profileImageViewConstraints?.height?.constant = profileImageViewCompactHeight
+        introController.profileImageViewConstraints?.trailing?.constant = -profileImageViewCompactTrailingOffset
+        detailControllerConstraints?.top?.constant = profileImageViewCompactHeight + topPadding
         let yScaleFactor = profileImageViewCompactHeight / introController.nameLabelContainerView.frame.height
         let xScaleFactor = (UIScreen.main.bounds.width - profileImageViewCompactWidth - profileImageViewCompactTrailingOffset) / introController.nameLabelContainerView.frame.width
         let scaleFactor = min(xScaleFactor, yScaleFactor)
@@ -182,7 +175,7 @@ class PersonContainerController: UIViewController {
                 self.introController.profileImageViewConstraints?.leading?.constant = 0
                 self.introController.profileImageViewConstraints?.height?.constant = self.profileImageViewFullHeight
                 self.introController.profileImageViewConstraints?.trailing?.constant = 0
-                self.detailControllerConstraints?.top?.constant = self.detailControllerHeight + self.profileImageViewCompactHeight
+                self.detailControllerConstraints?.top?.constant = UIScreen.main.bounds.height
             case .current:
                 break
             case .end:
@@ -198,10 +191,10 @@ class PersonContainerController: UIViewController {
     private func hideDetail() {
         
         self.view.layoutIfNeeded()
-        self.introController.profileImageViewConstraints?.leading?.constant = 0
-        self.introController.profileImageViewConstraints?.height?.constant = profileImageViewFullHeight
-        self.introController.profileImageViewConstraints?.trailing?.constant = 0
-        self.detailControllerConstraints?.top?.constant = detailControllerHeight + profileImageViewCompactHeight
+        introController.profileImageViewConstraints?.leading?.constant = 0
+        introController.profileImageViewConstraints?.height?.constant = profileImageViewFullHeight
+        introController.profileImageViewConstraints?.trailing?.constant = 0
+        detailControllerConstraints?.top?.constant = UIScreen.main.bounds.height
         animator.addAnimations {
             self.introController.collectionView.alpha = 1
             self.introController.stackView.alpha = 1
@@ -215,7 +208,7 @@ class PersonContainerController: UIViewController {
                 self.introController.profileImageViewConstraints?.leading?.constant = UIScreen.main.bounds.width - self.profileImageViewCompactWidth - self.profileImageViewCompactTrailingOffset
                 self.introController.profileImageViewConstraints?.height?.constant = self.profileImageViewCompactHeight
                 self.introController.profileImageViewConstraints?.trailing?.constant = -self.profileImageViewCompactTrailingOffset
-                self.detailControllerConstraints?.top?.constant = self.profileImageViewCompactHeight
+                self.detailControllerConstraints?.top?.constant = self.profileImageViewCompactHeight + self.topPadding
             case .current:
                 break
             case .end:
