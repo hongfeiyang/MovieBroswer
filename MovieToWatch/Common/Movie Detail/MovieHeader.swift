@@ -21,17 +21,12 @@ class MovieHeader: UICollectionReusableView {
     var tagLineLabel = UILabel(text: "", font: .italicSystemFont(ofSize: 18), numberOfLines: 2, textColor: .label, textAlignment: .center)
     var containerView: UIView = {
         let view = UIView()
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 20
+        view.addRoundedCorners(radius: 20, curve: .circular, corners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
+        view.addShadow(offset: .init(width: 0, height: -3), color: .black, radius: 0, opacity: 0.3)
         view.backgroundColor = .systemBackground
         return view
     }()
     
-    var bottomContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemBackground
-        return view
-    }()
     
     lazy var stackView = UIStackView(arrangedSubviews: [
         self.titleLabel,
@@ -41,18 +36,11 @@ class MovieHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(bottomContainerView)
         addSubview(containerView)
         containerView.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, size: .init(width: 0, height: 100))
-        bottomContainerView.anchor(top: containerView.centerYAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor)
-        
+
         containerView.addSubview(stackView)
         stackView.fillSuperview(padding: .init(top: 10, left: 20, bottom: 10, right: 20))
-        
-        containerView.layer.shadowOffset = .init(width: 0, height: -4)
-        containerView.layer.shadowColor = UIColor.systemGray.cgColor
-        containerView.layer.shadowOpacity = 0.3
-        containerView.layer.masksToBounds = false
     }
     
     required init?(coder: NSCoder) {

@@ -16,7 +16,8 @@ class MovieCollectionController: BaseCollectionViewController {
         }
     }
     
-    func setupNavigationBar() {
+    override func setupNavigationBar() {
+        super.setupNavigationBar()
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
@@ -24,7 +25,6 @@ class MovieCollectionController: BaseCollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
         title = "Title"
         collectionView.register(IndividualMovieCell.self, forCellWithReuseIdentifier: cellId)
     }

@@ -48,22 +48,7 @@ class MovieDetailViewController: BaseCollectionViewController {
             }
         }
     }
-    
-    func setupNavigationBar() {
-        let leftItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(leftItemTapped))
-        navigationItem.leftBarButtonItem = leftItem
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.backgroundColor = .clear
-        navigationController?.navigationBar.shadowImage = UIImage()
-    }
-    
-    @objc func leftItemTapped() {
-        //navigationController?.navigationBar.isHidden = true
-        dismiss(animated: true, completion: nil)
-    }
-    
-    
+
     var imageViewTopConstraint: NSLayoutConstraint?
     var imageViewWidthConstraint: NSLayoutConstraint?
     var imageViewHeightConstraint: NSLayoutConstraint?
@@ -92,26 +77,8 @@ class MovieDetailViewController: BaseCollectionViewController {
         collectionView.register(ReviewsSectionCell.self, forCellWithReuseIdentifier: reviewsCellId)
         
         collectionView.register(MovieHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: movieHeaderId)
-        
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        let gesterRecognizer = UITapGestureRecognizer(target: self, action: #selector(leftItemTapped))
-        view.addGestureRecognizer(gesterRecognizer)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        navigationController?.navigationBar.isHidden = false
-    }
-    
+
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         var cell: MovieDetailSectionBaseCell!
@@ -130,6 +97,7 @@ class MovieDetailViewController: BaseCollectionViewController {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewsCellId, for: indexPath) as! ReviewsSectionCell
         }
         cell.movieDetail = movieDetail
+        cell.navController = navigationController
         return cell
     }
     

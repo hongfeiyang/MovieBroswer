@@ -6,13 +6,12 @@
 //  Copyright © 2020 Hongfei Yang. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class MovieDetailSectionBaseCell: UICollectionViewCell {
     
     var movieDetail: MovieDetail?
-    
+    weak var navController: UINavigationController?
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .systemBackground

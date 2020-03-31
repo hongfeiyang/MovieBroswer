@@ -85,6 +85,14 @@ extension CreditsSectionCell: UICollectionViewDelegate, UICollectionViewDelegate
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cast = casts[indexPath.item]
+        let vc = PersonContainerController()
+        vc.personId = cast.id!
+        vc.hidesBottomBarWhenPushed = true
+        navController?.pushViewController(vc, animated: true)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         return .init(width: 90, height: collectionView.frame.height - 5*2)
