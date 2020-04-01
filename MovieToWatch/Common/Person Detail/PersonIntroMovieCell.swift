@@ -25,6 +25,8 @@ class PersonIntroMovieCell: UICollectionViewCell {
     var posterImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
         return view
     }()
     

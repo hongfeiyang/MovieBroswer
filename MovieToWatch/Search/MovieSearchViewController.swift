@@ -20,16 +20,23 @@ class MovieSearchViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchController
         searchController.delegate = self
-//        navigationItem.searchController?.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController?.obscuresBackgroundDuringPresentation = false
         navigationItem.searchController?.searchResultsUpdater = self
         navigationItem.hidesSearchBarWhenScrolling = false
         self.title = "Search"
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithOpaqueBackground()
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
         resultsController.navController = self.navigationController
-        setupNavigationBar()
+        
         view.addSubview(trendingController.view)
         addChild(trendingController)
         trendingController.didMove(toParent: self)
@@ -38,8 +45,9 @@ class MovieSearchViewController: UIViewController {
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
-        view.backgroundColor = .systemBackground
+        setupNavigationBar()
+//        navigationController?.navigationBar.isHidden = false
+//        view.backgroundColor = .systemBackground
     }
 }
 

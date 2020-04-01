@@ -17,19 +17,25 @@ class PersonIntroController: UIViewController {
     lazy var bottomPadding = window.safeAreaInsets.bottom
     lazy var profileImageViewFullHeight = UIScreen.main.bounds.height - topPadding - bottomPadding - MOVIE_COLLECTION_VIEW_HEIGHT
     
+    var complementaryTextColor: UIColor?
+    
     var personDetail: PersonDetail? {
         didSet {
+            let group = DispatchGroup()
+            group.enter()
             profileImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: personDetail?.profilePath, size: .original)) { [weak self] (image, _, _, _) in
                 if let avgColor = image?.averageColor {
                     self?.view.backgroundColor = avgColor
                     self?.nameLabel.textColor = avgColor.complementaryColor
+                    self?.complementaryTextColor = avgColor.complementaryColor
                 } else {
                     self?.view.backgroundColor = .secondarySystemBackground
                     self?.nameLabel.textColor = .label
+                    self?.complementaryTextColor = .label
                 }
+                group.leave()
             }
-            
-            DispatchQueue.main.async {
+            group.notify(queue: .main) {
                 self.nameLabel.text = self.personDetail?.name
                 self.dataSource = self.personDetail?.movieCredits?.cast
                 self.collectionView.reloadData()
@@ -37,7 +43,13 @@ class PersonIntroController: UIViewController {
         }
     }
     
-    var dataSource: [MediaElement]?
+    var dataSource: [MediaElement]? {
+        didSet {
+            dataSource?.sort(by: { (lhs, rhs) -> Bool in
+                return lhs.popularity ?? 0 > rhs.popularity ?? 0
+            })
+        }
+    }
     
     lazy var blurEdgeLayer: CAGradientLayer = {
         let maskLayer = CAGradientLayer()
@@ -54,12 +66,11 @@ class PersonIntroController: UIViewController {
         let view = UIImageView()
         view.clipsToBounds = true
         view.contentMode = .scaleAspectFill
-//        view.layer.mask = blurEdgeLayer
-        
+        view.layer.cornerRadius = 10
         return view
     }()
     
-    var nameLabel = UILabel(text: "Name", font: UIFont(name: "Georgia", size: 30)!, numberOfLines: 0, textColor: .label, textAlignment: .center)
+    var nameLabel = UILabel(text: "Name", font: UIFont(name: "AvenirNext-Medium", size: 35)!, numberOfLines: 0, textColor: .label, textAlignment: .center)
     var ratingLabel = UILabel(text: "Rating", font: .systemFont(ofSize: 20, weight: .semibold), numberOfLines: 0, textColor: .label, textAlignment: .center)
     var rankingLabel = UILabel(text: "Ranking", font: .systemFont(ofSize: 20, weight: .semibold), numberOfLines: 0, textColor: .label, textAlignment: .center)
     
@@ -84,10 +95,11 @@ class PersonIntroController: UIViewController {
         let layout = BetterSnappingLayout()
         layout.scrollDirection = .horizontal
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.contentInset = .init(top: 0, left: 20, bottom: 0, right: 20)
         view.decelerationRate = .fast
         view.delegate = self
         view.dataSource = self
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = .clear
         view.register(PersonIntroMovieCell.self, forCellWithReuseIdentifier: cellId)
         return view
     }()
@@ -123,6 +135,8 @@ extension PersonIntroController: UICollectionViewDelegateFlowLayout, UICollectio
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! PersonIntroMovieCell
         cell.data = dataSource?[indexPath.item]
+        cell.title.textColor = complementaryTextColor
+        cell.rating.textColor = complementaryTextColor
         return cell
     }
     
