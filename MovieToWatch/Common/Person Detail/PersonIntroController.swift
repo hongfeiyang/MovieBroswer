@@ -43,7 +43,7 @@ class PersonIntroController: UIViewController {
         }
     }
     
-    var dataSource: [MediaElement]? {
+    var dataSource: [PersonCastCredit]? {
         didSet {
             dataSource?.sort(by: { (lhs, rhs) -> Bool in
                 return lhs.popularity ?? 0 > rhs.popularity ?? 0

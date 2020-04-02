@@ -18,10 +18,15 @@ class PersonDetailController: UIViewController {
             }
         }
     }
+    
+    var cast: [PersonCastCredit]? {
+        return personDetail?.movieCredits?.cast
+    }
 
     let biographyCellId = "biographyCellId"
     let dobCellId = "dobCellId"
     let alsoKnownAsCellId = "alsoKnownAsCellId"
+    let personCreditCellId = "personCreditCellId"
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -34,6 +39,7 @@ class PersonDetailController: UIViewController {
         view.register(PersonBiographySectionCell.self, forCellWithReuseIdentifier: biographyCellId)
         view.register(PersonDobSectionCell.self, forCellWithReuseIdentifier: dobCellId)
         view.register(PersonAlsoKnownAsCell.self, forCellWithReuseIdentifier: alsoKnownAsCellId)
+        view.register(PersonCreditCell.self, forCellWithReuseIdentifier: personCreditCellId)
         return view
     }()
 
@@ -50,42 +56,78 @@ class PersonDetailController: UIViewController {
 
 
 extension PersonDetailController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        
+        if section == 0 {
+            return 3
+        } else if section == 1 {
+            return cast?.count ?? 0
+        } else {
+            fatalError("Not implemented")
+        }
+
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: PersonDetailBaseSectionCell
         
-        if indexPath.item == 0 {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: biographyCellId, for: indexPath) as! PersonBiographySectionCell
-        } else if indexPath.item == 1 {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: dobCellId, for: indexPath) as! PersonDobSectionCell
-        } else if indexPath.item == 2 {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: alsoKnownAsCellId, for: indexPath) as! PersonAlsoKnownAsCell
+        if indexPath.section == 0 {
+            let cell: PersonDetailBaseSectionCell
+            
+            if indexPath.item == 0 {
+                cell = collectionView.dequeueReusableCell(withReuseIdentifier: biographyCellId, for: indexPath) as! PersonBiographySectionCell
+            } else if indexPath.item == 1 {
+                cell = collectionView.dequeueReusableCell(withReuseIdentifier: dobCellId, for: indexPath) as! PersonDobSectionCell
+            } else if indexPath.item == 2 {
+                cell = collectionView.dequeueReusableCell(withReuseIdentifier: alsoKnownAsCellId, for: indexPath) as! PersonAlsoKnownAsCell
+            } else {
+                fatalError()
+            }
+            cell.data = personDetail
+            return cell
+        } else if indexPath.section == 1 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: personCreditCellId, for: indexPath) as! PersonCreditCell
+            cell.personCredit = PersonCreditViewModel(credit: cast![indexPath.item])
+            return cell
         } else {
-            fatalError()
+            fatalError("Not implemented")
         }
-        cell.data = personDetail
-        return cell
+
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cell: PersonDetailBaseSectionCell
-        if indexPath.item == 0 {
-            cell = PersonBiographySectionCell(frame: .init(origin: .zero, size: .init(width: collectionView.frame.width, height: 1000)))
-        } else if indexPath.item == 1 {
-            cell = PersonDobSectionCell(frame: .init(origin: .zero, size: .init(width: collectionView.frame.width, height: 1000)))
-        } else if indexPath.item == 2 {
-            cell = PersonAlsoKnownAsCell(frame: .init(origin: .zero, size: .init(width: collectionView.frame.width, height: 1000)))
+        
+        if indexPath.section == 0 {
+            let cell: PersonDetailBaseSectionCell
+            if indexPath.item == 0 {
+                cell = PersonBiographySectionCell(frame: .init(origin: .zero, size: .init(width: collectionView.frame.width, height: 1000)))
+            } else if indexPath.item == 1 {
+                cell = PersonDobSectionCell(frame: .init(origin: .zero, size: .init(width: collectionView.frame.width, height: 1000)))
+            } else if indexPath.item == 2 {
+                cell = PersonAlsoKnownAsCell(frame: .init(origin: .zero, size: .init(width: collectionView.frame.width, height: 1000)))
+            } else {
+                fatalError()
+            }
+            
+            cell.data = personDetail
+            cell.layoutIfNeeded()
+            let size = cell.systemLayoutSizeFitting(.init(width: collectionView.frame.width, height: 1000))
+            return .init(width: collectionView.frame.width, height: size.height)
+        } else if indexPath.section == 1 {
+            let cell = PersonCreditCell(frame: .init(origin: .zero, size: .init(width: collectionView.frame.width, height: 1000)))
+            cell.personCredit = PersonCreditViewModel(credit: cast![indexPath.item])
+            cell.layoutIfNeeded()
+            let size = cell.systemLayoutSizeFitting(.init(width: collectionView.frame.width, height: 1000))
+            return .init(width: collectionView.frame.width, height: size.height)
         } else {
-            fatalError()
+            fatalError("Not implemented")
         }
         
-        cell.data = personDetail
-        cell.layoutIfNeeded()
-        let size = cell.systemLayoutSizeFitting(.init(width: collectionView.frame.width, height: 1000))
-        return .init(width: collectionView.frame.width, height: size.height)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
