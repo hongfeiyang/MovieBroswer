@@ -14,7 +14,7 @@ class PersonContainerController: BaseNavItemController {
     var detailController = PersonDetailController()
     var personId: Int! {
         didSet {
-            let query = PersonDetailQuery(person_id: personId, append_to_response: [.movie_credits])
+            let query = PersonDetailQuery(person_id: personId, append_to_response: [.movie_credits, .combined_credits])
             Network.getPersonDetail(query: query) { [weak self] (res) in
                 switch res {
                 case .success(let personDetail):

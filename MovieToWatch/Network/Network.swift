@@ -143,7 +143,14 @@ class Network {
                 return
             }
             guard let data = data else {completion(.failure(NetworkError.NoDataError)); return}
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "y-MM-d"
             let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .custom({ decoder -> Date in
+                let dateString = try decoder.singleValueContainer().decode(String.self)
+                //let dateKey = decoder.codingPath.last as! PersonDetail.CodingKeys
+                return dateFormatter.date(from: dateString) ?? Date.distantPast
+            })
             do {
                 let results = try decoder.decode(PersonDetail.self, from: data)
                 completion(.success(results))

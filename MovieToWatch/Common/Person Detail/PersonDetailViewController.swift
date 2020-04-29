@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class PersonDetailController: UIViewController {
 
     var personDetail: PersonDetail? {
@@ -20,7 +19,12 @@ class PersonDetailController: UIViewController {
     }
     
     var cast: [PersonCastCredit]? {
-        return personDetail?.movieCredits?.cast
+        if let cast = personDetail?.combinedCredits?.cast {
+            return cast.sorted { (lhs, rhs) -> Bool in
+                lhs.releaseDate ?? Date.distantPast > rhs.releaseDate ?? Date.distantPast
+            }
+        }
+        return nil
     }
 
     let biographyCellId = "biographyCellId"
@@ -77,7 +81,6 @@ extension PersonDetailController: UICollectionViewDelegateFlowLayout, UICollecti
         
         if indexPath.section == 0 {
             let cell: PersonDetailBaseSectionCell
-            
             if indexPath.item == 0 {
                 cell = collectionView.dequeueReusableCell(withReuseIdentifier: biographyCellId, for: indexPath) as! PersonBiographySectionCell
             } else if indexPath.item == 1 {

@@ -89,7 +89,7 @@ struct PersonCastCredit: Codable {
     let name: String?
     let mediaType: MediaType?
     let posterPath: String?
-    let firstAirDate: String?
+    let firstAirDate: Date?
     let voteAverage: Double?
     let voteCount: Int?
     let character: String?
@@ -97,7 +97,8 @@ struct PersonCastCredit: Codable {
     let popularity: Double?
     let creditID, originalTitle: String?
     let video: Bool?
-    let releaseDate, title: String?
+    let releaseDate: Date?
+    let title: String?
     let adult: Bool?
 
     enum CodingKeys: String, CodingKey {
@@ -140,7 +141,7 @@ struct PersonCrewCredit: Codable {
     let popularity: Double?
     let creditID: String?
     let backdropPath: String?
-    let firstAirDate: String?
+    let firstAirDate: Date?
     let voteAverage: Double?
     let genreIDS: [Int]?
     let posterPath: String?
@@ -148,7 +149,7 @@ struct PersonCrewCredit: Codable {
     let video: Bool?
     let title: String?
     let adult: Bool?
-    let releaseDate: String?
+    let releaseDate: Date?
 
     enum CodingKeys: String, CodingKey {
         case id, department
