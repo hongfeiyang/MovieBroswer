@@ -10,16 +10,20 @@ import UIKit
 
 class TrendingController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
-    var dataSource: [ISearchResult]? {
-        didSet { DispatchQueue.main.async { self.collectionView.reloadData() } }
-    }
+//    var dataSource: [ISearchResult]? {
+//        didSet { DispatchQueue.main.async { self.collectionView.reloadData() } }
+//    }
     
 //    var personResult: [PersonMultiSearchResult]? {
 //        return (dataSource?.filter { $0.media_type == .person }) as? [PersonMultiSearchResult]
 //    }
     
+//    var movieResult: [MovieMultiSearchResult]? {
+//        return (dataSource?.filter { $0.media_type == .movie }) as? [MovieMultiSearchResult]
+//    }
+    
     var movieResult: [MovieMultiSearchResult]? {
-        return (dataSource?.filter { $0.media_type == .movie }) as? [MovieMultiSearchResult]
+        didSet { DispatchQueue.main.async { self.collectionView.reloadData() } }
     }
     
     var personResult: [PersonMultiSearchResult]? {
@@ -134,11 +138,12 @@ class TrendingController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        loadTrending(media_type: .all, time_window: .week) { [weak self] in
-            self?.dataSource = $0?.results
+        loadTrending(media_type: .movie, time_window: .day) { [weak self] in
+            //self?.dataSource = $0?.results
+            self?.movieResult = $0?.results as? [MovieMultiSearchResult]
         }
         
-        loadTrending(media_type: .person, time_window: .week) { [weak self] in
+        loadTrending(media_type: .person, time_window: .day) { [weak self] in
             self?.personResult = $0?.results as? [PersonMultiSearchResult]
         }
     }

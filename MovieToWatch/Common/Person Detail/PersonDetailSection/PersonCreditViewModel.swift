@@ -18,7 +18,7 @@ struct PersonCreditViewModel {
             let year = Calendar.current.component(.year, from: date)
             self.year = String(year)
         } else {
-            self.year = "Unknown year"
+            self.year = "-"
         }
 
         let resultString = NSMutableAttributedString()
@@ -64,7 +64,7 @@ struct PersonCreditViewModel {
             let year = Calendar.current.component(.year, from: date)
             self.year = String(year)
         } else {
-            self.year = "Unknown year"
+            self.year = "-"
         }
         
         let resultString = NSMutableAttributedString()

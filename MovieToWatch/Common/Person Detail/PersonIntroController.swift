@@ -70,7 +70,7 @@ class PersonIntroController: UIViewController {
         return view
     }()
     
-    var nameLabel = UILabel(text: "Name", font: UIFont(name: "AvenirNext-Medium", size: 35)!, numberOfLines: 0, textColor: .label, textAlignment: .center)
+    var nameLabel = UILabel(text: "", font: UIFont(name: "AvenirNext-Medium", size: 35)!, numberOfLines: 0, textColor: .label, textAlignment: .center)
     var ratingLabel = UILabel(text: "Rating", font: .systemFont(ofSize: 20, weight: .semibold), numberOfLines: 0, textColor: .label, textAlignment: .center)
     var rankingLabel = UILabel(text: "Ranking", font: .systemFont(ofSize: 20, weight: .semibold), numberOfLines: 0, textColor: .label, textAlignment: .center)
     
@@ -138,6 +138,15 @@ extension PersonIntroController: UICollectionViewDelegateFlowLayout, UICollectio
         cell.title.textColor = complementaryTextColor
         cell.rating.textColor = complementaryTextColor
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let id = dataSource?[indexPath.item].id {
+            let vc = MovieDetailViewController()
+            vc.movieId = id
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

@@ -21,7 +21,7 @@ class VideosSectionCell: MovieDetailSectionBaseCell {
         return movieDetail?.videos
     }
 
-    var allVideosButton = BaseButton(topic: "Videos", content: "view all")
+    var allVideosButton = BaseButton(topic: "Videos", content: "")
     
     lazy var collectionView: UICollectionView = {
         let layout = BetterSnappingLayout()

@@ -27,7 +27,10 @@ class GenreController: UICollectionViewController, UICollectionViewDelegateFlowL
 
     init() {
         let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
         super.init(collectionViewLayout: layout)
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
     }
     
     required init?(coder: NSCoder) {

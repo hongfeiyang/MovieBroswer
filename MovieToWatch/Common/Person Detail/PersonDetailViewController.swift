@@ -17,7 +17,7 @@ class PersonDetailController: UIViewController {
             }
         }
     }
-    
+
     var cast: [PersonCastCredit]? {
         if let cast = personDetail?.combinedCredits?.cast {
             return cast.sorted { (lhs, rhs) -> Bool in
@@ -31,6 +31,7 @@ class PersonDetailController: UIViewController {
     let dobCellId = "dobCellId"
     let alsoKnownAsCellId = "alsoKnownAsCellId"
     let personCreditCellId = "personCreditCellId"
+    let personCreditHeaderId = "personCreditHeaderId"
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -39,11 +40,13 @@ class PersonDetailController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = .systemBackground
+        view.delaysContentTouches = false
         view.addRoundedCorners(radius: 20, corners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
         view.register(PersonBiographySectionCell.self, forCellWithReuseIdentifier: biographyCellId)
         view.register(PersonDobSectionCell.self, forCellWithReuseIdentifier: dobCellId)
         view.register(PersonAlsoKnownAsCell.self, forCellWithReuseIdentifier: alsoKnownAsCellId)
         view.register(PersonCreditCell.self, forCellWithReuseIdentifier: personCreditCellId)
+        view.register(PersonCreditHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: personCreditHeaderId)
         return view
     }()
 
@@ -129,16 +132,45 @@ extension PersonDetailController: UICollectionViewDelegateFlowLayout, UICollecti
         } else {
             fatalError("Not implemented")
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            let id = cast![indexPath.item].id
+            let vc = MovieDetailViewController()
+            vc.movieId = id
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
-        
+        return .zero
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        if section == 1 {
+            return .init(width: collectionView.frame.width, height: 40)
+        }
+        return .zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        if kind == UICollectionView.elementKindSectionHeader, indexPath.section == 1 {
+            let cell = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: personCreditHeaderId, for: indexPath) as! PersonCreditHeader
+            cell.title.text = "Credits"
+            return cell
+        }
+        return UICollectionReusableView()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -146,7 +178,6 @@ extension PersonDetailController: UICollectionViewDelegateFlowLayout, UICollecti
             scrollView.isScrollEnabled = false
             scrollView.isScrollEnabled = true
         }
-        
     }
 }
 

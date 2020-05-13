@@ -28,7 +28,7 @@ class PersonAlsoKnownAsCell: PersonDetailBaseSectionCell {
         super.init(frame: frame)
         titleLabel.text = "Also Known As"
         addSubview(stackView)
-        stackView.fillSuperview(padding: .init(top: 0, left: 20, bottom: 0, right: 20))
+        stackView.fillSuperview(padding: .init(top: 0, left: 20, bottom: 20, right: 20))
     }
     
     required init?(coder: NSCoder) {

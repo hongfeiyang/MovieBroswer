@@ -22,7 +22,7 @@ class ReviewsSectionCell: MovieDetailSectionBaseCell {
         return movieDetail?.reviews.results
     }
 
-    var allReviewsButton = BaseButton(topic: "Reviews", content: "View all")
+    var allReviewsButton = BaseButton(topic: "Reviews", content: "")
     
     lazy var collectionView: UICollectionView = {
         let layout = BetterSnappingLayout()

@@ -10,6 +10,14 @@ import UIKit
 
 class PersonCreditCell: UICollectionViewCell {
     
+    override var isHighlighted: Bool {
+        didSet {
+            UIView.animate(withDuration: 0.25) {
+                self.backgroundColor = self.isHighlighted ? .opaqueSeparator : .systemBackground
+            }
+        }
+    }
+    
     var personCredit: PersonCreditViewModel! {
         didSet {
             detailLabel.attributedText = personCredit.detailAttributedString
@@ -35,8 +43,9 @@ class PersonCreditCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(stackView)
-        yearLabel.constrainWidth(constant: 40)
+        yearLabel.constrainWidth(constant: 50)
         stackView.fillSuperview(padding: .init(top: 5, left: 20, bottom: 5, right: 20))
+        backgroundColor = .systemBackground
     }
     
     required init?(coder: NSCoder) {

@@ -14,6 +14,7 @@ class MainTabBarController: UITabBarController {
     let vc1 = TestViewController()
     let vc2 = MovieSearchViewController()
     let vc3 = MainMovieViewController()
+    let vc4 = SavedMoviesViewController()
     override func viewDidLoad() {
         super.viewDidLoad()
         let discoverImage = UIImage.symbolWithTintColor(symbol: "lightbulb", weight: .regular, tintColor: .systemGray)
@@ -27,7 +28,11 @@ class MainTabBarController: UITabBarController {
         let browseImage = UIImage.symbolWithTintColor(symbol: "film", weight: .regular, tintColor: .systemGray)
         let browseHighlightedImage = UIImage.symbolWithTintColor(symbol: "film.fill", weight: .regular, tintColor: .systemBlue)
         vc3.tabBarItem = UITabBarItem(title: "Browse", image: browseImage, selectedImage: browseHighlightedImage)
-        let vcs = [vc1, vc2, vc3]
+        
+        let myList = UIImage.symbolWithTintColor(symbol: "square.and.arrow.down", weight: .regular, tintColor: .systemGray)
+        let myListHighlightedImage = UIImage.symbolWithTintColor(symbol: "square.and.arrow.down.fill", weight: .regular, tintColor: .systemBlue)
+        vc4.tabBarItem = UITabBarItem(title: "My list", image: myList, selectedImage: myListHighlightedImage)
+        let vcs = [vc1, vc2, vc3, vc4]
         
         viewControllers = vcs.map { UINavigationController(rootViewController: $0)}
         selectedIndex = 1

@@ -10,7 +10,7 @@ import UIKit
 
 class PersonDetailBaseSectionCell: UICollectionViewCell {
     
-    var titleLabel = UILabel(text: "TITLE", font: .systemFont(ofSize: 15, weight: .semibold), numberOfLines: 1, textColor: .label, textAlignment: .left)
+    var titleLabel = UILabel(text: "TITLE", font: .systemFont(ofSize: 18, weight: .semibold), numberOfLines: 1, textColor: .label, textAlignment: .left)
     var data: PersonDetail?
     
     override init(frame: CGRect) {

@@ -55,6 +55,8 @@
 		8D400AEA23B33388006555D3 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AE923B33388006555D3 /* TestViewController.swift */; };
 		8D400AEC23B34911006555D3 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AEB23B34911006555D3 /* MainTabBarController.swift */; };
 		8D400AEF23B36A56006555D3 /* MovieSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D400AEE23B36A56006555D3 /* MovieSearchViewController.swift */; };
+		8D467A922466929700E109A3 /* PersonCreditHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D467A912466929700E109A3 /* PersonCreditHeader.swift */; };
+		8D467A95246B186800E109A3 /* SavedMoviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D467A94246B186800E109A3 /* SavedMoviesViewController.swift */; };
 		8D4CFE9723B0EE4F00985287 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4CFE9623B0EE4F00985287 /* CoreDataManager.swift */; };
 		8D4E16F9241B721200D8D3F4 /* PersonDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4E16F8241B721200D8D3F4 /* PersonDetailViewController.swift */; };
 		8D4E16FB241B751100D8D3F4 /* PersonDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4E16FA241B751100D8D3F4 /* PersonDetail.swift */; };
@@ -184,7 +186,7 @@
 		8D11617824194DFF00B67F07 /* TrendingPersonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingPersonCell.swift; sourceTree = "<group>"; };
 		8D11617A2419527500B67F07 /* BaseTrendingSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTrendingSectionCell.swift; sourceTree = "<group>"; };
 		8D11617E241954F400B67F07 /* PersonTrendingSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonTrendingSectionCell.swift; sourceTree = "<group>"; };
-		8D12BE4C23A699CE006C72B4 /* MovieToWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieToWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D12BE4C23A699CE006C72B4 /* Movie Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Movie Browser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D12BE4F23A699CE006C72B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8D12BE5123A699CE006C72B4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8D12BE5623A699CE006C72B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -208,6 +210,8 @@
 		8D400AE923B33388006555D3 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		8D400AEB23B34911006555D3 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		8D400AEE23B36A56006555D3 /* MovieSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchViewController.swift; sourceTree = "<group>"; };
+		8D467A912466929700E109A3 /* PersonCreditHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCreditHeader.swift; sourceTree = "<group>"; };
+		8D467A94246B186800E109A3 /* SavedMoviesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedMoviesViewController.swift; sourceTree = "<group>"; };
 		8D4CFE9623B0EE4F00985287 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		8D4E16F8241B721200D8D3F4 /* PersonDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailViewController.swift; sourceTree = "<group>"; };
 		8D4E16FA241B751100D8D3F4 /* PersonDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetail.swift; sourceTree = "<group>"; };
@@ -368,7 +372,7 @@
 		8D12BE4D23A699CE006C72B4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D12BE4C23A699CE006C72B4 /* MovieToWatch.app */,
+				8D12BE4C23A699CE006C72B4 /* Movie Browser.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -376,6 +380,7 @@
 		8D12BE4E23A699CE006C72B4 /* MovieToWatch */ = {
 			isa = PBXGroup;
 			children = (
+				8D467A93246B183100E109A3 /* Saved Movies */,
 				8DBC157423C4EEC500547C57 /* Movies */,
 				8D63680523B4DAA9009CD78C /* Search */,
 				8D400AED23B369AE006555D3 /* Discover */,
@@ -429,6 +434,14 @@
 			path = Discover;
 			sourceTree = "<group>";
 		};
+		8D467A93246B183100E109A3 /* Saved Movies */ = {
+			isa = PBXGroup;
+			children = (
+				8D467A94246B186800E109A3 /* SavedMoviesViewController.swift */,
+			);
+			path = "Saved Movies";
+			sourceTree = "<group>";
+		};
 		8D58CC5523FE714F00819C94 /* Credits */ = {
 			isa = PBXGroup;
 			children = (
@@ -460,6 +473,7 @@
 				8D62E5EF242F7F46006EC8D7 /* PersonAlsoKnownAsCell.swift */,
 				8D97C6252436668C00C5EBDC /* PersonCreditCell.swift */,
 				8D896269244BCC5B00AB289D /* PersonCreditViewModel.swift */,
+				8D467A912466929700E109A3 /* PersonCreditHeader.swift */,
 			);
 			path = PersonDetailSection;
 			sourceTree = "<group>";
@@ -556,11 +570,11 @@
 		8DA5DB4423B1674300895DEF /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				8DBC156B23C4E64E00547C57 /* Movie Detail */,
 				8D8DEB99241B18BF003D927E /* Person Detail */,
 				4B87B6FE24150D0E00DAA0FF /* Movie Collection */,
 				8D400AEB23B34911006555D3 /* MainTabBarController.swift */,
 				4B87B70124150F7C00DAA0FF /* BaseCollectionViewController.swift */,
-				8DBC156B23C4E64E00547C57 /* Movie Detail */,
 				8DC0096024321641001A918F /* BaseNavItemController.swift */,
 			);
 			path = Common;
@@ -752,7 +766,7 @@
 			);
 			name = MovieToWatch;
 			productName = MovieToWatch;
-			productReference = 8D12BE4C23A699CE006C72B4 /* MovieToWatch.app */;
+			productReference = 8D12BE4C23A699CE006C72B4 /* Movie Browser.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -906,6 +920,7 @@
 				8D11617924194DFF00B67F07 /* TrendingPersonCell.swift in Sources */,
 				8DB9468E23ACBD7800AFD13C /* Network.swift in Sources */,
 				4B87B6FD241427EA00DAA0FF /* IndividualMovieCell.swift in Sources */,
+				8D467A95246B186800E109A3 /* SavedMoviesViewController.swift in Sources */,
 				8D400AE723B30A08006555D3 /* ImageCacheMO+CoreDataClass.swift in Sources */,
 				8D400AEC23B34911006555D3 /* MainTabBarController.swift in Sources */,
 				8D1849DD23FF64A600BF6666 /* ImagesCell.swift in Sources */,
@@ -960,6 +975,7 @@
 				8D400AEF23B36A56006555D3 /* MovieSearchViewController.swift in Sources */,
 				8DA5DB4C23B24E0200895DEF /* MovieDetail.swift in Sources */,
 				8DB9469323AD139A00AFD13C /* ShortMovieInfoView.swift in Sources */,
+				8D467A922466929700E109A3 /* PersonCreditHeader.swift in Sources */,
 				8D63680723B4DADC009CD78C /* MovieSearchResultsTableViewCell.swift in Sources */,
 				8D58CC4923FE307200819C94 /* UIView+Layout.swift in Sources */,
 				8DB0E60E23AA92CF00AAB29E /* Cache.swift in Sources */,
@@ -1139,6 +1155,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = JCDJLS5JT8;
 				INFOPLIST_FILE = MovieToWatch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1147,7 +1164,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = hongfeiyang.MovieToWatch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Movie Browser";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1161,6 +1178,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = JCDJLS5JT8;
 				INFOPLIST_FILE = MovieToWatch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1168,8 +1186,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = hongfeiyang.MovieToWatch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = hongfeiyang.movieBrowser;
+				PRODUCT_NAME = "Movie Browser";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

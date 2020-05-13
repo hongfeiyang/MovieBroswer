@@ -35,7 +35,7 @@ class CreditsSectionCell: MovieDetailSectionBaseCell {
     
     var titleButton = BaseButton(topic: "Cast", content: "")
     var directorButton = BaseButton(topic: "Director: ", content: "")
-    var allCrewButton = BaseButton(topic: "All Cast and Crew", content: "")
+    //var allCrewButton = BaseButton(topic: "All Cast and Crew", content: "")
     
     lazy var collectionView: UICollectionView = {
         let layout = BetterSnappingLayout()
@@ -57,7 +57,7 @@ class CreditsSectionCell: MovieDetailSectionBaseCell {
             self.titleButton,
             self.collectionView,
             self.directorButton,
-            self.allCrewButton
+            //self.allCrewButton
         ])
         return view
     }()

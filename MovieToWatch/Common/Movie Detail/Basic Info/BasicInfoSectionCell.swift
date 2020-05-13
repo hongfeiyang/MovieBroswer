@@ -26,6 +26,48 @@ class BasicInfoSectionCell: MovieDetailSectionBaseCell {
                 self.status.text = movieDetail?.status
             }
             genreController.data = movieDetail?.genres
+            
+            isMovieInList(successHandler: {[weak self] in
+                self?.addToListButton.isEnabled = false
+                self?.addToListButton.backgroundColor = .systemYellow
+            }, failureHandler: nil)
+        }
+    }
+    
+    lazy var addToListButton: UIButton = {
+        let button = UIButton(title: "Add to list", titleColor: .label, font: .systemFont(ofSize: 16, weight: .semibold))
+        button.contentEdgeInsets = .init(top: 5, left: 5, bottom: 5, right: 5)
+        button.clipsToBounds = true
+        button.layer.borderColor = UIColor.systemYellow.cgColor
+        button.layer.borderWidth = 1
+        button.setTitle("In my list", for: .disabled)
+        button.addTarget(self, action: #selector(addToListButtonTapped), for: .touchUpInside)
+        button.constrainHeight(constant: 30)
+        button.layer.cornerRadius = 15
+        return button
+    }()
+    
+    @objc func addToListButtonTapped() {
+        guard let movieDetail = movieDetail else {return}
+        isMovieInList(successHandler: {
+            print("Attempting to add a movie that is already in your list")
+        }, failureHandler: {
+            CoreDataManager.shared.saveMovie(movieDetail: movieDetail)
+        })
+        
+        addToListButton.isEnabled = false
+        addToListButton.backgroundColor = .systemYellow
+    }
+    
+    private func isMovieInList(successHandler: (()->Void)?, failureHandler: (()->Void)?) {
+        guard let movieDetail = movieDetail else {return}
+        CoreDataManager.shared.readMovie(id: movieDetail.id) { (result) in
+            switch result {
+            case .success(_):
+                successHandler?()
+            case .failure(_):
+                failureHandler?()
+            }
         }
     }
     
@@ -34,24 +76,25 @@ class BasicInfoSectionCell: MovieDetailSectionBaseCell {
     var status = UILabel(text: "", font: .systemFont(ofSize: 13, weight: .light), numberOfLines: 1, textColor: .label, textAlignment: .left)
     
     var genreController = GenreController()
+  
+    lazy var stackView = UIStackView(arrangedSubviews: [
+        self.addToListButton,
+        UIStackView(arrangedSubviews: [
+            self.releaseDate, self.status, self.runtime
+        ], axis: .horizontal, spacing: 10)
+    ], axis: .vertical, spacing: 2, distribution: .fill, alignment: .leading)
     
-    lazy var basicInfoStack: UIStackView = {
-        let view = UIStackView(arrangedSubviews: [self.releaseDate, self.status, self.runtime])
-        view.spacing = 10
-        return view
-    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(basicInfoStack)
+        addSubview(stackView)
         addSubview(genreController.view)
-        basicInfoStack.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 10, left: 10, bottom: 10, right: 10))
-        basicInfoStack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor).isActive = true
-        genreController.view.anchor(top: basicInfoStack.bottomAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 10, left: 10, bottom: 10, right: 10))
+        stackView.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 10, left: 10, bottom: 10, right: 10))
+        stackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor).isActive = true
+        genreController.view.anchor(top: stackView.bottomAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 10, left: 10, bottom: 10, right: 10))
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }

@@ -22,7 +22,7 @@ class MovieHeader: UICollectionReusableView {
     var containerView: UIView = {
         let view = UIView()
         view.addRoundedCorners(radius: 20, curve: .circular, corners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
-        view.addShadow(offset: .init(width: 0, height: -3), color: .black, radius: 0, opacity: 0.3)
+        view.addShadow(offset: .init(width: 0, height: -1), color: .systemGray, radius: 0, opacity: 0.5)
         view.backgroundColor = .systemBackground
         return view
     }()

@@ -13,6 +13,11 @@ import UIKit
 class CoreDataManager {
     static var shared = CoreDataManager()
     
+    enum CoreDataError: Error {
+        case notFoundError
+        case failToSaveError
+    }
+
     private init() {}
     
     var managedObjectContext: NSManagedObjectContext {
@@ -41,7 +46,7 @@ class CoreDataManager {
         }
     }
     
-    func fetchRecordForEntity(_ entityName: String, _ predicate: NSPredicate?) -> [NSManagedObject] {
+    func fetchRecordForEntity(_ entityName: String, _ predicate: NSPredicate? = nil) -> [NSManagedObject] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
         fetchRequest.predicate = predicate
         var result = [NSManagedObject]()
@@ -71,20 +76,31 @@ class CoreDataManager {
         return result
     }
     
-    func readImage(url: String, completion: ((String, UIImage?) -> Void)?) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ImageCache")
+    func deleteMovie(id: Int) {
+        readMovie(id: id) { (result) in
+            switch result {
+            case .success(let movie):
+                self.managedObjectContext.delete(movie)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        saveContext()
+    }
+    
+    func readMovie(id: Int, completion: ((Result<MovieMO, Error>) -> Void)?) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Movie")
         
-        let predicate = NSPredicate(format: "url == %@", url)
+        let predicate = NSPredicate(format: "id == %d", id)
         fetchRequest.predicate = predicate
         
         do {
             let records = try managedObjectContext.fetch(fetchRequest)
             
-            if let records = records as? [NSManagedObject], let imageData = records.first as? ImageCacheMO, let image = UIImage(data: imageData.data!) {
-
-                completion?(url, image)
+            if let records = records as? [NSManagedObject], let movie = records.first as? MovieMO {
+                completion?(.success(movie))
             } else {
-                saveImage(urlString: url, completion: completion)
+                completion?(.failure(CoreDataError.notFoundError))
             }
             
         } catch let error {
@@ -94,43 +110,15 @@ class CoreDataManager {
 
     }
     
-    func saveImage(urlString: String, completion: ((String, UIImage?) -> Void)?) {
-        guard let url = URL(string: urlString) else {return}
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data else { print("failed to get image data"); return}
-            
-            let entity = NSEntityDescription.entity(forEntityName: "ImageCache", in: self.managedObjectContext)
-            
-            if let entity = entity {
-                let object = ImageCacheMO(entity: entity, insertInto: self.managedObjectContext)
-                object.data = data
-                object.url = urlString
-                
-                //self.saveContext()
-                
-                // compress image to prevent low memory warning
-                guard let image = UIImage(data: data) else {return}
-                let screenWidth = UIScreen.main.bounds.width
-                let height = screenWidth * 3/2
-                let size = CGSize(width: screenWidth, height: height)
-                let newImage = image.resizeImage(targetSize: size)
-                completion?(urlString, newImage)
-            }
-            
-            
-//
-//
-//            // compress image to prevent low memory warning
-//            let screenWidth = UIScreen.main.bounds.width
-//            let height = screenWidth * 3/2
-//            let size = CGSize(width: screenWidth, height: height)
-//            let newImage = image.resizeImage(targetSize: size)
-//
-//
-//
-            
-            
-        }.resume()
+    func saveMovie(movieDetail: MovieDetail) {
+        if let entity = createRecordForEntity("Movie") as? MovieMO {
+            entity.id = Int64(movieDetail.id)
+            entity.title = movieDetail.title
+            self.saveContext()
+        } else {
+            fatalError("unable to save this Movie entity")
+        }
     }
 }
+
 

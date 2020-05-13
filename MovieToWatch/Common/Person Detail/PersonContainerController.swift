@@ -64,7 +64,10 @@ class PersonContainerController: BaseNavItemController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        detailControllerConstraints?.top?.constant = UIScreen.main.bounds.height
+        if state == .collapsed {
+            detailControllerConstraints?.top?.constant = UIScreen.main.bounds.height
+        }
+        
     }
     
     lazy var introControllerPanGestureRecogniser: UIPanGestureRecognizer = {
