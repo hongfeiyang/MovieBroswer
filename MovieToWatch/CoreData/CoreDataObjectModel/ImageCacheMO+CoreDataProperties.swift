@@ -18,6 +18,6 @@ extension ImageCacheMO {
     }
 
     @NSManaged public var data: Data?
-    @NSManaged public var url: String?
+    @NSManaged public var url: String? // this is the same as posterpath
 
 }

@@ -114,11 +114,14 @@ class CoreDataManager {
         if let entity = createRecordForEntity("Movie") as? MovieMO {
             entity.id = Int64(movieDetail.id)
             entity.title = movieDetail.title
+            entity.releaseDate = movieDetail.releaseDate
+            entity.posterPath = movieDetail.posterPath
             self.saveContext()
         } else {
             fatalError("unable to save this Movie entity")
         }
     }
+    
 }
 
 

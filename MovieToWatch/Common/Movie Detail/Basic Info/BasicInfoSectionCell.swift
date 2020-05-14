@@ -35,12 +35,16 @@ class BasicInfoSectionCell: MovieDetailSectionBaseCell {
     }
     
     lazy var addToListButton: UIButton = {
-        let button = UIButton(title: "Add to list", titleColor: .label, font: .systemFont(ofSize: 16, weight: .semibold))
+        let button = UIButton(title: "Add to my list", titleColor: .label, font: .systemFont(ofSize: 16, weight: .semibold))
         button.contentEdgeInsets = .init(top: 5, left: 5, bottom: 5, right: 5)
         button.clipsToBounds = true
         button.layer.borderColor = UIColor.systemYellow.cgColor
         button.layer.borderWidth = 1
-        button.setTitle("In my list", for: .disabled)
+        button.setTitle("Added", for: .disabled)
+        let plus = UIImage.symbolWithTintColor(symbol: "plus", weight: .semibold, tintColor: .label)
+        let checkmark = UIImage.symbolWithTintColor(symbol: "checkmark", weight: .semibold, tintColor: .label)
+        button.setImage(plus, for: .normal)
+        button.setImage(checkmark, for: .disabled)
         button.addTarget(self, action: #selector(addToListButtonTapped), for: .touchUpInside)
         button.constrainHeight(constant: 30)
         button.layer.cornerRadius = 15
@@ -82,7 +86,7 @@ class BasicInfoSectionCell: MovieDetailSectionBaseCell {
         UIStackView(arrangedSubviews: [
             self.releaseDate, self.status, self.runtime
         ], axis: .horizontal, spacing: 10)
-    ], axis: .vertical, spacing: 2, distribution: .fill, alignment: .leading)
+    ], axis: .vertical, spacing: 10, distribution: .fill, alignment: .leading)
     
     
     override init(frame: CGRect) {

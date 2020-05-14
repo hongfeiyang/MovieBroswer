@@ -14,16 +14,13 @@ struct PersonCreditViewModel {
     var year: String
 
     init(credit: PersonCastCredit) {
-        if let date = credit.releaseDate, date != Date.distantPast {
-            let year = Calendar.current.component(.year, from: date)
-            self.year = String(year)
-        } else {
-            self.year = "-"
-        }
-
+        
+        let date: Date?
         let resultString = NSMutableAttributedString()
+        
         switch credit.mediaType {
         case .tv:
+            date = credit.firstAirDate
             if let title = credit.name {
                 let mediaTitle = NSMutableAttributedString(string: title, attributes: [
                     .font : UIFont.systemFont(ofSize: 16, weight: .semibold),
@@ -31,7 +28,8 @@ struct PersonCreditViewModel {
                 ])
                 resultString.append(mediaTitle)
             }
-        default:
+        default: // assume it's a movie
+            date = credit.releaseDate
             if let title = credit.title {
                 let mediaTitle = NSMutableAttributedString(string: title, attributes: [
                     .font : UIFont.systemFont(ofSize: 16, weight: .semibold),
@@ -39,6 +37,13 @@ struct PersonCreditViewModel {
                 ])
                 resultString.append(mediaTitle)
             }
+        }
+        
+        if let date = date, date != Date.distantPast {
+            let year = Calendar.current.component(.year, from: date)
+            self.year = String(year)
+        } else {
+            self.year = "-"
         }
 
         if let character = credit.character, character != "" {
@@ -60,7 +65,16 @@ struct PersonCreditViewModel {
     
     init(credit: PersonCrewCredit) {
         
-        if let date = credit.releaseDate, date != Date.distantPast {
+        let date: Date?
+        
+        switch credit.mediaType {
+        case .tv:
+            date = credit.firstAirDate
+        default:
+            date = credit.releaseDate
+        }
+        
+        if let date = date, date != Date.distantPast {
             let year = Calendar.current.component(.year, from: date)
             self.year = String(year)
         } else {

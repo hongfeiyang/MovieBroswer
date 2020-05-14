@@ -589,7 +589,6 @@ extension URLSession {
                 completionHandler(nil, response, error)
                 return
             }
-                        
             do {
                 let data = try newJSONDecoder().decode(T.self, from: data)
                 completionHandler(data, response, nil)

@@ -158,6 +158,7 @@
 		8DBC157623C4EEF100547C57 /* MainMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBC157523C4EEF100547C57 /* MainMovieViewController.swift */; };
 		8DC0096124321641001A918F /* BaseNavItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC0096024321641001A918F /* BaseNavItemController.swift */; };
 		8DE4DC4A23B458860015445E /* MovieSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE4DC4923B458860015445E /* MovieSearchResults.swift */; };
+		8DF537BB246D6E6000BAB6BC /* SaveMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF537BA246D6E6000BAB6BC /* SaveMovieCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -313,6 +314,7 @@
 		8DBC157523C4EEF100547C57 /* MainMovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMovieViewController.swift; sourceTree = "<group>"; };
 		8DC0096024321641001A918F /* BaseNavItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavItemController.swift; sourceTree = "<group>"; };
 		8DE4DC4923B458860015445E /* MovieSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchResults.swift; sourceTree = "<group>"; };
+		8DF537BA246D6E6000BAB6BC /* SaveMovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveMovieCell.swift; sourceTree = "<group>"; };
 		B1D1D0FAECAB24D25AE6BB26 /* Pods-MovieToWatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieToWatch.debug.xcconfig"; path = "Target Support Files/Pods-MovieToWatch/Pods-MovieToWatch.debug.xcconfig"; sourceTree = "<group>"; };
 		D32883DACBBAEC17A1C8FF03 /* Pods_MovieToWatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieToWatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC7EA78312725EB9D76C05AF /* Pods-MovieToWatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieToWatch.release.xcconfig"; path = "Target Support Files/Pods-MovieToWatch/Pods-MovieToWatch.release.xcconfig"; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 			isa = PBXGroup;
 			children = (
 				8D467A94246B186800E109A3 /* SavedMoviesViewController.swift */,
+				8DF537BA246D6E6000BAB6BC /* SaveMovieCell.swift */,
 			);
 			path = "Saved Movies";
 			sourceTree = "<group>";
@@ -1003,6 +1006,7 @@
 				8D76955C23BCF1FC003A255C /* MovieVideosView.swift in Sources */,
 				8D63680423B470AF009CD78C /* MovieSearchQuery.swift in Sources */,
 				4B7046F12413955C0036388B /* Upcoming.swift in Sources */,
+				8DF537BB246D6E6000BAB6BC /* SaveMovieCell.swift in Sources */,
 				4B6B1E2924167B03000C5C3E /* DateParser.swift in Sources */,
 				8D0A2F2C23BF05B5000F0519 /* MovieReviewView.swift in Sources */,
 				8DA5DB6723B260D900895DEF /* MovieMO+CoreDataClass.swift in Sources */,

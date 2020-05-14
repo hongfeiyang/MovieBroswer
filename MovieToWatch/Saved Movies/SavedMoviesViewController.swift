@@ -19,10 +19,12 @@ class SavedMoviesViewController: UIViewController {
         }
     }
     
+    private let savedMovieCellId = "savedMovieCellId"
     
     lazy var savedMoviesTableView: UITableView = {
         let view = UITableView()
-        view.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        view.register(SavedMovieCell.self, forCellReuseIdentifier: savedMovieCellId)
+        //view.rowHeight = 90
         view.delegate = self
         view.dataSource = self
         return view
@@ -47,9 +49,10 @@ extension SavedMoviesViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: savedMovieCellId, for: indexPath) as! SavedMovieCell
         let movie = movies[indexPath.row]
-        cell.textLabel?.text = movie.value(forKey: "title") as? String
+        cell.movie = movie
+        //cell.textLabel?.text = movie.value(forKey: "title") as? String
         return cell
     }
     
