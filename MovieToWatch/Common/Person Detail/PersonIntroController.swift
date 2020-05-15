@@ -23,7 +23,7 @@ class PersonIntroController: UIViewController {
         didSet {
             let group = DispatchGroup()
             group.enter()
-            profileImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: personDetail?.profilePath, size: .original)) { [weak self] (image, _, _, _) in
+            profileImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: personDetail?.profilePath, size: .original), placeholderImage: Constants.personPlaceholderImage) { [weak self] (image, _, _, _) in
                 if let avgColor = image?.averageColor {
                     self?.view.backgroundColor = avgColor
                     self?.nameLabel.textColor = avgColor.complementaryColor

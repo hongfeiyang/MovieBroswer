@@ -382,8 +382,8 @@
 		8D12BE4E23A699CE006C72B4 /* MovieToWatch */ = {
 			isa = PBXGroup;
 			children = (
-				8D467A93246B183100E109A3 /* Saved Movies */,
-				8DBC157423C4EEC500547C57 /* Movies */,
+				8D467A93246B183100E109A3 /* My List */,
+				8DBC157423C4EEC500547C57 /* Browse */,
 				8D63680523B4DAA9009CD78C /* Search */,
 				8D400AED23B369AE006555D3 /* Discover */,
 				8DA5DB4A23B24D0B00895DEF /* Codable */,
@@ -436,13 +436,13 @@
 			path = Discover;
 			sourceTree = "<group>";
 		};
-		8D467A93246B183100E109A3 /* Saved Movies */ = {
+		8D467A93246B183100E109A3 /* My List */ = {
 			isa = PBXGroup;
 			children = (
 				8D467A94246B186800E109A3 /* SavedMoviesViewController.swift */,
 				8DF537BA246D6E6000BAB6BC /* SaveMovieCell.swift */,
 			);
-			path = "Saved Movies";
+			path = "My List";
 			sourceTree = "<group>";
 		};
 		8D58CC5523FE714F00819C94 /* Credits */ = {
@@ -732,14 +732,14 @@
 			path = "Movie Detail";
 			sourceTree = "<group>";
 		};
-		8DBC157423C4EEC500547C57 /* Movies */ = {
+		8DBC157423C4EEC500547C57 /* Browse */ = {
 			isa = PBXGroup;
 			children = (
 				8DBC157523C4EEF100547C57 /* MainMovieViewController.swift */,
 				8DAA63F223D1DB52002CEFF1 /* MovieCategoryCellCollectionViewCell.swift */,
 				4B87B6FC241427EA00DAA0FF /* IndividualMovieCell.swift */,
 			);
-			path = Movies;
+			path = Browse;
 			sourceTree = "<group>";
 		};
 		912BB1816A8D0B7E786F6004 /* Frameworks */ = {
@@ -1159,7 +1159,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = JCDJLS5JT8;
 				INFOPLIST_FILE = MovieToWatch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1182,7 +1182,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = JCDJLS5JT8;
 				INFOPLIST_FILE = MovieToWatch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

@@ -21,4 +21,7 @@ struct Constants {
     static let MOIVE_SUMMARY_VIEW_HEIGHT = 80
     
     static var USER_INTERFACE_STYLE: UIUserInterfaceStyle = .unspecified
+    
+    static let personPlaceholderImage = UIImage.symbolWithTintColor(symbol: "person.fill", weight: .regular, tintColor: .opaqueSeparator)
+    static let moviePlaceholderImage = UIImage.symbolWithTintColor(symbol: "photo", weight: .regular, tintColor: .opaqueSeparator)
 }

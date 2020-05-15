@@ -30,6 +30,17 @@ class SavedMoviesViewController: UIViewController {
         return view
     }()
     
+    func setupNavigationBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        self.title = "My List"
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithOpaqueBackground()
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(savedMoviesTableView)
@@ -38,6 +49,7 @@ class SavedMoviesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupNavigationBar()
         movies = CoreDataManager.shared.fetchRecordForEntity("Movie") as! [MovieMO]
     }
 }

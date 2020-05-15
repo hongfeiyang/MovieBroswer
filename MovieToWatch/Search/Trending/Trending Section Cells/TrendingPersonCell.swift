@@ -13,7 +13,7 @@ class TrendingPersonCell: BaseTrendingCell {
     override var result: ISearchResult? {
         didSet {
             if let personResult = result as? PersonMultiSearchResult {
-                profileImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: personResult.profilePath, size: .original), completed: nil)
+                profileImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: personResult.profilePath, size: .original), placeholderImage: Constants.personPlaceholderImage, completed: nil)
                 titleLabel.text = personResult.name
             }
         }

@@ -86,18 +86,4 @@ extension MovieSearchViewController: UISearchControllerDelegate, UISearchBarDele
         }
     }
 }
-//
-//extension MovieSearchViewController {
-//    func loadTrending() {
-//        let item = TrendingQuery(media_type: .all, time_window: .week)
-//        Network.getTrending(query: item) { (res) in
-//            switch res {
-//            case .success(let results):
-//                break
-//                //print(results)
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//    }
-//}
+

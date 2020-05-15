@@ -13,7 +13,7 @@ class TrendingMovieCell: BaseTrendingCell {
     override var result: ISearchResult? {
         didSet {
             if let movieResult = result as? MovieMultiSearchResult {
-                profileImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: movieResult.backdropPath, size: .w154), completed: nil)
+                profileImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: movieResult.backdropPath, size: .w154), placeholderImage: Constants.moviePlaceholderImage, completed: nil)
                 titleLabel.text = movieResult.title
             }
         }

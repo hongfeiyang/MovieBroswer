@@ -131,7 +131,7 @@ struct PersonMultiSearchResult: ISearchResult {
     let knownForDepartment: String?
     let id: Int?
     let name: String?
-    let knownFor: [ISearchResult]
+    let knownFor: [ISearchResult]?
     let popularity: Double?
     let profilePath: String?
     let adult: Bool?
@@ -156,7 +156,10 @@ struct PersonMultiSearchResult: ISearchResult {
         try container.encode(adult, forKey: .adult)
         try container.encode(media_type, forKey: .media_type)
         try container.encode(knownForDepartment, forKey: .knownForDepartment)
-        try container.encode(knownFor.map{AnyResult($0)}, forKey: .knownFor)
+        if let knownFor = knownFor {
+            try container.encode(knownFor.map{AnyResult($0)}, forKey: .knownFor)
+        }
+        
     }
     
     init(from decoder: Decoder) throws {

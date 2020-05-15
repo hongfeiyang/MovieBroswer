@@ -52,6 +52,17 @@ class MainMovieViewController: UIViewController {
         return view
     }()
     
+    func setupNavigationBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        self.title = "Browse"
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithOpaqueBackground()
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(collectionView)
@@ -61,6 +72,7 @@ class MainMovieViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupNavigationBar()
     }
 }
 
