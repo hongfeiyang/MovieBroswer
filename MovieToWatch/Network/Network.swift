@@ -119,7 +119,7 @@ class Network {
                 return
             }
             //Interceptor.shared.intercept(data: data)
-            guard let data = data else {completion(.success(nil)); return}
+            guard let data = data else {completion(.failure(NetworkError.NoDataError)); return}
             let decoder = JSONDecoder()
             do {
                 let multiSearchResults = try decoder.decode(MultiSearchResults.self, from: data)
@@ -158,7 +158,52 @@ class Network {
                 completion(.failure(error))
             }
         }.resume()
+    }
+    
+    static func getOMDBDetail(query: OMDB_Query, completion: @escaping (Result<OMDBResponse, Error>) -> Void) {
+        var components = URLComponents(string: "https://www.omdbapi.com/")
+        components?.queryItems = query.URLQueryItems
         
+        guard let url = components?.url else {return}
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            //Interceptor.shared.intercept(data: data)
+            guard let data = data else {completion(.failure(NetworkError.NoDataError)); return}
+            let decoder = JSONDecoder()
+            do {
+                let results = try decoder.decode(OMDBResponse.self, from: data)
+                completion(.success(results))
+            } catch let error {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
+    static func getExternalId(query: ExternalIdQuery, completion: @escaping (Result<ExternalIdResponse, Error>) -> Void) {
+        var components = URLComponents(string: "https://api.themoviedb.org/3/movie/\(query.movie_id)/external_ids")
+        components?.queryItems = [URLQueryItem(name: "api_key", value: query.api_key)]
+        
+        guard let url = components?.url else {return}
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            //Interceptor.shared.intercept(data: data)
+            guard let data = data else {completion(.failure(NetworkError.NoDataError)); return}
+            let decoder = JSONDecoder()
+            do {
+                let results = try decoder.decode(ExternalIdResponse.self, from: data)
+                completion(.success(results))
+            } catch let error {
+                completion(.failure(error))
+            }
+        }.resume()
     }
 }
 

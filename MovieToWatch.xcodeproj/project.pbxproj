@@ -129,6 +129,10 @@
 		8D89626A244BCC5B00AB289D /* PersonCreditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D896269244BCC5B00AB289D /* PersonCreditViewModel.swift */; };
 		8D97C6262436668C00C5EBDC /* PersonCreditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D97C6252436668C00C5EBDC /* PersonCreditCell.swift */; };
 		8DA1A05623B5BDF900B28167 /* CreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA1A05523B5BDF900B28167 /* CreditsView.swift */; };
+		8DA35DD4247094DA00AB6876 /* OMDB_Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA35DD3247094DA00AB6876 /* OMDB_Query.swift */; };
+		8DA35DD62470973500AB6876 /* OMDBResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA35DD52470973500AB6876 /* OMDBResponse.swift */; };
+		8DA35DD8247099B000AB6876 /* ExternalIdResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA35DD7247099B000AB6876 /* ExternalIdResponse.swift */; };
+		8DA35DDA247099E700AB6876 /* ExternalIdQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA35DD9247099E700AB6876 /* ExternalIdQuery.swift */; };
 		8DA5DABF23B13DFC00895DEF /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DABD23B13DFC00895DEF /* DataModel.xcdatamodeld */; };
 		8DA5DB4C23B24E0200895DEF /* MovieDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DB4B23B24E0200895DEF /* MovieDetail.swift */; };
 		8DA5DB6723B260D900895DEF /* MovieMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DB6523B260D900895DEF /* MovieMO+CoreDataClass.swift */; };
@@ -288,6 +292,10 @@
 		8D896269244BCC5B00AB289D /* PersonCreditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCreditViewModel.swift; sourceTree = "<group>"; };
 		8D97C6252436668C00C5EBDC /* PersonCreditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCreditCell.swift; sourceTree = "<group>"; };
 		8DA1A05523B5BDF900B28167 /* CreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsView.swift; sourceTree = "<group>"; };
+		8DA35DD3247094DA00AB6876 /* OMDB_Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OMDB_Query.swift; sourceTree = "<group>"; };
+		8DA35DD52470973500AB6876 /* OMDBResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OMDBResponse.swift; sourceTree = "<group>"; };
+		8DA35DD7247099B000AB6876 /* ExternalIdResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalIdResponse.swift; sourceTree = "<group>"; };
+		8DA35DD9247099E700AB6876 /* ExternalIdQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalIdQuery.swift; sourceTree = "<group>"; };
 		8DA5DABE23B13DFC00895DEF /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		8DA5DB4B23B24E0200895DEF /* MovieDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetail.swift; sourceTree = "<group>"; };
 		8DA5DB6523B260D900895DEF /* MovieMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MovieMO+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -606,6 +614,8 @@
 				4B87B70324153BE900DAA0FF /* MultiSearch.swift */,
 				4B6B1E1C24162080000C5C3E /* Trending.swift */,
 				8D4E16FA241B751100D8D3F4 /* PersonDetail.swift */,
+				8DA35DD52470973500AB6876 /* OMDBResponse.swift */,
+				8DA35DD7247099B000AB6876 /* ExternalIdResponse.swift */,
 			);
 			path = Codable;
 			sourceTree = "<group>";
@@ -685,6 +695,8 @@
 				4B87B70524154BCC00DAA0FF /* MultiSearchQuery.swift */,
 				4B6B1E1E241628E5000C5C3E /* TrendingQuery.swift */,
 				8D4E16FC241B79DF00D8D3F4 /* PersonDetailQuery.swift */,
+				8DA35DD3247094DA00AB6876 /* OMDB_Query.swift */,
+				8DA35DD9247099E700AB6876 /* ExternalIdQuery.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -921,6 +933,7 @@
 				8DBC157623C4EEF100547C57 /* MainMovieViewController.swift in Sources */,
 				8D1849E223FF78F200BF6666 /* VideosCell.swift in Sources */,
 				8D11617924194DFF00B67F07 /* TrendingPersonCell.swift in Sources */,
+				8DA35DD4247094DA00AB6876 /* OMDB_Query.swift in Sources */,
 				8DB9468E23ACBD7800AFD13C /* Network.swift in Sources */,
 				4B87B6FD241427EA00DAA0FF /* IndividualMovieCell.swift in Sources */,
 				8D467A95246B186800E109A3 /* SavedMoviesViewController.swift in Sources */,
@@ -945,6 +958,7 @@
 				8DAA63F923D457E4002CEFF1 /* TopRatedQuery.swift in Sources */,
 				4B6B1E23241676ED000C5C3E /* SearchResultsController.swift in Sources */,
 				8DAEF42023B9B627008AE0EA /* BaseButton.swift in Sources */,
+				8DA35DDA247099E700AB6876 /* ExternalIdQuery.swift in Sources */,
 				8D62E5EC242F7415006EC8D7 /* PersonBiographySectionCell.swift in Sources */,
 				4B87B70424153BEA00DAA0FF /* MultiSearch.swift in Sources */,
 				8D12BE6C23A79C4B006C72B4 /* APIConfiguration.swift in Sources */,
@@ -973,6 +987,7 @@
 				8DB2115424010A6F00946AD2 /* ReviewCell.swift in Sources */,
 				4B6B1E1F241628E5000C5C3E /* TrendingQuery.swift in Sources */,
 				4B7046F524139C460036388B /* BaseMovieResult.swift in Sources */,
+				8DA35DD8247099B000AB6876 /* ExternalIdResponse.swift in Sources */,
 				4B87B70024150D2100DAA0FF /* MovieCollectionController.swift in Sources */,
 				8DBC157323C4EC1300547C57 /* NowPlayingQuery.swift in Sources */,
 				8D400AEF23B36A56006555D3 /* MovieSearchViewController.swift in Sources */,
@@ -1002,6 +1017,7 @@
 				4B6B1E2724167A32000C5C3E /* BaseSearchResultCell.swift in Sources */,
 				8D4CFE9723B0EE4F00985287 /* CoreDataManager.swift in Sources */,
 				8D62E5F0242F7F46006EC8D7 /* PersonAlsoKnownAsCell.swift in Sources */,
+				8DA35DD62470973500AB6876 /* OMDBResponse.swift in Sources */,
 				8DAC28EE2419B10C002127AA /* TrendingMovieCell.swift in Sources */,
 				8D76955C23BCF1FC003A255C /* MovieVideosView.swift in Sources */,
 				8D63680423B470AF009CD78C /* MovieSearchQuery.swift in Sources */,
@@ -1159,7 +1175,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = JCDJLS5JT8;
 				INFOPLIST_FILE = MovieToWatch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1182,7 +1198,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = JCDJLS5JT8;
 				INFOPLIST_FILE = MovieToWatch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

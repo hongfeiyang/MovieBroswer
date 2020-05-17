@@ -12,6 +12,43 @@ class BasicInfoSectionCell: MovieDetailSectionBaseCell {
     
     override var movieDetail: MovieDetail? {
         didSet {
+            if let id = movieDetail?.id {
+                let group = DispatchGroup()
+                var imdbRating: String?
+                var metaRating: String?
+                
+                let query = ExternalIdQuery(movie_id: id)
+                group.enter()
+                Network.getExternalId(query: query) {(result) in
+                    switch result {
+                    case.success(let response):
+                        if let imdbId = response.imdbID {
+                            let omdbQuery = OMDB_Query(i: imdbId)
+                            group.enter()
+                            Network.getOMDBDetail(query: omdbQuery) {(omdbResult) in
+                                switch omdbResult {
+                                case .success(let omdbResponse):
+                                    imdbRating = omdbResponse.imdbRating
+                                    metaRating = omdbResponse.metascore
+                                case .failure(_):
+                                    imdbRating = "-"
+                                    metaRating = "-"
+                                }
+                                group.leave()
+                            }
+                        }
+                    case .failure(_):
+                        imdbRating = "--"
+                        metaRating = "--"
+                    }
+                    group.leave()
+                }
+                group.notify(queue: .main) {
+                    self.imdbRating.text = imdbRating
+                    self.metacriticRating.text = metaRating
+                }
+            }
+            
             if let date = movieDetail?.releaseDate {
                 let formatter = DateFormatter()
                 formatter.dateStyle = .medium
@@ -33,6 +70,24 @@ class BasicInfoSectionCell: MovieDetailSectionBaseCell {
             }, failureHandler: nil)
         }
     }
+    
+    var imdbLogoView: UIImageView = {
+        let view = UIImageView(image: UIImage(named: "IMDB_Logo"))
+        view.contentMode = .scaleAspectFit
+        view.constrainWidth(constant: 1200/605*25)
+        view.constrainHeight(constant: 25)
+        return view
+    }()
+    var imdbRating = UILabel(text: "", font: .systemFont(ofSize: 16, weight: .regular), numberOfLines: 1, textColor: .label, textAlignment: .left)
+    
+    var metacriticView: UIImageView = {
+        let view = UIImageView(image: UIImage(named: "MetacriticLogo"))
+        view.contentMode = .scaleAspectFit
+        view.constrainWidth(constant: 1280/300*25)
+        view.constrainHeight(constant: 25)
+        return view
+    }()
+    var metacriticRating = UILabel(text: "", font: .systemFont(ofSize: 16, weight: .regular), numberOfLines: 1, textColor: .label, textAlignment: .left)
     
     lazy var addToListButton: UIButton = {
         let button = UIButton(title: "Add to my list", titleColor: .label, font: .systemFont(ofSize: 16, weight: .semibold))
@@ -82,6 +137,16 @@ class BasicInfoSectionCell: MovieDetailSectionBaseCell {
     var genreController = GenreController()
   
     lazy var stackView = UIStackView(arrangedSubviews: [
+        UIStackView(arrangedSubviews: [
+            UIStackView(arrangedSubviews: [
+                self.imdbLogoView,
+                self.imdbRating
+            ], axis: .horizontal, spacing: 5, distribution: .fill, alignment: .center),
+            UIStackView(arrangedSubviews: [
+                self.metacriticView,
+                self.metacriticRating
+            ], axis: .horizontal, spacing: 5, distribution: .fill, alignment: .center),
+        ], axis: .horizontal, spacing: 20, distribution: .fill, alignment: .center),
         self.addToListButton,
         UIStackView(arrangedSubviews: [
             self.releaseDate, self.status, self.runtime

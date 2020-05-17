@@ -9,6 +9,8 @@
 import Foundation
 
 let API_KEY = "8bb40fd6bdda6cfcc5397a96da82609d"
+let OMDB_KEY = "85c26d5f"
+
 
 struct APIConfiguration {
     
