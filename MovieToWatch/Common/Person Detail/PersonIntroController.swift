@@ -10,12 +10,14 @@ import UIKit
 
 class PersonIntroController: UIViewController {
     
-    public let MOVIE_COLLECTION_VIEW_HEIGHT: CGFloat = 160
-    public let NAME_LABEL_FULL_HEIGHT: CGFloat = 80
+    let MOVIE_COLLECTION_VIEW_HEIGHT: CGFloat = 160
+    let NAME_LABEL_FULL_HEIGHT: CGFloat = 80
+    let KNOWN_FOR_LABEL_HEIGHT: CGFloat = 30
+    let UP_ARROW_HEIGHT: CGFloat = 20
     let window = UIApplication.shared.windows[0]
     lazy var topPadding = window.safeAreaInsets.top
     lazy var bottomPadding = window.safeAreaInsets.bottom
-    lazy var profileImageViewFullHeight = UIScreen.main.bounds.height - topPadding - bottomPadding - MOVIE_COLLECTION_VIEW_HEIGHT
+    lazy var profileImageViewFullHeight = UIScreen.main.bounds.height - topPadding - bottomPadding - MOVIE_COLLECTION_VIEW_HEIGHT - KNOWN_FOR_LABEL_HEIGHT - UP_ARROW_HEIGHT
     
     var complementaryTextColor: UIColor?
     
@@ -28,10 +30,12 @@ class PersonIntroController: UIViewController {
                     self?.view.backgroundColor = avgColor
                     self?.nameLabel.textColor = avgColor.complementaryColor
                     self?.complementaryTextColor = avgColor.complementaryColor
+                    self?.knownForLabel.textColor = avgColor.complementaryColor
                 } else {
                     self?.view.backgroundColor = .secondarySystemBackground
                     self?.nameLabel.textColor = .label
                     self?.complementaryTextColor = .label
+                    self?.knownForLabel.textColor = .label
                 }
                 group.leave()
             }
@@ -74,6 +78,13 @@ class PersonIntroController: UIViewController {
     var ratingLabel = UILabel(text: "Rating", font: .systemFont(ofSize: 20, weight: .semibold), numberOfLines: 0, textColor: .label, textAlignment: .center)
     var rankingLabel = UILabel(text: "Ranking", font: .systemFont(ofSize: 20, weight: .semibold), numberOfLines: 0, textColor: .label, textAlignment: .center)
     
+    var knownForLabel = UILabel(text: "Known For:", font: .systemFont(ofSize: 18, weight: .medium), numberOfLines: 1, textColor: .label, textAlignment: .left)
+    var upArrowView: UIImageView = {
+        let view = UIImageView(image: UIImage.symbolWithTintColor(symbol: "chevron.compact.up", weight: .bold, tintColor: .label))
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
+    
     lazy var nameLabelContainerView: UIView = {
         let view = UIView()
         view.addSubview(self.nameLabel)
@@ -95,7 +106,7 @@ class PersonIntroController: UIViewController {
         let layout = BetterSnappingLayout()
         layout.scrollDirection = .horizontal
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.contentInset = .init(top: 0, left: 20, bottom: 0, right: 20)
+        view.contentInset = .init(top: 0, left: 10, bottom: 0, right: 10)
         view.decelerationRate = .fast
         view.delegate = self
         view.dataSource = self
@@ -119,9 +130,15 @@ class PersonIntroController: UIViewController {
         
         view.addSubview(nameLabelContainerView)
         nameLabelConstraints = nameLabelContainerView.anchor(top: nil, leading: view.leadingAnchor, bottom: profileImageView.bottomAnchor, trailing: view.trailingAnchor, size: .init(width: 0, height: NAME_LABEL_FULL_HEIGHT))
+        
+        view.addSubview(knownForLabel)
+        knownForLabel.anchor(top: profileImageView.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 0, left: 10, bottom: 0, right: 10), size: .init(width: 0, height: KNOWN_FOR_LABEL_HEIGHT))
         view.addSubview(collectionView)
-        collectionView.anchor(top: profileImageView.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, size: .init(width: 0, height: MOVIE_COLLECTION_VIEW_HEIGHT))
-        collectionView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        collectionView.anchor(top: knownForLabel.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, size: .init(width: 0, height: MOVIE_COLLECTION_VIEW_HEIGHT))
+        view.addSubview(upArrowView)
+        upArrowView.anchor(top: collectionView.bottomAnchor, leading: nil, bottom: nil, trailing: nil, size: .init(width: 0, height: UP_ARROW_HEIGHT))
+        upArrowView.centerXInSuperview()
+        upArrowView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
     
 }
@@ -150,7 +167,7 @@ extension PersonIntroController: UICollectionViewDelegateFlowLayout, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height = collectionView.frame.height - 10
+        let height = collectionView.frame.height
         return .init(width: height/2, height: height)
     }
     

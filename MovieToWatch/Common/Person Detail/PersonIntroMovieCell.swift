@@ -12,7 +12,7 @@ class PersonIntroMovieCell: UICollectionViewCell {
     
     var data: PersonCastCredit! {
         didSet {
-            posterImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: data.posterPath, size: .original), placeholderImage: Constants.moviePlaceholderImage, completed: nil)
+            posterImageView.sd_setImage(with: APIConfiguration.parsePosterURL(file_path: data.posterPath, size: .w154), placeholderImage: Constants.moviePlaceholderImage, completed: nil)
             title.text = data.title
             if let vote = data.voteAverage {
                 rating.text = String(vote)

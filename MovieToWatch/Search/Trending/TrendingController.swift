@@ -100,7 +100,7 @@ class TrendingController: UICollectionViewController, UICollectionViewDelegateFl
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: sectionHeaderCellId, for: indexPath) as! TrendingSectionHeaderCell
-            cell.titleLabel.text = "Trending Person"
+            cell.titleLabel.text = "Trending People"
             return cell
         } else {
             let cell = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: sectionHeaderCellId, for: indexPath) as! TrendingSectionHeaderCell
@@ -143,7 +143,7 @@ class TrendingController: UICollectionViewController, UICollectionViewDelegateFl
             self?.movieResult = $0?.results as? [MovieMultiSearchResult]
         }
         
-        loadTrending(media_type: .person, time_window: .day) { [weak self] in
+        loadTrending(media_type: .person, time_window: .week) { [weak self] in
             self?.personResult = $0?.results as? [PersonMultiSearchResult]
         }
     }

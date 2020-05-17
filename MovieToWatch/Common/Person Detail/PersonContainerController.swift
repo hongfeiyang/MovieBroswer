@@ -33,7 +33,7 @@ class PersonContainerController: BaseNavItemController {
     
     var detailControllerConstraints: AnchoredConstraints?
     lazy var detailControllerHeight: CGFloat = UIScreen.main.bounds.height - topPadding - profileImageViewCompactHeight
-    lazy var profileImageViewFullHeight: CGFloat = UIScreen.main.bounds.height - topPadding - bottomPadding - self.introController.MOVIE_COLLECTION_VIEW_HEIGHT
+    lazy var profileImageViewFullHeight: CGFloat = self.introController.profileImageViewFullHeight
     var profileImageViewCompactHeight: CGFloat = 90
     var profileImageViewCompactWidth: CGFloat = 60
     var profileImageViewCompactTrailingOffset: CGFloat = 20
@@ -167,6 +167,8 @@ class PersonContainerController: BaseNavItemController {
         animator.addAnimations {
             self.introController.collectionView.alpha = 0
             self.introController.stackView.alpha = 0
+            self.introController.knownForLabel.alpha = 0
+            self.introController.upArrowView.alpha = 0
             self.introController.nameLabelContainerView.transform = transform
             self.view.layoutIfNeeded()
         }
@@ -201,6 +203,8 @@ class PersonContainerController: BaseNavItemController {
         animator.addAnimations {
             self.introController.collectionView.alpha = 1
             self.introController.stackView.alpha = 1
+            self.introController.knownForLabel.alpha = 1
+            self.introController.upArrowView.alpha = 1
             self.introController.nameLabelContainerView.transform = .identity
             self.view.layoutIfNeeded()
         }

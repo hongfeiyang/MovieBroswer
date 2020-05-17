@@ -49,8 +49,8 @@ struct PersonDetail: Codable {
 
 // MARK: - CombinedCredits
 struct CombinedCredits: Codable {
-    let cast: [PersonCastCredit]
-    let crew: [PersonCrewCredit]
+    let cast: [PersonCastCredit]?
+    let crew: [PersonCrewCredit]?
 }
 
 // MARK: - Images
@@ -177,8 +177,8 @@ struct PersonCrewCredit: Codable {
 
 // MARK: - MovieCredits
 struct MovieCredits: Codable {
-    let cast: [PersonCastCredit]
-    let crew: [PersonCrewCredit]
+    let cast: [PersonCastCredit]?
+    let crew: [PersonCrewCredit]?
 }
 
 // MARK: - TaggedImages
