@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OverviewSectionCell: MovieDetailSectionBaseCell {
+class OverviewSectionCell: BaseMovieDetailSectionCell {
     
     override var movieDetail: MovieDetail? {
         didSet {

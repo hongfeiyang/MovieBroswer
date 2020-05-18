@@ -1,5 +1,5 @@
 //
-//  Credits.swift
+//  CreditsSectionCell.swift
 //  MovieToWatch
 //
 //  Created by Clark on 20/2/20.
@@ -8,10 +8,15 @@
 
 import UIKit
 
-class CreditsSectionCell: MovieDetailSectionBaseCell {
+class CreditsSectionCell: BaseMovieDetailSectionCell {
     
     override var movieDetail: MovieDetail? {
         didSet {
+            if let data = movieDetail?.credits?.cast, data.count > 0 {
+                emptyDatasourceLabel.isHidden = true
+            } else {
+                emptyDatasourceLabel.isHidden = false
+            }
             DispatchQueue.main.async {
                 self.directorButton.contentLabel.text = self.directorCrew?.name
                 self.collectionView.reloadData()
@@ -42,7 +47,6 @@ class CreditsSectionCell: MovieDetailSectionBaseCell {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.decelerationRate = .fast
-        collectionView.showsHorizontalScrollIndicator = false
         collectionView.contentInset = .init(top: 0, left: 10, bottom: 0, right: 30)
         collectionView.backgroundColor = .clear
         collectionView.delegate = self
@@ -66,6 +70,10 @@ class CreditsSectionCell: MovieDetailSectionBaseCell {
         super.init(frame: frame)
         addSubview(stackView)
         stackView.fillSuperview()
+        
+        emptyDatasourceLabel.text = "No Credits Infomation Available"
+        collectionView.addSubview(emptyDatasourceLabel)
+        emptyDatasourceLabel.centerInSuperview()
     }
     
     required init?(coder: NSCoder) {
@@ -99,7 +107,7 @@ extension CreditsSectionCell: UICollectionViewDelegate, UICollectionViewDelegate
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 20
+        return 0
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

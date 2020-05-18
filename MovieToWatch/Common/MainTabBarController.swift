@@ -13,7 +13,7 @@ class MainTabBarController: UITabBarController {
     
     let vc1 = TestViewController()
     let vc2 = MovieSearchViewController()
-    let vc3 = MainMovieViewController()
+    let vc3 = BrowseMovieViewController()
     let vc4 = SavedMoviesViewController()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +35,6 @@ class MainTabBarController: UITabBarController {
         let vcs = [vc1, vc2, vc3, vc4]
         
         viewControllers = vcs.map { UINavigationController(rootViewController: $0)}
-        selectedIndex = 1
+        selectedIndex = 0
     }
 }

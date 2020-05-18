@@ -8,10 +8,12 @@
 
 import UIKit
 
-class MovieDetailSectionBaseCell: UICollectionViewCell {
+class BaseMovieDetailSectionCell: UICollectionViewCell {
     
     var movieDetail: MovieDetail?
     weak var navController: UINavigationController?
+    var emptyDatasourceLabel = UILabel(text: "Nothing here", font: .systemFont(ofSize: 20, weight: .regular), numberOfLines: 0, textColor: .label, textAlignment: .center)
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .systemBackground

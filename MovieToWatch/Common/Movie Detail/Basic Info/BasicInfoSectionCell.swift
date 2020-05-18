@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BasicInfoSectionCell: MovieDetailSectionBaseCell {
+class BasicInfoSectionCell: BaseMovieDetailSectionCell {
     
     override var movieDetail: MovieDetail? {
         didSet {
@@ -49,6 +49,12 @@ class BasicInfoSectionCell: MovieDetailSectionBaseCell {
                 }
             }
             
+            if let voteAverage = movieDetail?.voteAverage, voteAverage != 0 {
+                tmdbRating.text = String(voteAverage)
+            } else {
+                tmdbRating.text = "N/A"
+            }
+
             if let date = movieDetail?.releaseDate {
                 let formatter = DateFormatter()
                 formatter.dateStyle = .medium
@@ -88,6 +94,15 @@ class BasicInfoSectionCell: MovieDetailSectionBaseCell {
         return view
     }()
     var metacriticRating = UILabel(text: "", font: .systemFont(ofSize: 16, weight: .regular), numberOfLines: 1, textColor: .label, textAlignment: .left)
+    
+    var tmdbView: UIImageView = {
+        let view = UIImageView(image: UIImage(named: "TMDB_Logo"))
+        view.contentMode = .scaleAspectFit
+        view.constrainWidth(constant: 185/133*25)
+        view.constrainHeight(constant: 25)
+        return view
+    }()
+    var tmdbRating = UILabel(text: "", font: .systemFont(ofSize: 16, weight: .regular), numberOfLines: 1, textColor: .label, textAlignment: .left)
     
     lazy var addToListButton: UIButton = {
         let button = UIButton(title: "Add to my list", titleColor: .label, font: .systemFont(ofSize: 16, weight: .semibold))
@@ -145,6 +160,10 @@ class BasicInfoSectionCell: MovieDetailSectionBaseCell {
             UIStackView(arrangedSubviews: [
                 self.metacriticView,
                 self.metacriticRating
+            ], axis: .horizontal, spacing: 5, distribution: .fill, alignment: .center),
+            UIStackView(arrangedSubviews: [
+                self.tmdbView,
+                self.tmdbRating
             ], axis: .horizontal, spacing: 5, distribution: .fill, alignment: .center),
         ], axis: .horizontal, spacing: 20, distribution: .fill, alignment: .center),
         self.addToListButton,

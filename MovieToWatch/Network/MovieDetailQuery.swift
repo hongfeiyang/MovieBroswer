@@ -14,7 +14,7 @@ struct MovieDetailQuery: CustomStringConvertible {
     
     let movieID: Int
     var language: String?
-    var append_to_response: String? = "videos,images,reviews,keywords,popular,release_dates,similar,recommendations,lists,credits"
+    var append_to_response: String? = "videos,images,reviews,keywords,popular,release_dates,similar_movies,recommendations,lists,credits"
     
     var include_image_language: String? = "en,null"
     

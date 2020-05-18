@@ -18,7 +18,7 @@ import Foundation
 // MARK: - DiscoverMovie
 struct DiscoverMovie: Codable {
     let page, totalResults, totalPages: Int
-    let results: [DiscoverMovieResult]
+    let results: [MovieListResult]
 
     enum CodingKeys: String, CodingKey {
         case page
@@ -28,70 +28,6 @@ struct DiscoverMovie: Codable {
     }
 
 }
-
-//
-// To read values from URLs:
-//
-//   let task = URLSession.shared.resultTask(with: url) { result, response, error in
-//     if let result = result {
-//       ...
-//     }
-//   }
-//   task.resume()
-
-// MARK: - MovieItem
-struct DiscoverMovieResult: Codable {
-    let popularity: Double?
-    let voteCount: Int?
-    let video: Bool
-    let posterPath: String?
-    let id: Int
-    let adult: Bool?
-    let backdropPath: String?
-    let originalLanguage: String?
-    let originalTitle: String?
-    let genreIDS: [Int]
-    let title: String?
-    let voteAverage: Double?
-    let overview: String?
-    let releaseDate: Date?
-
-    enum CodingKeys: String, CodingKey {
-        case popularity
-        case voteCount = "vote_count"
-        case video
-        case posterPath = "poster_path"
-        case id, adult
-        case backdropPath = "backdrop_path"
-        case originalLanguage = "original_language"
-        case originalTitle = "original_title"
-        case genreIDS = "genre_ids"
-        case title
-        case voteAverage = "vote_average"
-        case overview
-        case releaseDate = "release_date"
-    }
-
-}
-
-
-// MARK: - Helper functions for creating encoders and decoders
-
-//func newJSONDecoder() -> JSONDecoder {
-//    let decoder = JSONDecoder()
-//    if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
-//        decoder.dateDecodingStrategy = .iso8601
-//    }
-//    return decoder
-//}
-//
-//func newJSONEncoder() -> JSONEncoder {
-//    let encoder = JSONEncoder()
-//    if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
-//        encoder.dateEncodingStrategy = .iso8601
-//    }
-//    return encoder
-//}
 
 // MARK: - URLSession response handlers
 

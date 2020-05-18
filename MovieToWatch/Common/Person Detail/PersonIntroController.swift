@@ -21,6 +21,8 @@ class PersonIntroController: UIViewController {
     
     var complementaryTextColor: UIColor?
     
+    var emptyDatasourceLabel = UILabel(text: "Nothing here", font: .systemFont(ofSize: 20, weight: .regular), numberOfLines: 0, textColor: .label, textAlignment: .center)
+    
     var personDetail: PersonDetail? {
         didSet {
             let group = DispatchGroup()
@@ -49,6 +51,11 @@ class PersonIntroController: UIViewController {
     
     var dataSource: [PersonCastCredit]? {
         didSet {
+            if let dataSource = dataSource, !dataSource.isEmpty {
+                self.emptyDatasourceLabel.isHidden = true
+            } else {
+                self.emptyDatasourceLabel.isHidden = false
+            }
             dataSource?.sort(by: { (lhs, rhs) -> Bool in
                 return lhs.popularity ?? 0 > rhs.popularity ?? 0
             })
@@ -78,7 +85,7 @@ class PersonIntroController: UIViewController {
     var ratingLabel = UILabel(text: "Rating", font: .systemFont(ofSize: 20, weight: .semibold), numberOfLines: 0, textColor: .label, textAlignment: .center)
     var rankingLabel = UILabel(text: "Ranking", font: .systemFont(ofSize: 20, weight: .semibold), numberOfLines: 0, textColor: .label, textAlignment: .center)
     
-    var knownForLabel = UILabel(text: "Known For:", font: .systemFont(ofSize: 18, weight: .medium), numberOfLines: 1, textColor: .label, textAlignment: .left)
+    var knownForLabel = UILabel(text: "Popular Movies", font: .systemFont(ofSize: 18, weight: .medium), numberOfLines: 1, textColor: .label, textAlignment: .left)
     var upArrowView: UIImageView = {
         let view = UIImageView(image: UIImage.symbolWithTintColor(symbol: "chevron.compact.up", weight: .bold, tintColor: .label))
         view.contentMode = .scaleAspectFit
@@ -111,20 +118,15 @@ class PersonIntroController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = .clear
-        view.register(PersonIntroMovieCell.self, forCellWithReuseIdentifier: cellId)
+        //view.register(PersonIntroMovieCell.self, forCellWithReuseIdentifier: cellId)
+        view.register(IndividualMovieCell.self, forCellWithReuseIdentifier: cellId)
         return view
     }()
 
     var profileImageViewConstraints: AnchoredConstraints?
     var nameLabelConstraints: AnchoredConstraints?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.backgroundColor = .systemBackground
-        nameLabel.contentMode = .center
-        nameLabel.adjustsFontSizeToFitWidth = true
-        nameLabel.minimumScaleFactor = 0
+    func setupLayout() {
         view.addSubview(profileImageView)
         profileImageViewConstraints = profileImageView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: topPadding, left: 0, bottom: 0, right: 0), size: .init(width: 0, height: profileImageViewFullHeight))
         
@@ -141,6 +143,18 @@ class PersonIntroController: UIViewController {
         upArrowView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        nameLabel.contentMode = .center
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.minimumScaleFactor = 0
+        setupLayout()
+        emptyDatasourceLabel.text = "No Movies"
+        collectionView.addSubview(emptyDatasourceLabel)
+        emptyDatasourceLabel.centerInSuperview()
+    }
+    
 }
 
 
@@ -150,10 +164,14 @@ extension PersonIntroController: UICollectionViewDelegateFlowLayout, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! PersonIntroMovieCell
-        cell.data = dataSource?[indexPath.item]
-        cell.title.textColor = complementaryTextColor
-        cell.rating.textColor = complementaryTextColor
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! IndividualMovieCell
+//        cell.data = dataSource?[indexPath.item]
+//        cell.title.textColor = complementaryTextColor
+//        cell.rating.textColor = complementaryTextColor
+        guard let credit = dataSource?[indexPath.item] else { cell.movieItem = nil; return cell}
+        cell.movieItem =  IndividualMovieItem(castCredit: credit)
+        cell.titleLabel.textColor = complementaryTextColor
+        cell.ratingNumberLabel.textColor = complementaryTextColor
         return cell
     }
     

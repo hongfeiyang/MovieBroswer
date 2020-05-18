@@ -41,9 +41,10 @@ struct MovieDetail: Codable {
     let reviews: MovieReviews
     let keywords: Keywords?
     let releaseDates: ReleaseDates?
-    let similar, recommendations: Recommendations?
+    let recommendations: MovieRecommendationsResponse?
     let lists: Lists?
     let credits: Credits?
+    let similarMovies: SimilarMoviesResponse?
     
     enum CodingKeys: String, CodingKey {
         case adult
@@ -68,8 +69,9 @@ struct MovieDetail: Codable {
         case reviews
         case keywords
         case releaseDates = "release_dates"
-        case similar, recommendations, lists
+        case recommendations, lists
         case credits
+        case similarMovies = "similar_movies"
     }
 }
 
@@ -328,71 +330,6 @@ struct ProductionCountry: Codable {
     enum CodingKeys: String, CodingKey {
         case iso3166_1 = "iso_3166_1"
         case name
-    }
-}
-
-
-//
-// To read values from URLs:
-//
-//   let task = URLSession.shared.recommendationsTask(with: url) { recommendations, response, error in
-//     if let recommendations = recommendations {
-//       ...
-//     }
-//   }
-//   task.resume()
-
-// MARK: - Recommendations
-struct Recommendations: Codable {
-    let page: Int
-    let results: [RecommendationsResult]
-    let totalPages, totalResults: Int
-    
-    enum CodingKeys: String, CodingKey {
-        case page, results
-        case totalPages = "total_pages"
-        case totalResults = "total_results"
-    }
-}
-
-//
-// To read values from URLs:
-//
-//   let task = URLSession.shared.recommendationsResultTask(with: url) { recommendationsResult, response, error in
-//     if let recommendationsResult = recommendationsResult {
-//       ...
-//     }
-//   }
-//   task.resume()
-
-// MARK: - RecommendationsResult
-struct RecommendationsResult: Codable {
-    let id: Int?
-    let video: Bool?
-    let voteCount: Int?
-    let voteAverage: Double?
-    let title, releaseDate: String?
-    let originalLanguage: String?
-    let originalTitle: String?
-    let genreIDS: [Int]?
-    let backdropPath: String?
-    let adult: Bool?
-    let overview, posterPath: String?
-    let popularity: Double?
-    
-    enum CodingKeys: String, CodingKey {
-        case id, video
-        case voteCount = "vote_count"
-        case voteAverage = "vote_average"
-        case title
-        case releaseDate = "release_date"
-        case originalLanguage = "original_language"
-        case originalTitle = "original_title"
-        case genreIDS = "genre_ids"
-        case backdropPath = "backdrop_path"
-        case adult, overview
-        case posterPath = "poster_path"
-        case popularity
     }
 }
 

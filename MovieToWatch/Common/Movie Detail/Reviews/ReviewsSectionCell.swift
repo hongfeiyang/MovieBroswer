@@ -1,5 +1,5 @@
 //
-//  Movie Reviews.swift
+//  ReviewsSectionCell.swift
 //  MovieToWatch
 //
 //  Created by Clark on 22/2/20.
@@ -8,12 +8,18 @@
 
 import UIKit
 
-class ReviewsSectionCell: MovieDetailSectionBaseCell {
+class ReviewsSectionCell: BaseMovieDetailSectionCell {
     
     let reviewCellId = "singleReviewCellId"
     
     override var movieDetail: MovieDetail? {
         didSet {
+            if let data = movieDetail?.reviews.results, data.count > 0 {
+                print("XXXXXXXXXXX: \(data.count)")
+                emptyDatasourceLabel.isHidden = true
+            } else {
+                emptyDatasourceLabel.isHidden = false
+            }
             DispatchQueue.main.async { self.collectionView.reloadData() }
         }
     }
@@ -34,7 +40,7 @@ class ReviewsSectionCell: MovieDetailSectionBaseCell {
         view.dataSource = self
         view.backgroundColor = .clear
         view.register(MovieReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
-        view.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 168).isActive = true
         return view
     }()
     
@@ -50,6 +56,10 @@ class ReviewsSectionCell: MovieDetailSectionBaseCell {
         super.init(frame: frame)
         addSubview(stackView)
         stackView.fillSuperview()
+        
+        emptyDatasourceLabel.text = "No Reviews"
+        collectionView.addSubview(emptyDatasourceLabel)
+        emptyDatasourceLabel.centerInSuperview()
     }
     
     required init?(coder: NSCoder) {
@@ -78,7 +88,7 @@ extension ReviewsSectionCell: UICollectionViewDelegate, UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return .init(width: collectionView.frame.width - interItemSpacing*2, height: collectionView.frame.height - lineSpacingforSections*2)
+        return .init(width: collectionView.frame.width - interItemSpacing*2, height: collectionView.frame.height)
     }
     
     var interItemSpacing: CGFloat {return 16}

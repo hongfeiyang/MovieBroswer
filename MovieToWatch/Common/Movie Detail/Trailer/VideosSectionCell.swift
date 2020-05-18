@@ -1,5 +1,5 @@
 //
-//  Trailer.swift
+//  VideosSectionCell.swift
 //  MovieToWatch
 //
 //  Created by Clark on 21/2/20.
@@ -9,10 +9,15 @@
 import UIKit
 import WebKit
 
-class VideosSectionCell: MovieDetailSectionBaseCell {
+class VideosSectionCell: BaseMovieDetailSectionCell {
 
     override var movieDetail: MovieDetail? {
         didSet {
+            if let data = movieDetail?.videos.results, data.count > 0 {
+                emptyDatasourceLabel.isHidden = true
+            } else {
+                emptyDatasourceLabel.isHidden = false
+            }
             DispatchQueue.main.async { self.collectionView.reloadData() }
         }
     }
@@ -28,7 +33,7 @@ class VideosSectionCell: MovieDetailSectionBaseCell {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.decelerationRate = .fast
-        collectionView.contentInset = .init(top: 0, left: 10, bottom: 0, right: 10)
+        collectionView.contentInset = .init(top: 0, left: 10, bottom: 0, right: 50)
         collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -49,6 +54,10 @@ class VideosSectionCell: MovieDetailSectionBaseCell {
         super.init(frame: frame)
         addSubview(stackView)
         stackView.fillSuperview()
+        
+        emptyDatasourceLabel.text = "No Videos Available"
+        collectionView.addSubview(emptyDatasourceLabel)
+        emptyDatasourceLabel.centerInSuperview()
     }
     
     required init?(coder: NSCoder) {
@@ -71,7 +80,7 @@ extension VideosSectionCell: UICollectionViewDelegate, UICollectionViewDelegateF
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let adjustedHight = collectionView.frame.height - 5*2
+        let adjustedHight = collectionView.frame.height //- 5*2
         let adjustedWidth = adjustedHight * 1920/1080
         
         return .init(width: adjustedWidth, height: adjustedHight)

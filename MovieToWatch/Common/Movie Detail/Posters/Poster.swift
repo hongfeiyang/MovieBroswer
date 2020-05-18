@@ -8,12 +8,17 @@
 
 import UIKit
 
-class ImagesSectionCell: MovieDetailSectionBaseCell {
+class ImagesSectionCell: BaseMovieDetailSectionCell {
 
     let cellId = "ImagesCell"
     
     override var movieDetail: MovieDetail? {
         didSet {
+            if let data = movieDetail?.images.backdrops, data.count > 0 {
+                emptyDatasourceLabel.isHidden = true
+            } else {
+                emptyDatasourceLabel.isHidden = false
+            }
             DispatchQueue.main.async { self.collectionView.reloadData() }
         }
     }
@@ -29,8 +34,7 @@ class ImagesSectionCell: MovieDetailSectionBaseCell {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.decelerationRate = .fast
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.contentInset = .init(top: 0, left: 10, bottom: 0, right: 20)
+        collectionView.contentInset = .init(top: 0, left: 10, bottom: 0, right: 30)
         collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -51,6 +55,10 @@ class ImagesSectionCell: MovieDetailSectionBaseCell {
         super.init(frame: frame)
         addSubview(stackView)
         stackView.fillSuperview()
+        
+        emptyDatasourceLabel.text = "No Images Available"
+        collectionView.addSubview(emptyDatasourceLabel)
+        emptyDatasourceLabel.centerInSuperview()
     }
     
     required init?(coder: NSCoder) {
@@ -75,7 +83,7 @@ extension ImagesSectionCell: UICollectionViewDelegate, UICollectionViewDelegateF
         
         guard let image = data?.backdrops[indexPath.row] else {return .init(width: 0, height: 0)}
         
-        let adjustedHeight = collectionView.frame.height - 10*2
+        let adjustedHeight = collectionView.frame.height // - 10*2
         let widthToDisplay = adjustedHeight / CGFloat(image.height!) * CGFloat(image.width!)
         return .init(width: widthToDisplay, height: adjustedHeight)
     }

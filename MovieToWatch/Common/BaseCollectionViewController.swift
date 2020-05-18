@@ -14,8 +14,9 @@ class BaseCollectionViewController: UICollectionViewController, UICollectionView
         let layout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: layout)
         collectionView.delegate = self
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .systemBackground
         collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.contentInset = .init(top: 0, left: 0, bottom: UIApplication.shared.windows[0].safeAreaInsets.bottom, right: 0)
     }
     
     required init?(coder: NSCoder) {

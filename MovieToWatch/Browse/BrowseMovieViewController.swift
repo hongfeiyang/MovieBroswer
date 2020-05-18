@@ -8,37 +8,18 @@
 
 import UIKit
 
-class MainMovieViewController: UIViewController {
+class BrowseMovieViewController: UIViewController {
     
-    var nowPlayingResult: [NowPlayingResult]?
-    var topRatedResult: [TopRatedResult]?
-    var upcomingResult: [UpcomingResult]?
-    var popularResult: [PopularResult]?
+    var nowPlayingResult: [MovieListResult]?
+    var topRatedResult: [MovieListResult]?
+    var upcomingResult: [MovieListResult]?
+    var popularResult: [MovieListResult]?
     
-    let nowPlayingQuery: NowPlayingQuery = {
-        var query = NowPlayingQuery()
-        query.region = "AU"
-        return query
-    }()
-    
-    let topRatedQuery: TopRatedQuery = {
-        var query = TopRatedQuery()
-        query.region = "AU"
-        return query
-    }()
-    
-    var upcomingQuery: UpcomingQuery = {
-        var query = UpcomingQuery()
-        query.region = "AU"
-        return query
-    }()
-    
-    var popularQuery: PopularQuery = {
-        var query = PopularQuery()
-        query.region = "AU"
-        return query
-    }()
-    
+    let nowPlayingQuery = NowPlayingQuery(region: "AU")
+    let topRatedQuery = TopRatedQuery(region: "AU")
+    let upcomingQuery = UpcomingQuery(region: "AU")
+    let popularQuery = PopularQuery(region: "AU")
+       
     lazy var collectionView: UICollectionView = {
         let layout = BetterSnappingLayout()
         // layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
@@ -48,7 +29,7 @@ class MainMovieViewController: UIViewController {
         view.backgroundColor = .systemBackground
         view.delegate = self
         view.dataSource = self
-        view.register(MovieCategoryCell.self, forCellWithReuseIdentifier: "CategoryCell")
+        view.register(HorizontalMovieCollectionCell.self, forCellWithReuseIdentifier: "CategoryCell")
         return view
     }()
     
@@ -78,49 +59,49 @@ class MainMovieViewController: UIViewController {
 
 
 
-extension MainMovieViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
+extension BrowseMovieViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 4
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! MovieCategoryCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! HorizontalMovieCollectionCell
         switch(indexPath.item) {
         case 0:
-            cell.dataSource = nowPlayingResult
+            cell.movieItems = nowPlayingResult?.map{IndividualMovieItem(movieListResult: $0)}
             cell.titleLabel.text = "In Cinema"
         case 1:
-            cell.dataSource = popularResult
+            cell.movieItems = popularResult?.map{IndividualMovieItem(movieListResult: $0)}
             cell.titleLabel.text = "Popular"
         case 2:
-            cell.dataSource = upcomingResult
+            cell.movieItems = upcomingResult?.map{IndividualMovieItem(movieListResult: $0)}
             cell.titleLabel.text = "Upcoming"
         case 3:
-            cell.dataSource = topRatedResult
+            cell.movieItems = topRatedResult?.map{IndividualMovieItem(movieListResult: $0)}
             cell.titleLabel.text = "Top Rated"
         default:
             fatalError("not implemented")
         }
-        cell.delegate = self
+        cell.parentController = self
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         //return .init(width: UIScreen.main.bounds.width, height: 200)
         let width = collectionView.frame.width
-        let dummyCell = MovieCategoryCell(frame: .init(origin: .zero, size: .init(width: width, height: 1000)))
+        let dummyCell = HorizontalMovieCollectionCell(frame: .init(origin: .zero, size: .init(width: width, height: 1000)))
         switch(indexPath.item) {
         case 0:
-            dummyCell.dataSource = nowPlayingResult
+            dummyCell.movieItems = nowPlayingResult?.map{IndividualMovieItem(movieListResult: $0)}
             dummyCell.titleLabel.text = "In Cinema"
         case 1:
-            dummyCell.dataSource = popularResult
+            dummyCell.movieItems = popularResult?.map{IndividualMovieItem(movieListResult: $0)}
             dummyCell.titleLabel.text = "Popular"
         case 2:
-            dummyCell.dataSource = upcomingResult
+            dummyCell.movieItems = upcomingResult?.map{IndividualMovieItem(movieListResult: $0)}
             dummyCell.titleLabel.text = "Upcoming"
         case 3:
-            dummyCell.dataSource = topRatedResult
+            dummyCell.movieItems = topRatedResult?.map{IndividualMovieItem(movieListResult: $0)}
             dummyCell.titleLabel.text = "Top Rated"
         default:
             fatalError("not implemented")
@@ -131,7 +112,7 @@ extension MainMovieViewController: UICollectionViewDelegateFlowLayout, UICollect
     }
 }
 
-extension MainMovieViewController {
+extension BrowseMovieViewController {
     func loadData() {
         let group = DispatchGroup()
         group.enter()

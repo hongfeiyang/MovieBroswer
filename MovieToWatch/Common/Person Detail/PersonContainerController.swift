@@ -65,6 +65,7 @@ class PersonContainerController: BaseNavItemController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if state == .collapsed {
+            // Hide details only during initialisation of this view
             detailControllerConstraints?.top?.constant = UIScreen.main.bounds.height
         }
         

@@ -40,7 +40,9 @@ class Network {
     }
     
     static func getNowPlaying(query: NowPlayingQuery, completion: ((NowPlaying?) -> Void)?) {
-        guard let url = URL(string: query.description) else {return}
+        var components = URLComponents(string: "https://api.themoviedb.org/3/movie/now_playing")
+        components?.queryItems = query.URLQueryItems
+        guard let url = components?.url else {fatalError("Error parse query items for now playing")}
         URLSession.shared.nowPlayingTask(with: url) {(data, response, error) in
             completion?(data)
         }.resume()
@@ -48,7 +50,9 @@ class Network {
     }
 
     static func getTopRated(query: TopRatedQuery, completion: ((TopRated?) -> Void)?) {
-        guard let url = URL(string: query.description) else {return}
+        var components = URLComponents(string: "https://api.themoviedb.org/3/movie/top_rated")
+        components?.queryItems = query.URLQueryItems
+        guard let url = components?.url else {fatalError("Error parse query items for top rated")}
         URLSession.shared.topRatedTask(with: url) {(data, response, error) in
             completion?(data)
         }.resume()

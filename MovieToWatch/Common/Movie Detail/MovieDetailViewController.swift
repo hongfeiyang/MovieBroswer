@@ -18,6 +18,7 @@ class MovieDetailViewController: BaseCollectionViewController {
     let overviewCellId = "overviewCellId"
     let basicInfoCellId = "basicInfoCellId"
     let movieHeaderId = "movieHeaderId"
+    let similarMoviesCellId = "similarMoviesCellId"
     
     var movieDetail: MovieDetail? {
         didSet {
@@ -75,13 +76,14 @@ class MovieDetailViewController: BaseCollectionViewController {
         collectionView.register(ImagesSectionCell.self, forCellWithReuseIdentifier: imagesCellId)
         collectionView.register(VideosSectionCell.self, forCellWithReuseIdentifier: videosCellId)
         collectionView.register(ReviewsSectionCell.self, forCellWithReuseIdentifier: reviewsCellId)
+        collectionView.register(SimilarMoviesSectionCell.self, forCellWithReuseIdentifier: similarMoviesCellId)
         
         collectionView.register(MovieHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: movieHeaderId)
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        var cell: MovieDetailSectionBaseCell!
+        var cell: BaseMovieDetailSectionCell!
         
         if indexPath.item == 0 {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: basicInfoCellId, for: indexPath) as! BasicInfoSectionCell
@@ -93,8 +95,12 @@ class MovieDetailViewController: BaseCollectionViewController {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: imagesCellId, for: indexPath) as! ImagesSectionCell
         } else if indexPath.item == 4 {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: videosCellId, for: indexPath) as! VideosSectionCell
-        } else {
+        } else if indexPath.item == 5 {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewsCellId, for: indexPath) as! ReviewsSectionCell
+        } else if indexPath.item == 6 {
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: similarMoviesCellId, for: indexPath) as! SimilarMoviesSectionCell
+        } else {
+            fatalError("Not Implemented")
         }
         cell.movieDetail = movieDetail
         cell.navController = navigationController
@@ -102,7 +108,7 @@ class MovieDetailViewController: BaseCollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return 7
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -113,7 +119,7 @@ class MovieDetailViewController: BaseCollectionViewController {
         
         var height: CGFloat = 280
         
-        let dummyCell: MovieDetailSectionBaseCell
+        let dummyCell: BaseMovieDetailSectionCell
         
         if indexPath.item == 0 {
             dummyCell = BasicInfoSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
@@ -125,8 +131,12 @@ class MovieDetailViewController: BaseCollectionViewController {
             dummyCell = ImagesSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
         } else if indexPath.item == 4 {
             dummyCell = VideosSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
-        } else {
+        } else if indexPath.item == 5 {
             dummyCell = ReviewsSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
+        } else if indexPath.item == 6 {
+            dummyCell = SimilarMoviesSectionCell(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: 1000))
+        } else {
+            fatalError("Not Implemented")
         }
         
         dummyCell.movieDetail = movieDetail
@@ -156,7 +166,7 @@ class MovieDetailViewController: BaseCollectionViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
